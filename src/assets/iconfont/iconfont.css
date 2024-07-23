@@ -1,0 +1,159 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3866935 */
+  src: url('iconfont.woff2?t=1718160301830') format('woff2'),
+       url('iconfont.woff?t=1718160301830') format('woff'),
+       url('iconfont.ttf?t=1718160301830') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-zhiding:before {
+  content: "\e6b6";
+}
+
+.icon-zixun:before {
+  content: "\e703";
+}
+
+.icon-online:before {
+  content: "\e694";
+}
+
+.icon-jx-zhaopinrenshu:before {
+  content: "\e6fc";
+}
+
+.icon-jx-jiaohuoriqi:before {
+  content: "\e6fb";
+}
+
+.icon-jx-jingyan:before {
+  content: "\e6fd";
+}
+
+.icon-jx-xueli:before {
+  content: "\e6fe";
+}
+
+.icon-jx-fabu:before {
+  content: "\e6ff";
+}
+
+.icon-jx-didian:before {
+  content: "\e700";
+}
+
+.icon-jx-daogangshijian:before {
+  content: "\e701";
+}
+
+.icon-jx-woyaozhaopin:before {
+  content: "\e702";
+}
+
+.icon-wenhao:before {
+  content: "\e655";
+}
+
+.icon-user:before {
+  content: "\e660";
+}
+
+.icon-a:before {
+  content: "\e600";
+}
+
+.icon-a-kefu1:before {
+  content: "\e6e7";
+}
+
+.icon-play:before {
+  content: "\e6e6";
+}
+
+.icon-qiye:before {
+  content: "\e6e3";
+}
+
+.icon-haoyou:before {
+  content: "\e6e4";
+}
+
+.icon-a-erweima2:before {
+  content: "\e6e2";
+}
+
+.icon-guanbi1:before {
+  content: "\e60f";
+}
+
+.icon-youxiang:before {
+  content: "\e667";
+}
+
+.icon-bg-left:before {
+  content: "\e638";
+}
+
+.icon-bg-right:before {
+  content: "\e64c";
+}
+
+.icon-xiangzuo1:before {
+  content: "\e779";
+}
+
+.icon-dianhua:before {
+  content: "\e65c";
+}
+
+.icon-position-fill:before {
+  content: "\e631";
+}
+
+.icon-xiangyou1:before {
+  content: "\e775";
+}
+
+.icon-fangxiangyou:before {
+  content: "\e6d7";
+}
+
+.icon-fangdajing:before {
+  content: "\e6d8";
+}
+
+.icon-gouxuankuang:before {
+  content: "\e6d9";
+}
+
+.icon-guanbi:before {
+  content: "\e6da";
+}
+
+.icon-jiaoyibaozhang:before {
+  content: "\e6db";
+}
+
+.icon-youzhifuwu:before {
+  content: "\e6dc";
+}
+
+.icon-shouhouwuyou:before {
+  content: "\e6dd";
+}
+
+.icon-fuwujianguan:before {
+  content: "\e6de";
+}
+
+.icon-kefu:before {
+  content: "\e6df";
+}
+

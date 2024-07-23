@@ -1,0 +1,96 @@
+html {
+  overflow-y: overlay;
+
+  // 解决打开弹窗页面抖动的问题
+  body {
+    width: 100% !important;
+  }
+}
+
+.ant-btn-primary {
+  background: @primary-background;
+  border: none;
+  &:not(:disabled):hover {
+    background: @primary-background-hover;
+  }
+  &:not(:disabled):active {
+    background: @primary-background-active;
+  }
+  &:disabled {
+    background: @primary-background-disable;
+  }
+}
+
+.ant-btn-primary.ant-btn-background-ghost {
+  background: @primary-background-light;
+  border: 1px solid @primary-border;
+  &:not(:disabled):hover {
+    background: @primary-background-light-hover;
+  }
+  &:not(:disabled):active {
+    background: @primary-background-light-active;
+  }
+  &:disabled {
+    border: 1px solid @primary-border-disable;
+    background: @primary-background-light-disable;
+  }
+}
+
+.secondary-btn.ant-btn-primary {
+  background: @secondary-background;
+  border: none;
+  &:not(:disabled):hover {
+    background: @secondary-background-hover;
+  }
+  &:not(:disabled):active {
+    background: @secondary-background-active;
+  }
+  &:disabled {
+    background: @secondary-background-disable;
+  }
+}
+
+.secondary-btn.ant-btn-primary.ant-btn-background-ghost {
+  background: @secondary-background-light;
+  border: 1px solid @secondary-border;
+  &:not(:disabled):hover {
+    background: @secondary-background-light-hover;
+  }
+  &:not(:disabled):active {
+    background: @secondary-background-light-active;
+  }
+  &:disabled {
+    border: 1px solid @primary-border-disable;
+    background: @secondary-background-light-disable;
+  }
+}
+
+.ant-btn-link {
+  color: @primary-color;
+  &:not(:disabled):hover {
+    color: @primary-color-hover;
+  }
+  &:not(:disabled):active {
+    color: @primary-color-active;
+  }
+  &:disabled {
+    color: @primary-color-disable;
+  }
+}
+
+.secondary-btn.ant-btn-link {
+  color: @secondary-color;
+  &:not(:disabled):hover {
+    color: @secondary-color-hover;
+  }
+  &:not(:disabled):active {
+    color: @secondary-color-active;
+  }
+  &:disabled {
+    color: @secondary-color-disable;
+  }
+}
+
+.ant-dropdown {
+  z-index: 1070;
+}

@@ -1,0 +1,14 @@
+@import "./assets/iconfont/iconfont.css";
+
+html {
+  overflow-y: overlay;
+}
+* {
+  margin: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
