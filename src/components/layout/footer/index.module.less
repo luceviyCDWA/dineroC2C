@@ -1,0 +1,129 @@
+.footer {
+  padding: 5px 14px 2px 14px;
+  padding-bottom: calc(constant(safe-area-inset-bottom) + 2px); /* 兼容 iOS < 11.2 */
+  padding-bottom: calc(env(safe-area-inset-bottom) + 2px); /* 兼容 iOS >= 11.2 */
+
+  background: rgb(24,24,27);
+
+  .flex(row);
+
+  .nav {
+    width: 49px;
+
+    .flex(column, flex-start, center);
+    row-gap: 2px;
+
+    .icon-container {
+      .flex(row, center, center);
+
+      .icon {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .title {
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 16px;
+      white-space: nowrap;
+    }
+  }
+
+  .home {
+    margin-right: 28px;
+
+    .icon-container {
+      padding: 2px;
+
+      .icon {
+        width: 20px;
+        height: 20px;
+      }  
+    }
+  }
+
+  .market {
+    .icon-container .icon {
+      width: 25px;
+      height: 24px;
+    }
+  }
+
+  .message {
+    margin-right: 28px;
+
+    .icon-container {
+      padding: 3px;
+
+      .icon {
+        width: 21px;
+        height: 18px;
+      }  
+    }
+  }
+
+  .publish {
+    width: 99px;
+    position: relative;
+
+    .publish-btn {
+      position: absolute;
+      top: -33px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+
+      width: 65px;
+      height: 65px;
+      padding: 5px;
+      box-sizing: border-box;
+      border-radius: 50%;
+      background: rgb(24,24,27);
+
+      .flex(row, center, center);
+      .btn-mix();
+
+      .icon {
+        width: 55px;
+        height: 55px;
+      }
+    }
+
+    .bg {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      right: 0;
+      height: 10px;
+      z-index: 1;
+      background: rgb(24,24,27);
+    }
+
+    &::before {
+      content: ' ';
+      position: absolute;
+      top: -55px;
+      left: -23px;
+      width: 50px;
+      height: 50px;
+      z-index: 10;
+      border-radius: 50%;
+      background: #0E0D14;
+    }
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: -55px;
+      right: -23px;
+      width: 50px;
+      height: 50px;
+      z-index: 10;
+      border-radius: 50%;
+      background: #0E0D14;
+    }
+  }
+}

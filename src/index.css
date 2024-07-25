@@ -2,6 +2,7 @@
 
 html {
   overflow-y: overlay;
+  background: #0E0D14;
 }
 * {
   margin: 0;

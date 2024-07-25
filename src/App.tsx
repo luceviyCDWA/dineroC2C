@@ -5,8 +5,7 @@ function App() {
   return (
     <>
       <Helmet>
-        <title>AI合规检测</title>
-        {/* <link rel="icon" type="image/svg+xml" href={faviconStr} /> */}
+        <title>Dinero</title>
       </Helmet>
       <div className={`App`}>
         <Router />

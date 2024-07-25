@@ -20,8 +20,16 @@ const routesList: RouteObject[] = [
         element: React.createElement(lazy(() => import("@/views/index"))),
       },
       {
-        path: 'test',
-        element: React.createElement(lazy(() => import("@/views/test"))),
+        path: "/publish",
+        element: React.createElement(lazy(() => import("@/views/publish"))),
+      },
+      {
+        path: "/message",
+        element: React.createElement(lazy(() => import("@/views/message"))),
+      },
+      {
+        path: "/message",
+        element: React.createElement(lazy(() => import("@/views/message"))),
       },
     ],
   },
