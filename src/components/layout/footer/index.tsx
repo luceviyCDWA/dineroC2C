@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
         <div className={Styles["publish-btn"]}>
           <img className={Styles["icon"]} src={PublishIcon} alt="publish" />
         </div>
-        <div className={Styles['bg']}></div>
+        <div className={Styles["bg"]}></div>
       </div>
       <NavItem
         className={Styles["message"]}

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import NProgress from "nprogress"; // progress bar
 import qs from "qs";
-import message from "antd/es/message";
+import { Toast } from "antd-mobile";
 
 import website from "@/config/website";
 import { serialize } from "@/utils";
@@ -92,14 +92,14 @@ axios.interceptors.response.use(
             "_self",
           );
         }
-        message.error(errMsg);
+        Toast.show(errMsg);
         return Promise.reject(new Error(errMsg));
       }
       const { url } = res.config;
       if (url === "/admin/user/check/exist") {
         return Promise.reject(new Error(errMsg));
       }
-      message.error(errMsg);
+      Toast.show(errMsg);
       return Promise.reject(new Error(errMsg));
     }
 
@@ -108,7 +108,7 @@ axios.interceptors.response.use(
   (error) => {
     // 处理 503 网络异常
     if (error.response.status === 503) {
-      message.error(error.response.data.msg);
+      Toast.show(error.response.data.msg);
     }
     NProgress.done();
     return Promise.reject(new Error(error));
