@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 
 interface LayoutStoreState {
-  whatever: boolean;
+  pageTitle: string;
 
-  setWhatever: () => void;
+  setPageTitle: (pageTitle: string) => void;
 }
 
-const LayoutStore = create<LayoutStoreState>((set) => ({
-  whatever: false,
+const useLayoutStore = create<LayoutStoreState>((set) => ({
+  pageTitle: "Dinero",
 
-  setWhatever: () => {
-    set(state => ({ ...state, whatever: !state.whatever }));
-  }
+  setPageTitle: (pageTitle) => {
+    set((state) => ({ ...state, pageTitle }));
+  },
 }));
 
-export default LayoutStore;
+export default useLayoutStore;
