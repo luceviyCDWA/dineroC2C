@@ -12,6 +12,7 @@ import WalletIcon from '@/assets/imgs/wallet.png';
 import Styles from './index.module.less';
 import { login } from "@/api";
 
+
 const LoginModal: React.FC = () => {
   const showModal = useLoginModalStore(state => state.showModal);
   const onHideLogin = useLoginModalStore(state => state.onHideLogin);
@@ -21,9 +22,9 @@ const LoginModal: React.FC = () => {
   const [doConnect, setDoConnect] = useState<object>();
 
   const signMsgRef = useRef<string>(
-    `You're signing into Dinero using your wallet on time: ${dayjs().format(
-      "MMM DD HH:mm (UTCZ)",
-    )}`,
+    `You're signing into Dinero using your wallet on time: ${dayjs()
+      .utc()
+      .format("MMM DD HH:mm (UTC+0)")}`,
   );
 
   const {
@@ -33,9 +34,9 @@ const LoginModal: React.FC = () => {
     onConnect: () => {
       (async () => {
         if (manualConnect) {
-          signMsgRef.current = `You're signing into Dinero using your wallet on time: ${dayjs().format(
-            "MMM DD HH:mm (UTCZ)",
-          )}`;
+          signMsgRef.current = `You're signing into Dinero using your wallet on time: ${dayjs()
+            .utc()
+            .format("MMM DD HH:mm (UTC+0)")}`;
           signMessage({
             message: signMsgRef.current,
           });
@@ -45,7 +46,6 @@ const LoginModal: React.FC = () => {
   });
 
   const { signMessage } = useSignMessage({
-    message: signMsgRef.current,
     // sign callback
     onSuccess(data) {
       (async () => {
@@ -67,7 +67,12 @@ const LoginModal: React.FC = () => {
   useEffect(() => {
     if (!doConnect) return;
     if (isConnected) {
-      signMessage();
+      signMsgRef.current = `You're signing into Dinero using your wallet on time: ${dayjs()
+        .utc()
+        .format("MMM DD HH:mm (UTC+0)")}`;
+      signMessage({
+        message: signMsgRef.current,
+      });
     } else {
       if (openConnectModal) {
         openConnectModal();
