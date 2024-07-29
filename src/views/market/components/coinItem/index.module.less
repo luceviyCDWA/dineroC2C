@@ -1,0 +1,47 @@
+.coin__info {
+  width: 100%;
+
+  .flex(row);
+
+  font-family: PingFangSC, PingFang SC;
+  font-weight: 500;
+
+  &-icon {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+  }
+
+  &-main {
+    flex: 1;
+
+    .flex(column);
+  }
+
+  &-name {
+    margin-bottom: 8px;
+
+    font-size: 18px;
+    color: #FFFFFF;
+    line-height: 20px;
+  }
+
+  &-detail {
+    .flex(row, flex-start, center);
+    column-gap: 5px;
+
+    .detail-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &-rules {
+    height: 100%;
+
+    .flex(row, center, center);
+
+    font-size: 14px;
+    color: #298FFC;
+  }
+}

@@ -1,3 +1,5 @@
+import { ActionType } from "@/types";
+
 export interface IMessageItem {
   id: string;
   icon: string;
@@ -6,16 +8,6 @@ export interface IMessageItem {
   createTime: string;
 
   hasRead: boolean;
-}
-
-export const enum ActionType {
-  Buy = 'buy',
-  Sell = 'sell',
-}
-
-export const DealerByActionType: Record<ActionType, string> = {
-  [ActionType.Buy]: 'seller',
-  [ActionType.Sell]: 'buyer',
 }
 
 export const enum OrderStatus {

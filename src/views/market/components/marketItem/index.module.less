@@ -1,0 +1,90 @@
+.market__item {
+  height: 127px;
+  padding: 15px 10px;
+  box-sizing: border-box;
+  background: #202029;
+  border-radius: 15px;
+
+  &-info {
+    margin-bottom: 15px;
+
+    .flex(row);
+
+    .coin-icon {
+      width: 40px;
+      height: 40px;
+
+      margin-right: 7px;
+    }
+
+    .info-main {
+      flex: 1;
+
+      .name {
+        margin-bottom: 4px;
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 500;
+        font-size: 14px;
+        color: #FFFFFF;
+        line-height: 20px;
+      }
+
+      .guarantee-info {
+        .flex(row, flex-start, center);
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 12px;
+        color: #8E8E8E;
+
+        .icon {
+          width: 12px;
+          height: 12px;
+          margin-right: 5px;
+        }
+      }
+    }
+
+    .market-btn {
+      width: 68px;
+      height: 26px;
+      background: linear-gradient( 44deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+      border-radius: 25px;
+
+      .flex(row, center, center);
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 12px;
+      color: #FFFFFF;
+    }
+  }
+
+  &-deal {
+    .flex(row);
+    column-gap: 10px;
+
+    .deal-item {
+      flex: 1;
+
+      .title {
+        margin-bottom: 10px;
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 12px;
+        color: #8E8E8E;
+      }
+
+      .content {
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 500;
+        font-size: 14px;
+        color: #FFFFFF;
+        line-height: 16px;
+      }
+    }
+  }
+
+}

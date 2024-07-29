@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { LeftOutline } from 'antd-mobile-icons';
+
+import { getTimeStrBySec } from "@/utils";
+import RightPage from "@/components/rightPage";
 
 import TipsIcon from '@/assets/imgs/tips.png';
 
+import { ActionType, DealerByActionType } from "@/types";
 import {
-  ActionType,
-  DealerByActionType,
   IMessageDetail,
   OrderStatusTxtHash,
 } from "@/views/message/types";
 
 import Styles from './index.module.less';
-import { getTimeStrBySec } from "@/utils";
 
 interface MessageDetailCompProps {
   showPanel: boolean;
@@ -38,14 +38,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     deadline,
   } = msgDetail;
 
-  const [innerShow, setInnerShow] = useState(false);
   const [leftTime, setLeftTime] = useState(0);
-
-  useEffect(() => {
-    if (showPanel) {
-      setInnerShow(true);
-    }
-  }, [showPanel]);
 
   useEffect(() => {
     setLeftTime(deadline);
@@ -59,31 +52,14 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     }
   }, [leftTime]);
 
-  const onTransEnd = () => {
-    if (!innerShow) {
-      onClose();
-    }
-  };
-
-  const onBack = () => {
-    setInnerShow(false);
-  }
 
   return (
-    <div
-      className={classNames(Styles["detail__panel"], {
-        [Styles["show"]]: innerShow,
-      })}
-      onTransitionEnd={onTransEnd}
+    <RightPage
+      show={showPanel}
+      title="Order Detail"
+      rightBtnNode={<div className={Styles["btns"]}>Appeal</div>}
+      onClose={onClose}
     >
-      <div className={Styles["detail__panel-header"]}>
-        <div className={Styles["back"]} onClick={onBack}>
-          <LeftOutline />
-        </div>
-        <div className={Styles["title"]}>Order Detail</div>
-        <div className={Styles["btns"]}>Appeal</div>
-      </div>
-
       <div className={Styles["detail__panel-main"]}>
         <div className={Styles["coin__detail"]}>
           <img
@@ -158,22 +134,20 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
             <div className={Styles["tips-content"]}>
               The {DealerByActionType[actionType]} has made the payment. Please
               pay the deposit within{" "}
-              <span className={Styles['left-time']}>{getTimeStrBySec(leftTime)}s</span>
+              <span className={Styles["left-time"]}>
+                {getTimeStrBySec(leftTime)}s
+              </span>
             </div>
           </div>
         )}
       </div>
 
-      {
-        leftTime > 0 && (
-          <div className={Styles['detail__panel-btn']}>
-            <div className={Styles['btn']}>
-              Go to pay
-            </div>
-          </div>
-        )
-      }
-    </div>
+      {leftTime > 0 && (
+        <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["btn"]}>Go to pay</div>
+        </div>
+      )}
+    </RightPage>
   );
 };
 export default MessageDetail;

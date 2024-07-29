@@ -7,7 +7,8 @@ import MessageDetail from "./components/messageDetail";
 
 import CoinIcon from '@/assets/imgs/example/coin.png';
 
-import { ActionType, IMessageDetail, OrderStatus } from "./types";
+import { ActionType } from "@/types";
+import { IMessageDetail, OrderStatus } from "./types";
 
 import Styles from "./index.module.less";
 
