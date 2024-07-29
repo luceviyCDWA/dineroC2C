@@ -63,11 +63,32 @@
 
     .icon-container {
       padding: 3px;
+      position: relative;
 
       .icon {
         width: 21px;
         height: 18px;
       }  
+
+      .unread {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #FB445F;
+
+        .flex(row, center, center);
+
+        position: absolute;
+        top: -8px;
+        right: -8px;
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 500;
+        font-size: 12px;
+        color: #FFFFFF;
+
+        transform: scale(0.75);
+      }
     }
   }
 

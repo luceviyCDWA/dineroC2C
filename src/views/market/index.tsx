@@ -19,9 +19,6 @@ import CoinItem from "./components/coinItem";
 import MarketItem from "./components/marketItem";
 
 import Styles from './index.module.less';
-import { getHotCoinList } from "@/api";
-
-
 
 const Market: React.FC = () => {
   const [coinList, setCoinList] = useState<ICoinInfo[]>([]);
@@ -73,9 +70,9 @@ const Market: React.FC = () => {
   }, []);
 
   const initHotCoinList = async () => {
-    const res = await getHotCoinList();
+    // const res = await getHotCoinList();
 
-    console.log(res);
+    // console.log(res);
   }
 
   const onLoadMore = async () => {
@@ -103,7 +100,11 @@ const Market: React.FC = () => {
             ))}
           </div>
 
-          <InfiniteScroll loadMore={onLoadMore} hasMore={totalPage > page} />
+          <InfiniteScroll loadMore={onLoadMore} hasMore={totalPage > page}>
+            {(hasMore) => (
+              <div>{hasMore ? "Loading..." : "This is the end"}</div>
+            )}
+          </InfiniteScroll>
         </PullToRefresh>
       </div>
     </div>

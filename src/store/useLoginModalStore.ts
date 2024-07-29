@@ -5,7 +5,7 @@ interface LoginModalState {
   afterLogin: (() => void ) | null;
 
   onShowLogin: () => Promise<void>;
-  onHideLogin: () => void;
+  onHideLogin: (loginSuccess: boolean) => void;
 }
 
 const useLoginModalStore = create<LoginModalState>((set, get) => ({
@@ -28,7 +28,11 @@ const useLoginModalStore = create<LoginModalState>((set, get) => ({
     return loginPromise;
   },
 
-  onHideLogin: () => {
+  onHideLogin: (isSucess) => {
+    if (!isSucess) {
+      return;
+    }
+
     const { afterLogin } = get();
 
     if (afterLogin) {

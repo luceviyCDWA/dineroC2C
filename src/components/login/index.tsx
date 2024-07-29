@@ -11,11 +11,13 @@ import WalletIcon from '@/assets/imgs/wallet.png';
 
 import Styles from './index.module.less';
 import { login } from "@/api";
+import useUserStore from "@/store/useUserStore";
 
 
 const LoginModal: React.FC = () => {
   const showModal = useLoginModalStore(state => state.showModal);
   const onHideLogin = useLoginModalStore(state => state.onHideLogin);
+  const afterLogin = useUserStore((state) => state.afterLogin);
 
   const [inviteCode, setInviteCode] = useState('');
   const [manualConnect, setManualConnect] = useState(false);
@@ -57,7 +59,7 @@ const LoginModal: React.FC = () => {
           inviteCode,
         );
 
-        console.log(res);
+        afterLogin(res.bearer_token);
       })();
     },
   });
