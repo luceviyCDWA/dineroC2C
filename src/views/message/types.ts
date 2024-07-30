@@ -1,4 +1,4 @@
-import { ActionType } from "@/types";
+import { ActionType, OrderStatus } from "@/types";
 
 export const enum IMessageStatus {
   UnRead = 1,
@@ -13,16 +13,6 @@ export interface IMessageItem {
 
   status: IMessageStatus;
 }
-
-export const enum OrderStatus {
-  Pending,
-  End
-}
-
-export const OrderStatusTxtHash: Record<OrderStatus, string> = {
-  [OrderStatus.Pending]: 'Pending Order',
-  [OrderStatus.End]: 'Order Ended',
-};
 
 export interface IMessageDetail {
   id: string;

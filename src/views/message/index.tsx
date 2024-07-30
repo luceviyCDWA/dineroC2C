@@ -1,16 +1,17 @@
 import React, { useCallback, useState } from "react";
-import { InfiniteScroll, PullToRefresh } from "antd-mobile";
+import { InfiniteScroll, PullToRefresh, Toast } from "antd-mobile";
+
+import { getMessageDetail } from "@/api/message";
+import { getOrderDetail } from "@/api/order";
 
 import useMsgStore from "@/store/useMsgStore";
 import MessageItem from "./components/messageItem";
 import MessageDetail from "./components/messageDetail";
 
-import CoinIcon from '@/assets/imgs/example/coin.png';
-
-import { ActionType } from "@/types";
-import { IMessageDetail, OrderStatus } from "./types";
+import { IMessageDetail } from "./types";
 
 import Styles from "./index.module.less";
+import { GuaranteeStatus } from "@/types";
 
 const Message: React.FC = () => {
   const {
@@ -34,24 +35,33 @@ const Message: React.FC = () => {
     await getNextPageData();
   }
 
-  const onSelectDetail = useCallback((selectId: string) => {
-    debugger;
-    
+  const onSelectDetail = useCallback(async (selectId: string) => {
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "Loading...",
+    });
+
+    const {url} = await getMessageDetail(selectId);
+    const orderInfo = await getOrderDetail(url);
+
+    Toast.clear();
+
     setShowDetail(true);
     setCurMsgDetail({
-      id: selectId,
+      id: orderInfo.id,
 
-      coinName: "SEND",
-      coinIcon: CoinIcon,
+      coinName: orderInfo.category_name,
+      coinIcon: orderInfo.category_image,
 
-      total: 10000,
-      totalPrice: "200",
-      unitPrice: "0.00192",
-      currencyName: "USDT",
-      actionType: ActionType.Buy,
+      total: orderInfo.total_count,
+      totalPrice: orderInfo.total_price + '',
+      unitPrice: orderInfo.unit_price + '',
+      currencyName: orderInfo.payment_name,
+      actionType: orderInfo.type,
 
-      status: OrderStatus.Pending,
-      guaranteeDeposit: "Pending",
+      status: orderInfo.status,
+      guaranteeDeposit: orderInfo.is_mortgage === GuaranteeStatus.Guaranteed ? 'Has paid' : 'Pending',
 
       deadline: 1000,
     });

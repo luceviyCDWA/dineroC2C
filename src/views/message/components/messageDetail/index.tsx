@@ -6,10 +6,9 @@ import RightPage from "@/components/rightPage";
 
 import TipsIcon from '@/assets/imgs/tips.png';
 
-import { ActionType, DealerByActionType } from "@/types";
+import { ActionType, DealerByActionType, OrderStatus, OrderStatusTitleHash } from "@/types";
 import {
   IMessageDetail,
-  OrderStatusTxtHash,
 } from "@/views/message/types";
 
 import Styles from './index.module.less';
@@ -114,7 +113,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Status</div>
           <div className={Styles["detail__item-content"]}>
-            {OrderStatusTxtHash[status]}
+            {OrderStatusTitleHash[status]}
           </div>
         </div>
 
@@ -142,11 +141,72 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         )}
       </div>
 
-      {leftTime > 0 && (
+      {status === OrderStatus.InitState && (
+        // createOrder
         <div className={Styles["detail__panel-btn"]}>
           <div className={Styles["btn"]}>Go to pay</div>
         </div>
       )}
+
+      {status === OrderStatus.WaitForBuyer &&
+        (actionType === ActionType.Buy ? (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Go to pay</div>
+          </div>
+        ) : (
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Cancel</div>
+          </div>
+        ))}
+
+      {status === OrderStatus.WaitForSeller &&
+        (actionType === ActionType.Sell ? (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Go to pay</div>
+          </div>
+        ) : (
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Cancel</div>
+          </div>
+        ))}
+
+      {status === OrderStatus.BothPaid &&
+        (actionType === ActionType.Buy ? (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Confirm</div>
+          </div>
+        ) : (
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Cancel</div>
+          </div>
+        ))}
+
+      {status === OrderStatus.CancelWithBuyer &&
+        actionType === ActionType.Sell && (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Cancel</div>
+          </div>
+        )}
+
+      {status === OrderStatus.CancelWithSeller &&
+        actionType === ActionType.Buy && (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Cancel</div>
+          </div>
+        )}
+
+      {status === OrderStatus.Withdrawal &&
+        actionType === ActionType.Sell && (
+          // payOrder
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]}>Confirm</div>
+          </div>
+        )}
     </RightPage>
   );
 };
