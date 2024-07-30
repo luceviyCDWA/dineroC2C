@@ -16,7 +16,7 @@ const passwordKeySS = import.meta.env.VITE_PASSWORD_KEY_SS;
 const smsKeyGQC = import.meta.env.VITE_SMS_KEY_GQC;
 const passwordKeyGQC = import.meta.env.VITE_PASSWORD_KEY_GQC;
 
-const INIT_PAGE = 0;
+const INIT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 10;
 
 export {

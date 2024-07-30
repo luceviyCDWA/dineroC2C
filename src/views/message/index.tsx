@@ -35,6 +35,8 @@ const Message: React.FC = () => {
   }
 
   const onSelectDetail = useCallback((selectId: string) => {
+    debugger;
+    
     setShowDetail(true);
     setCurMsgDetail({
       id: selectId,

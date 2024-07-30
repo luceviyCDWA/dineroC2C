@@ -11,13 +11,26 @@ export const getMesageList = (page: number) => {
     }
   >({
     url: "/apis/v1/dinero/get_message_list",
-    method: "get",
-    params: {
-      offset: page,
+    method: "post",
+    data: {
+      offset: (page - 1) * DEFAULT_PAGE_SIZE + 1,
       limit: DEFAULT_PAGE_SIZE,
     },
   });
 };
+
+export const getMessageDetail = (id: string) => {
+  return request<
+    unknown,
+    {
+      id: string,
+      url: string,
+    }
+  >({
+    url: `/apis/v1/dinero/get_message_detail/${id}`,
+    method: "get",
+  });
+}
 
 export const getUnreadNum = () => {
   return request<
