@@ -20,6 +20,7 @@ import MarketItem from "./components/marketItem";
 
 import Styles from './index.module.less';
 import { getHotCoinList } from "@/api";
+import CoinSelect from "@/components/coinSelect";
 
 
 
@@ -85,7 +86,9 @@ const Market: React.FC = () => {
     <div className={Styles["market-page"]}>
       {curCoin && <CoinItem coinInfo={curCoin} />}
 
-      <div className={Styles["order-filter"]}></div>
+      <div className={Styles["order-filter"]}>
+        <CoinSelect curCoinId={curCoin?.id} onSelectCoin={() => {}} />
+      </div>
 
       <div className={Styles["order-list"]}>
         <PullToRefresh
