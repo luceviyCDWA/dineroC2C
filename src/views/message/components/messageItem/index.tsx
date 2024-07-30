@@ -1,6 +1,9 @@
 import React from "react";
 
-import { IMessageItem } from "@/views/message/types";
+import { IMessageItem, IMessageStatus } from "@/views/message/types";
+
+import MessageIcon from '@/assets/imgs/message_icon.png';
+
 import Styles from './index.module.less';
 
 interface MessageItemCompProps {
@@ -9,7 +12,7 @@ interface MessageItemCompProps {
 }
 
 const MessageItem: React.FC<MessageItemCompProps> = ({ msgInfo, onSelect }) => {
-  const { id, icon, hasRead, title, createTime, content } = msgInfo;
+  const { id, status, title, created_at, content } = msgInfo;
 
   const onClickMsg = () => {
     onSelect(id);
@@ -18,14 +21,16 @@ const MessageItem: React.FC<MessageItemCompProps> = ({ msgInfo, onSelect }) => {
   return (
     <div className={Styles["message__item"]} onClick={onClickMsg}>
       <div className={Styles["message__item-icon"]}>
-        <img className={Styles["icon"]} src={icon} alt="icon" />
-        {!hasRead && <span className={Styles["dot"]}></span>}
+        <img className={Styles["icon"]} src={MessageIcon} alt="icon" />
+        {status === IMessageStatus.UnRead && (
+          <span className={Styles["dot"]}></span>
+        )}
       </div>
 
       <div className={Styles["message__item-detail"]}>
         <div className={Styles["message__item-main"]}>
           <div className={Styles["message__item-title"]}>{title}</div>
-          <div className={Styles["message__item-time"]}>{createTime}</div>
+          <div className={Styles["message__item-time"]}>{created_at}</div>
         </div>
         <div className={Styles["message__item-content"]}>{content}</div>
       </div>

@@ -7,15 +7,16 @@ export const login = (
   signType?: "evm" | "btc",
   inviteCode?: string,
 ) => {
-  return request.post("/apis/v1/login/wallet_sign", {
+  return request.post<
+    unknown,
+    {
+      bearer_token: string;
+    }
+  >("/apis/v1/login/wallet_sign", {
     from,
     hex,
     msg,
-    sign_type: signType || 'evm',
-    inviteCode
+    sign_type: signType || "evm",
+    inviteCode,
   });
 };
-
-export const getHotCoinList = () => {
-  return request.get("/apis/v1/dinero/get_hot_list");
-}

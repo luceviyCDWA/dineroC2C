@@ -1,13 +1,17 @@
 import { ActionType } from "@/types";
 
+export const enum IMessageStatus {
+  UnRead = 1,
+  Readed = 2,
+}
+
 export interface IMessageItem {
   id: string;
-  icon: string;
   title: string;
   content: string;
-  createTime: string;
+  created_at: string;
 
-  hasRead: boolean;
+  status: IMessageStatus;
 }
 
 export const enum OrderStatus {

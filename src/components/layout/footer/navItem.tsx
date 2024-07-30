@@ -3,11 +3,12 @@ import classNames from "classnames";
 
 import history from "@/utils/history";
 
-import { INavItem } from "./data";
+import { INavItem, NAV_TYPE } from "./data";
 
 import Styles from './index.module.less';
 import { useNavigate } from "react-router-dom";
 import useLayoutStore from "@/store/useLayoutStore";
+import useMsgStore from "@/store/useMsgStore";
 
 interface NavItemCompProps {
   className?: string;
@@ -22,6 +23,8 @@ const NavItem: React.FC<NavItemCompProps> = ({
 
   const naviagate = useNavigate();
   const setPageTitle = useLayoutStore((state) => state.setPageTitle);
+  const unreadNum = useMsgStore(state => state.unreadNum);
+
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
@@ -41,12 +44,20 @@ const NavItem: React.FC<NavItemCompProps> = ({
   }
 
   return (
-    <div className={classNames(Styles["nav"], className, {[Styles['active']]: isActive})} onClick={onJumpNewPage}>
+    <div
+      className={classNames(Styles["nav"], className, {
+        [Styles["active"]]: isActive,
+      })}
+      onClick={onJumpNewPage}
+    >
       <div className={Styles["icon-container"]}>
         {isActive ? (
           <img className={Styles["icon"]} src={activeIcon} alt="icon" />
         ) : (
           <img className={Styles["icon"]} src={icon} alt="icon" />
+        )}
+        {navInfo.type === NAV_TYPE.MESSAGE && (
+          <span className={Styles["unread"]}>{unreadNum > 9 ? '9+' : unreadNum}</span>
         )}
       </div>
       <div className={Styles["title"]}>{title}</div>

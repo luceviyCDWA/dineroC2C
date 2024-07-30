@@ -80,7 +80,9 @@ const Message: React.FC = () => {
           ))}
         </div>
 
-        <InfiniteScroll loadMore={onLoadMore} hasMore={totalPage > page} />
+        <InfiniteScroll loadMore={onLoadMore} hasMore={totalPage > page}>
+          {(hasMore) => <div>{hasMore ? "Loading..." : "This is the end"}</div>}
+        </InfiniteScroll>
       </PullToRefresh>
 
       {curMsgDetail && (
