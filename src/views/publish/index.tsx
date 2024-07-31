@@ -1,4 +1,6 @@
 import { getCoinList, getHotCoinList } from "@/api/order";
+import OrderEdit from "@/components/orderEdit";
+import useChainListStore from "@/store/useChainListStore";
 import { ICoinItem, IHotItem } from "@/types";
 import React, { ReactNode, useEffect, useState } from "react";
 
@@ -6,9 +8,16 @@ const PublishPage: React.FC = () => {
   const [coinList, setCoinList] = useState<ICoinItem[]>([]);
   const [hotList, setHotList] = useState<IHotItem[]>([]);
 
+  const [curCoinId, setCurCoinId] = useState('');
+  const [showOrderCreate, setShowOrderCreate] = useState(false);
+
+  const getChainList = useChainListStore((state) => state.getChainList);
+
   useEffect(() => {
     initHotList();
     initCoinList();
+
+    getChainList();
   }, []);
 
   const initHotList = async () => {
@@ -21,6 +30,11 @@ const PublishPage: React.FC = () => {
     const coinList = await getCoinList('');
 
     setCoinList(coinList);
+  }
+
+  const onPublishCoin = (coinId: string) => {
+    setCurCoinId(coinId);
+    setShowOrderCreate(true);
   }
 
   const groupList: Array<{
@@ -57,7 +71,25 @@ const PublishPage: React.FC = () => {
   );
 
   return (
-    <></>
+    <>
+      {groupList.map((group, index) => (
+        <div key={index}>
+          {group.brief}
+          {group.list.map((coin) => (
+            <div key={coin.id} onClick={() => onPublishCoin(coin.id)}>
+              <img src={coin.image} />
+              {coin.name}
+            </div>
+          ))}
+        </div>
+      ))}
+
+      <OrderEdit
+        showPanel={showOrderCreate}
+        coinId={curCoinId}
+        onClose={() => setShowOrderCreate(false)}
+      />
+    </>
   );
 }
 export default PublishPage;

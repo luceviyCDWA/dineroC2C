@@ -74,3 +74,9 @@ export interface ICoinItem {
   discord: string;
 }
 
+export interface IChainItem {
+  id: string;
+  name: string;
+  chain_id: string;
+  contract_address: string;
+}

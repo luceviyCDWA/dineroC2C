@@ -186,7 +186,6 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
       {status === OrderStatus.CancelWithBuyer &&
         actionType === ActionType.Sell && (
-          // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
@@ -194,7 +193,6 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
       {status === OrderStatus.CancelWithSeller &&
         actionType === ActionType.Buy && (
-          // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
@@ -202,7 +200,6 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
       {status === OrderStatus.Withdrawal &&
         actionType === ActionType.Sell && (
-          // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Confirm</div>
           </div>

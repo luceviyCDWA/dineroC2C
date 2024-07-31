@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-import { ActionType, GuaranteeStatus, ICoinItem, IHotItem } from "@/types";
+import { ActionType, GuaranteeStatus, IChainItem, ICoinItem, IHotItem } from "@/types";
 
 export const getHotCoinList = () => {
   return request.get<unknown, IHotItem[]>("/apis/v1/dinero/get_hot_list");
@@ -11,6 +11,13 @@ export const getCoinList = (keyword: string) => {
     "/apis/v1/dinero/get_publish_list",
     { keyword },
   );
+}
+
+export const getChainList = () => {
+  return request.get<
+    unknown,
+    IChainItem[]
+  >("/apis/v1/dinero/get_chain_list");
 }
 
 export const getOrderDetail = (orderId: string) => {
@@ -42,3 +49,19 @@ export const getOrderDetail = (orderId: string) => {
     }
   >(`/apis/v1/dinero/get_order_detail/${orderId}`);
 }
+
+export const createOrder = (data: {
+  total_price: number;
+  total_count: number;
+  category_id: string;
+  type: ActionType;
+  chain_id: string;
+  chain_name: string;
+  payment_name: string;
+  contract_address: string;
+}) => {
+  return request.post<unknown, { order_id: string }>(
+    "/apis/v1/dinero/create_dinero_order",
+    data,
+  );
+};

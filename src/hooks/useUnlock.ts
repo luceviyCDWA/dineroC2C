@@ -6,7 +6,9 @@ import {
 import { erc20ABI, PublicClient } from "wagmi";
 import { useAccount, usePublicClient, useWalletClient } from "wagmi";
 import { useEffect, useRef } from "react";
-import { GetWalletClientResult } from "wagmi/actions";
+import { getContract, GetWalletClientResult } from "wagmi/actions";
+import { DineroAbi } from "@/utils/abi";
+import { Toast } from "antd-mobile";
 
 export interface Ipurchase {
   value: bigint[];
@@ -40,23 +42,35 @@ export default function useUnlock() {
     unLockAddress: `0x${string}`,
     amount: bigint,
   ) => {
-    if (!usePublicClientRef.current) {
+    if (!usePublicClientRef.current || !useWalletClientRef.current) {
       return;
     }
 
     let hash;
     try {
-      const { request } = await usePublicClientRef.current.simulateContract({
-        abi: erc20ABI,
+      const token0 = getContract({
         address: tokenAddress,
-        functionName: "approve",
-        args: [unLockAddress, amount],
-        account: account as unknown as `0x${string}` | Account,
+        abi: erc20ABI,
+        publicClient: usePublicClientRef.current,
+        walletClient: useWalletClientRef.current,
       });
-      hash = await useWalletClientRef.current?.writeContract(request);
+
+      const approveTx = await token0.write.approve({
+        account: account.address,
+        args: [unLockAddress, amount],
+      });
+
+      // const { request } = await usePublicClientRef.current.simulateContract({
+      //   abi: erc20ABI,
+      //   address: tokenAddress,
+      //   functionName: "approve",
+      //   args: [unLockAddress, amount],
+      //   account: account.address,
+      // });
+      // hash = await useWalletClientRef.current?.writeContract(request);
 
       // wati tx
-      await usePublicClientRef.current?.waitForTransactionReceipt({ hash: hash! });
+      // await usePublicClientRef.current?.waitForTransactionReceipt({ hash: hash! });
     } catch (err) {
       console.log(err);
       if (err instanceof BaseError) {
@@ -68,7 +82,68 @@ export default function useUnlock() {
           // do something with `errorName`
           console.log(errorName);
           if (errorName) {
-            console.error(errorName);
+            Toast.show({
+              icon: 'error',
+              content: errorName,
+            })
+          }
+        }
+      }
+    }
+
+    return hash;
+  };
+
+  const funcWithContract = async (
+    contractAddress: string,
+    funcName: string,
+    args: Array<unknown>,
+  ) => {
+    if (!usePublicClientRef.current) {
+      return;
+    }
+
+    let hash;
+    try {
+      const token0 = getContract({
+        address: contractAddress,
+        abi: DineroAbi,
+        publicClient: usePublicClientRef.current,
+        walletClient: useWalletClientRef.current,
+      });
+
+      const approveTx = await token0.write[funcName]({
+        account: account.address,
+        args: [...args],
+      });
+
+      // const { request } = await usePublicClientRef.current.simulateContract({
+      //   abi: DineroAbi,
+      //   address: contractAddress as `0x${string}`,
+      //   functionName: funcName,
+      //   args: [...args],
+      //   account: account as unknown as `0x${string}` | Account,
+      // });
+      // hash = await useWalletClientRef.current?.writeContract(request);
+
+      // wati tx
+      // const receipt =
+        // await usePublicClientRef.current?.waitForTransactionReceipt({ hash });
+    } catch (err) {
+      console.log(err);
+      if (err instanceof BaseError) {
+        const revertError = err.walk(
+          (err) => err instanceof ContractFunctionRevertedError,
+        );
+        if (revertError instanceof ContractFunctionRevertedError) {
+          const errorName = revertError.data?.errorName ?? "";
+          // do something with `errorName`
+          console.log(errorName);
+          if (errorName) {
+            Toast.show({
+              icon: "error",
+              content: errorName,
+            });
           }
         }
       }
@@ -79,6 +154,7 @@ export default function useUnlock() {
 
   return {
     approve,
+    funcWithContract,
     USDT_ADDRESS: "0x17a3f74434831b32b951bae3b36507e199dfc83e",
   };
 }
