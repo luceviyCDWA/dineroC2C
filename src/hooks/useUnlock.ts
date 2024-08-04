@@ -4,7 +4,7 @@ import {
   ContractFunctionRevertedError,
 } from "viem";
 import { erc20ABI, PublicClient } from "wagmi";
-import { useAccount, usePublicClient, useWalletClient } from "wagmi";
+import { useAccount, usePublicClient, useWalletClient, useContractWrite } from "wagmi";
 import { useEffect, useRef } from "react";
 import { getContract, GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
@@ -105,17 +105,23 @@ export default function useUnlock() {
 
     let hash;
     try {
-      const token0 = getContract({
-        address: contractAddress,
+      const rx = useContractWrite({
         abi: DineroAbi,
-        publicClient: usePublicClientRef.current,
-        walletClient: useWalletClientRef.current,
+        address: contractAddress as `0x${string}`,
+        functionName: funcName,
+        args: [...args]
       });
+      // const token0 = getContract({
+      //   address: contractAddress,
+      //   abi: DineroAbi,
+      //   publicClient: usePublicClientRef.current,
+      //   walletClient: useWalletClientRef.current,
+      // });
 
-      const approveTx = await token0.write[funcName]({
-        account: account.address,
-        args: [...args],
-      });
+      // const approveTx = await token0.write[funcName]({
+      //   account: account.address,
+      //   args: [...args],
+      // });
 
       // const { request } = await usePublicClientRef.current.simulateContract({
       //   abi: DineroAbi,
@@ -155,6 +161,6 @@ export default function useUnlock() {
   return {
     approve,
     funcWithContract,
-    USDT_ADDRESS: "0x17a3f74434831b32b951bae3b36507e199dfc83e",
+    USDT_ADDRESS: "0xe24ff3d398ec931a22076608a16e85edbaacd4a4",
   };
 }

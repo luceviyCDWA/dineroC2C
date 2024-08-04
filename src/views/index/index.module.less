@@ -1,0 +1,48 @@
+.home-page {
+  height: 100%;
+  padding: 5px 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  .loading {
+    width: 100%;
+    height: 100%;
+    .flex(row, center, center);
+  }
+
+  .banner {
+    height: 167px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+
+    &-img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .recommend-list {
+    .recommend-title {
+      padding-left: 10px;
+      margin-bottom: 10px;
+
+      .flex(row, flex-start, flex-end);
+
+      .title-icon {
+        width: 28px;
+        height: 28px;
+      }
+
+      .title-txt {
+        padding-bottom: 3px;
+        color: #fff;
+        font-size: 17px;
+      }
+    }
+
+    .list-wrap {
+      .flex(column, flex-start, center);
+      row-gap: 15px;
+    }
+  }
+}

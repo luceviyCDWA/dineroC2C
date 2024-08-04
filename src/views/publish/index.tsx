@@ -1,95 +1,141 @@
-import { getCoinList, getHotCoinList } from "@/api/order";
-import OrderEdit from "@/components/orderEdit";
-import useChainListStore from "@/store/useChainListStore";
-import { ICoinItem, IHotItem } from "@/types";
 import React, { ReactNode, useEffect, useState } from "react";
+import { IndexBar, Input } from "antd-mobile";
+
+import usePublicDataStore from "@/store/usePublicDataStore";
+import OrderEdit from "@/components/orderEdit";
+
+import { IHotItem } from "@/types";
+
+import SearchIcon from '@/assets/imgs/search.png';
+import HotIcon from '@/assets/imgs/hot.png';
+
+import Styles from './index.module.less';
 
 const PublishPage: React.FC = () => {
-  const [coinList, setCoinList] = useState<ICoinItem[]>([]);
-  const [hotList, setHotList] = useState<IHotItem[]>([]);
+  const { coinList, hotList } = usePublicDataStore(
+    (state) => ({
+      coinList: state.coinList,
+      hotList: state.hotList,
+    }),
+  );
+  const [groupList, setGroupList] = useState<
+    Array<{
+      brief: string;
+      title: ReactNode;
+      list: IHotItem[];
+    }>
+  >([]);
 
-  const [curCoinId, setCurCoinId] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  const [curCoinId, setCurCoinId] = useState("");
   const [showOrderCreate, setShowOrderCreate] = useState(false);
 
-  const getChainList = useChainListStore((state) => state.getChainList);
-
   useEffect(() => {
-    initHotList();
-    initCoinList();
+    const tmpHotList = !search
+      ? hotList
+      : hotList.filter((item) => item.name.indexOf(search) >= 0);
+    const tmpCoinList = !search
+      ? coinList
+      : coinList.filter((item) => item.name.indexOf(search) >= 0);
 
-    getChainList();
-  }, []);
+    const groupList: Array<{
+      brief: string;
+      title: ReactNode;
+      list: IHotItem[];
+    }> = [];
+    const charCodeOfA = "A".charCodeAt(0);
 
-  const initHotList = async () => {
-    const list = await getHotCoinList();
+    groupList.push({
+      brief: "★",
+      title: (
+        <div className={Styles["hot-title"]}>
+          <img className={Styles["hot-icon"]} src={HotIcon} />
+          <span className={Styles["hot-txt"]}>Hot</span>
+        </div>
+      ),
+      list: tmpHotList,
+    });
 
-    setHotList(list || []);
-  }
+    groupList.push(
+      ...Array(26)
+        .fill("")
+        .map((_, i) => {
+          const letter = String.fromCharCode(charCodeOfA + i);
 
-  const initCoinList = async () => {
-    const coinList = await getCoinList('');
+          return {
+            brief: letter,
+            title: <div className={Styles["common-header"]}>{letter}</div>,
+            list: tmpCoinList.filter(
+              (coin) =>
+                coin.name.startsWith(letter) ||
+                coin.name.startsWith(letter.toLowerCase()),
+            ),
+          };
+        }),
+    );
 
-    setCoinList(coinList);
+    setGroupList(groupList.filter((group) => !!group.list?.length));
+  }, [coinList, hotList, search]);
+
+  const onClickSearch = () => {
+    setSearch(searchInput);
   }
 
   const onPublishCoin = (coinId: string) => {
     setCurCoinId(coinId);
     setShowOrderCreate(true);
-  }
-
-  const groupList: Array<{
-    brief: ReactNode;
-    title: ReactNode;
-    list: IHotItem[];
-  }> = [];
-  const charCodeOfA = 'A'.charCodeAt(0);
-
-  groupList.push({
-    brief: <img />,
-    title: (
-      <div>Hot</div>
-    ),
-    list: hotList,
-  });
-
-  groupList.push(
-    ...Array(26)
-      .fill("")
-      .map((_, i) => {
-        const letter = String.fromCharCode(charCodeOfA + i);
-
-        return {
-          brief: letter,
-          title: letter,
-          list: coinList.filter(
-            (coin) =>
-              coin.name.startsWith(letter) ||
-              coin.name.startsWith(letter.toLowerCase()),
-          ),
-        };
-      }),
-  );
+  };
 
   return (
-    <>
-      {groupList.map((group, index) => (
-        <div key={index}>
-          {group.brief}
-          {group.list.map((coin) => (
-            <div key={coin.id} onClick={() => onPublishCoin(coin.id)}>
-              <img src={coin.image} />
-              {coin.name}
-            </div>
+    <div className={Styles["publish-page"]}>
+      <div className={Styles["search"]}>
+        <img
+          className={Styles["search-icon"]}
+          src={SearchIcon}
+          onClick={onClickSearch}
+        />
+        <Input
+          className={Styles["search-input"]}
+          placeholder="Search"
+          value={searchInput}
+          onChange={setSearchInput}
+          onEnterPress={onClickSearch}
+        />
+      </div>
+
+      {groupList.length > 0 ? (
+        <IndexBar>
+          {groupList.map((group) => (
+            <IndexBar.Panel
+              key={group.brief}
+              index={group.brief}
+              title={group.title}
+            >
+              {group.list.map((coin) => (
+                <div
+                  className={Styles["coin-item"]}
+                  key={coin.id}
+                  onClick={() => onPublishCoin(coin.id)}
+                >
+                  <img className={Styles["icon"]} src={coin.image} />
+                  {coin.name}
+                </div>
+              ))}
+            </IndexBar.Panel>
           ))}
-        </div>
-      ))}
+        </IndexBar>
+      ) : (
+        <div className={Styles['empty']}>No Data...</div>
+      )}
 
       <OrderEdit
         showPanel={showOrderCreate}
         coinId={curCoinId}
         onClose={() => setShowOrderCreate(false)}
       />
-    </>
+    </div>
   );
-}
+};
 export default PublishPage;

@@ -65,3 +65,10 @@ export const createOrder = (data: {
     data,
   );
 };
+
+export const getRecommendList = () => {
+  return request.get<unknown, Array<{
+    id: string,
+    image: string;
+  }>>("/apis/v1/dinero/get_recommend_list");
+}

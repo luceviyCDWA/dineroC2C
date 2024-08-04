@@ -1,0 +1,117 @@
+.publish-page {
+  height: 100%;
+  padding: 10px 0;
+  box-sizing: border-box;
+
+  .flex(column);
+
+  .search {
+    height: 38px;
+    padding: 0 15px;
+    margin: 0 10px;
+    margin-bottom: 20px;
+
+    background: rgba(63,57,89,0.3);
+    border-radius: 8px;
+
+    .flex(row, flex-start, center);
+
+    &-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 15px;
+    }
+
+    &-input {
+      flex: 1;
+      height: 20px;
+      line-height: 20px;
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 400;
+      font-size: 14px;
+
+      input {
+        color: #fff;
+
+        &::placeholder {
+          color: #B5B5B5;
+        }
+      }
+    }
+  }
+
+  :global {
+    .adm-index-bar {
+      flex: 1;
+      --adm-color-background: #0E0D14;
+      --adm-color-fill-content: #0E0D14;
+
+      .adm-index-bar-anchor-title {
+        padding: 0;
+        margin-bottom: 15px;
+      }
+
+      .adm-index-bar-sidebar-row {
+        line-height: 17px;
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .hot-title {
+    padding: 0 10px;
+    .flex(row, flex-start, center);
+    column-gap: 5px;
+
+    .hot-icon {
+      width: 14px;
+      height: 16px;
+    }
+
+    .hot-txt {
+      font-size: 16px;
+      line-height: 22px;
+      background: linear-gradient(324.9795844106158deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .coin-item {
+    padding: 0 10px;
+    margin-bottom: 15px;
+
+    .flex(row, flex-start, center);
+    column-gap: 10px;
+
+    font-family: PingFangSC, PingFang SC;
+    font-weight: 500;
+    font-size: 14px;
+    color: #FFFFFF;
+
+    .icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .common-header {
+    width: 100%;
+    height: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background: rgba(30,33,41,0.5);
+
+    .flex(row, flex-start, center);
+  }
+
+  .empty {
+    height: 200px;
+
+    color: #fff;
+    font-size: 16px;
+
+    .flex(row, center, center);
+  }
+}

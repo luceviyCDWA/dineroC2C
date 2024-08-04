@@ -59,6 +59,9 @@ export interface IHotItem {
   id: string;
   name: string;
   image: string;
+  payment_name?: string;
+  buy_price?: string;
+  sell_price?: string;
 }
 
 
