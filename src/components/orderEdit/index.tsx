@@ -73,6 +73,11 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     setOrderId(order_id);
   };
 
+  const onClosePayGuarantee = () => {
+    setOrderId("");
+    onClose();
+  }
+
   const onPayGuarantee = async () => {
     await createOrderByContract(orderId, Number(totalPrice), actionType);
     onClose();
@@ -152,11 +157,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
         </div>
       </RightPage>
 
-      <RightPage
-        show={!!orderId}
-        onClose={() => setOrderId("")}
-        title="Publish"
-      >
+      <RightPage show={!!orderId} onClose={onClosePayGuarantee} title="Publish">
         <div className={Styles["success-page"]}>
           <div className={Styles["page-title"]}>
             <img className={Styles["icon"]} src={TitleImg} alt="title" />
@@ -182,7 +183,9 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
           </div>
 
           <div className={Styles["share-btn"]}>
-            <span className={Styles['btn']} onClick={onPayGuarantee}>Pay</span>
+            <span className={Styles["btn"]} onClick={onPayGuarantee}>
+              Pay
+            </span>
           </div>
         </div>
       </RightPage>
