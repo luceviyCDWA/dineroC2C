@@ -8,10 +8,8 @@ import useMsgStore from "@/store/useMsgStore";
 import MessageItem from "./components/messageItem";
 import MessageDetail from "./components/messageDetail";
 
-import { IMessageDetail } from "./types";
-
 import Styles from "./index.module.less";
-import { GuaranteeStatus } from "@/types";
+import { type IOrderDetail } from "@/types";
 
 const Message: React.FC = () => {
   const {
@@ -29,7 +27,7 @@ const Message: React.FC = () => {
   }));
 
   const [showDetail, setShowDetail] = useState(false);
-  const [curMsgDetail, setCurMsgDetail] = useState<IMessageDetail | null>(null);
+  const [curMsgDetail, setCurMsgDetail] = useState<IOrderDetail | null>(null);
 
   const onLoadMore = async () => {
     await getNextPageData();
@@ -48,23 +46,7 @@ const Message: React.FC = () => {
     Toast.clear();
 
     setShowDetail(true);
-    setCurMsgDetail({
-      id: orderInfo.id,
-
-      coinName: orderInfo.category_name,
-      coinIcon: orderInfo.category_image,
-
-      total: orderInfo.total_count,
-      totalPrice: orderInfo.total_price + '',
-      unitPrice: orderInfo.unit_price + '',
-      currencyName: orderInfo.payment_name,
-      actionType: orderInfo.type,
-
-      status: orderInfo.status,
-      guaranteeDeposit: orderInfo.is_mortgage === GuaranteeStatus.Guaranteed ? 'Has paid' : 'Pending',
-
-      deadline: 1000,
-    });
+    setCurMsgDetail(orderInfo);
   }, []);
 
   const onDetailClose = useCallback(() => {

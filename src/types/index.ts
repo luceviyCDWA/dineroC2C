@@ -3,14 +3,9 @@ export const enum ActionType {
   Sell = 1
 }
 
-export const DealerByActionType: Record<ActionType, string> = {
-  [ActionType.Buy]: "seller",
-  [ActionType.Sell]: "buyer",
-};
-
 export const BtnNameByActionType: Record<ActionType, string> = {
-  [ActionType.Buy]: "Buy",
-  [ActionType.Sell]: "Sell",
+  [ActionType.Buy]: "Sell",
+  [ActionType.Sell]: "Buy",
 };
 
 //waiting for buyer 2. waiting for seller 3.both are payed 4.cancel with buyer 5.cancel with seller 6.appeal with buyer 7. appeal with seller 8.cancel 9.buyer confirm 100.finish
@@ -48,6 +43,25 @@ export const enum GuaranteeStatus {
   Guaranteed = 2
 }
 
+// 排序
+export const enum SortType {
+  UnitPriceUp = 1,
+  UnitPriceDown = 2,
+  TotalPriceUp = 3,
+  TotalPriceDown = 4,
+  Newest = 5,
+  Earliest = 6,
+}
+
+export const SORT_TITLE_HASH: Record<SortType, string> = {
+  [SortType.UnitPriceUp]: "Price: from low to high",
+  [SortType.UnitPriceDown]: "Price: from high to low",
+  [SortType.TotalPriceUp]: "Total price: from low to high",
+  [SortType.TotalPriceDown]: "Total price: from high to low",
+  [SortType.Newest]: "Newest",
+  [SortType.Earliest]: "Earliest",
+};
+
 
 // 个人信息
 export interface IUserInfo {
@@ -82,4 +96,21 @@ export interface IChainItem {
   name: string;
   chain_id: string;
   contract_address: string;
+}
+
+export interface IOrderDetail {
+  id: string;
+  name: string;
+  order_onchain_id: string;
+  category_name: string;
+  category_image: string;
+  is_mortgage: GuaranteeStatus;
+  type: ActionType;
+
+  unit_price: string;
+  total_price: string;
+  total_count: number;
+  payment_name: string;
+
+  status: OrderStatus;
 }

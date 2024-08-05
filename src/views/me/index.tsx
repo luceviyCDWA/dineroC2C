@@ -72,10 +72,6 @@ const TaskComp: React.FC = () => {
     }
   }
 
-  function handleToDetail() {
-    
-  }
-
   const handleCompleteDaily = useCallback(() => {
     setHasSigned(hasSigned + 1);
     setTodayHasSigned(true);

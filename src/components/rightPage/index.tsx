@@ -25,9 +25,7 @@ const RightPage: React.FC<PropsWithChildren<RightPageCompProps>> = ({
   const [innerShow, setInnerShow] = useState(false);
 
   useEffect(() => {
-    if (show) {
-      setInnerShow(true);
-    }
+    setInnerShow(show);
   }, [show]);
 
   const onTransEnd = () => {

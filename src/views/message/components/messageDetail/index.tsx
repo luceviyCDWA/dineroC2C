@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import classNames from "classnames";
 
-import { getTimeStrBySec } from "@/utils";
 import RightPage from "@/components/rightPage";
 
-import TipsIcon from '@/assets/imgs/tips.png';
-
-import { ActionType, DealerByActionType, OrderStatus, OrderStatusTitleHash } from "@/types";
 import {
-  IMessageDetail,
-} from "@/views/message/types";
+  ActionType,
+  IOrderDetail,
+  OrderStatus,
+  OrderStatusTitleHash,
+} from "@/types";
 
 import Styles from './index.module.less';
 
 interface MessageDetailCompProps {
   showPanel: boolean;
-  msgDetail: IMessageDetail,
+  msgDetail: IOrderDetail;
   onClose: () => void;
 }
 
@@ -25,32 +24,16 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
   onClose,
 }) => {
   const {
-    coinIcon,
-    coinName,
-    actionType,
-    total,
-    totalPrice,
-    unitPrice,
-    currencyName,
+    category_image,
+    category_name,
+    type,
+    total_count,
+    total_price,
+    unit_price,
+    payment_name,
     status,
-    guaranteeDeposit,
-    deadline,
+    is_mortgage,
   } = msgDetail;
-
-  const [leftTime, setLeftTime] = useState(0);
-
-  useEffect(() => {
-    setLeftTime(deadline);
-  }, [deadline]);
-
-  useEffect(() => {
-    if (leftTime > 0) {
-      setTimeout(() => {
-        setLeftTime(leftTime - 1);
-      }, 1000);
-    }
-  }, [leftTime]);
-
 
   return (
     <RightPage
@@ -63,16 +46,16 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         <div className={Styles["coin__detail"]}>
           <img
             className={Styles["coin__detail-icon"]}
-            src={coinIcon}
+            src={category_image}
             alt="coin"
           />
 
           <div className={Styles["coin__detail-main"]}>
-            <div className={Styles["coin__detail-title"]}>{coinName}</div>
+            <div className={Styles["coin__detail-title"]}>{category_name}</div>
             <div className={Styles["coin__detail-type"]}>
               <span
                 className={classNames({
-                  [Styles["active"]]: actionType === ActionType.Buy,
+                  [Styles["active"]]: type === ActionType.Buy,
                 })}
               >
                 Buy
@@ -80,7 +63,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
               /
               <span
                 className={classNames({
-                  [Styles["active"]]: actionType === ActionType.Sell,
+                  [Styles["active"]]: type === ActionType.Sell,
                 })}
               >
                 Sell
@@ -93,20 +76,20 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Total</div>
-          <div className={Styles["detail__item-content"]}>{total}</div>
+          <div className={Styles["detail__item-content"]}>{total_count}</div>
         </div>
 
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Total Price</div>
           <div className={Styles["detail__item-content"]}>
-            {totalPrice} {currencyName}
+            {total_price} {payment_name}
           </div>
         </div>
 
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Unit price</div>
           <div className={Styles["detail__item-content"]}>
-            {unitPrice} {currencyName}
+            {unit_price} {payment_name}
           </div>
         </div>
 
@@ -120,25 +103,9 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Guarantee deposit</div>
           <div className={Styles["detail__item-content"]}>
-            {guaranteeDeposit}
+            {is_mortgage ? 'Paid' : 'Pending'}
           </div>
         </div>
-
-        {leftTime > 0 && (
-          <div className={Styles["tips"]}>
-            <div className={Styles["tips-icon"]}>
-              <img className={Styles["icon"]} src={TipsIcon} alt="tips" />
-            </div>
-
-            <div className={Styles["tips-content"]}>
-              The {DealerByActionType[actionType]} has made the payment. Please
-              pay the deposit within{" "}
-              <span className={Styles["left-time"]}>
-                {getTimeStrBySec(leftTime)}s
-              </span>
-            </div>
-          </div>
-        )}
       </div>
 
       {status === OrderStatus.InitState && (
@@ -149,7 +116,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
       )}
 
       {status === OrderStatus.WaitForBuyer &&
-        (actionType === ActionType.Buy ? (
+        (type === ActionType.Buy ? (
           // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Go to pay</div>
@@ -161,7 +128,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         ))}
 
       {status === OrderStatus.WaitForSeller &&
-        (actionType === ActionType.Sell ? (
+        (type === ActionType.Sell ? (
           // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Go to pay</div>
@@ -173,7 +140,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         ))}
 
       {status === OrderStatus.BothPaid &&
-        (actionType === ActionType.Buy ? (
+        (type === ActionType.Buy ? (
           // payOrder
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Confirm</div>
@@ -185,21 +152,21 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         ))}
 
       {status === OrderStatus.CancelWithBuyer &&
-        actionType === ActionType.Sell && (
+        type === ActionType.Sell && (
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
         )}
 
       {status === OrderStatus.CancelWithSeller &&
-        actionType === ActionType.Buy && (
+        type === ActionType.Buy && (
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
         )}
 
       {status === OrderStatus.Withdrawal &&
-        actionType === ActionType.Sell && (
+        type === ActionType.Sell && (
           <div className={Styles["detail__panel-btn"]}>
             <div className={Styles["btn"]}>Confirm</div>
           </div>

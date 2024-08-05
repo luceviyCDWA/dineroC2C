@@ -10,6 +10,9 @@ import SearchIcon from '@/assets/imgs/search.png';
 import HotIcon from '@/assets/imgs/hot.png';
 
 import Styles from './index.module.less';
+import { useAccount } from "wagmi";
+import useUserStore from "@/store/useUserStore";
+import useLoginModalStore from "@/store/useLoginModalStore";
 
 const PublishPage: React.FC = () => {
   const { coinList, hotList } = usePublicDataStore(
@@ -31,6 +34,10 @@ const PublishPage: React.FC = () => {
 
   const [curCoinId, setCurCoinId] = useState("");
   const [showOrderCreate, setShowOrderCreate] = useState(false);
+
+  const { isConnected } = useAccount();
+  const isLogin = useUserStore(state => state.isLogin);
+  const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
 
   useEffect(() => {
     const tmpHotList = !search
@@ -83,7 +90,10 @@ const PublishPage: React.FC = () => {
     setSearch(searchInput);
   }
 
-  const onPublishCoin = (coinId: string) => {
+  const onPublishCoin = async (coinId: string) => {
+    if (!isConnected || !isLogin) {
+      await onShowLogin();
+    }
     setCurCoinId(coinId);
     setShowOrderCreate(true);
   };

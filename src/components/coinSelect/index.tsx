@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Popup } from "antd-mobile";
 import { DownOutline } from "antd-mobile-icons";
 
-import { ICoinInfo } from "@/views/market/components/coinItem/types";
-
 import Styles from "./index.module.less";
+import { ICoinItem } from "@/types";
 
 
 interface CoinSelectCompProps {
-  curCoinInfo?: ICoinInfo;
-  coinList: ICoinInfo[];
+  curCoinInfo?: ICoinItem;
   onSelectCoin: (coinId: string) => void;
 }
 
@@ -28,7 +26,7 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
         <div className={Styles["coin-info"]}>
           {curCoinInfo && (
             <>
-              <img className={Styles["coin-icon"]} src={curCoinInfo.icon} />
+              <img className={Styles["coin-icon"]} src={curCoinInfo.image} />
               <div className={Styles["coin-name"]}>{curCoinInfo.name}</div>
             </>
           )}

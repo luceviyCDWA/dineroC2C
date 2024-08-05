@@ -2,7 +2,8 @@ import { create } from "zustand";
 
 interface LoginModalState {
   showModal: boolean;
-  afterLogin: (() => void ) | null;
+  afterLoginSuccess: (() => void) | null;
+  afterLoginFail: ((str: string) => void) | null;
 
   onShowLogin: () => Promise<void>;
   onHideLogin: (loginSuccess: boolean) => void;
@@ -10,41 +11,44 @@ interface LoginModalState {
 
 const useLoginModalStore = create<LoginModalState>((set, get) => ({
   showModal: false,
-  afterLogin: null,
+  afterLoginSuccess: null,
+  afterLoginFail: null,
 
   onShowLogin: () => {
     let resolveFn: (value: void | PromiseLike<void>) => void;
+    let rejectFn: (value: string) => void;
 
-    const loginPromise = new Promise<void>((resolve) => {
+    const loginPromise = new Promise<void>((resolve, reject) => {
       resolveFn = resolve;
+      rejectFn = reject;
     });
 
-    set(state => ({
+    set((state) => ({
       ...state,
       showModal: true,
-      afterLogin: resolveFn,
+      afterLoginSuccess: resolveFn,
+      afterLoginFail: rejectFn, 
     }));
 
     return loginPromise;
   },
 
   onHideLogin: (isSucess) => {
-    if (!isSucess) {
-      return;
+    const { afterLoginSuccess, afterLoginFail } = get();
+
+    if (isSucess) {
+      afterLoginSuccess && afterLoginSuccess();
+    } else {
+      afterLoginFail && afterLoginFail('loginFail');
     }
 
-    const { afterLogin } = get();
-
-    if (afterLogin) {
-      afterLogin();
-    }
-
-    set(state => ({
+    set((state) => ({
       ...state,
       showModal: false,
-      afterLogin: null,
+      afterLoginSuccess: null,
+      afterLoginFail: null,
     }));
-  }
+  },
 }));
 
 export default useLoginModalStore;

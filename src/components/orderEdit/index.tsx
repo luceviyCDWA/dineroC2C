@@ -4,15 +4,14 @@ import { Input } from "antd-mobile";
 
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { createOrder } from "@/api/order";
-import useUnlock from "@/hooks/useUnlock";
+import useContract from "@/hooks/useContract";
 
 import RightPage from "../rightPage";
 
-import { ActionType, ICoinItem } from "@/types";
-import { useContractWrite } from "wagmi";
-import { DineroAbi } from "@/utils/abi";
+import { ActionType } from "@/types";
 
 import USDTImg from '@/assets/imgs/example/usdt.png';
+import TitleImg from '@/assets/imgs/mask.png';
 
 import Styles from "./index.module.less";
 
@@ -27,45 +26,27 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   showPanel,
   onClose,
 }) => {
-  const coinList = usePublicDataStore(state => state.coinList);
+  const chainList = usePublicDataStore(state => state.chainList);
 
+  // 订单参数
   const [actionType, setActionType] = useState<ActionType>(ActionType.Buy);
   const [total, setTotal] = useState("");
   const [totalPrice, setTotalPrice] = useState("");
   const [unitPrice, setUnitPrice] = useState('');
-  const [curCoinInfo, setCurCoinInfo] = useState<ICoinItem | null>(null);
 
-  const { approve, funcWithContract, USDT_ADDRESS } = useUnlock();
+  const [orderId, setOrderId] = useState('');
 
-  // const { write, isSuccess, isLoading } = useContractWrite({
-  //   abi: DineroAbi,
-  //   address:"0x3be0cd01d9801546ebf77e8915f2c10e03c34724",
-  //   functionName: "createOrder",
-  //   args: ["5", Number(totalPrice) * Math.pow(10, 18), actionType],
-  // });
-
-  // const { write, isSuccess, isLoading } = useContractWrite({
-  //   abi: DineroAbi,
-  //   address:"0x3be0cd01d9801546ebf77e8915f2c10e03c34724",
-  //   functionName: "payOrder",
-  //   args: ["5", Number(totalPrice) * Math.pow(10, 18), actionType],
-  // });
-
-  const { write, isSuccess, isLoading } = useContractWrite({
-    abi: DineroAbi,
-    address:"0x3be0cd01d9801546ebf77e8915f2c10e03c34724",
-    functionName: "cancelOrder",
-    args: ["5"],
-  });
+  const {
+    createOrder: createOrderByContract,
+    CONTRACT_ADDRESS,
+  } = useContract();
 
   useEffect(() => {
-    if (coinId && coinList?.length) {
-      const coinInfo = coinList.find(coin => coin.id === coinId);
-
-      coinInfo && setCurCoinInfo(coinInfo);
-    }
-    
-  }, [coinId, coinList]);
+    setActionType(ActionType.Buy);
+    setTotal('');
+    setTotalPrice('');
+    setOrderId('');
+  }, [showPanel]);
 
   useEffect(() => {
     if (total && totalPrice) {
@@ -76,105 +57,136 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   }, [total, totalPrice]);
 
   const onPublish = async () => {
-    // const chainInfo = chainList[0];
+    const chainInfo = chainList[0];
 
-    // const res = await createOrder({
-    //   total_count: Number(total),
-    //   total_price: Number(totalPrice),
-    //   chain_id: chainInfo.chain_id,
-    //   chain_name: chainInfo.name,
-    //   contract_address: "0x0cB3f96E74C953610c90F12c7015B5f38102571d",
-    //   category_id: coinId,
-    //   type: actionType,
-    //   payment_name: "USDT",
-    // });
+    const { order_id } = await createOrder({
+      total_count: Number(total),
+      total_price: Number(totalPrice),
+      chain_id: chainInfo.chain_id,
+      chain_name: chainInfo.name,
+      contract_address: CONTRACT_ADDRESS,
+      category_id: coinId,
+      type: actionType,
+      payment_name: "USDT",
+    });
 
-    // await approve(
-    //   USDT_ADDRESS as `0x${string}`,
-    //   "0x3be0cd01d9801546ebf77e8915f2c10e03c34724",
-    //   BigInt(Number(totalPrice) * Math.pow(10, 18)),
-    // );
-
-    // await funcWithContract(
-    //   "0x0cB3f96E74C953610c90F12c7015B5f38102571d",
-    //   "createOrder",
-    //   ["5", Number(totalPrice) * Math.pow(10, 18), actionType],
-    // );
-    write();
+    setOrderId(order_id);
   };
 
+  const onPayGuarantee = async () => {
+    await createOrderByContract(orderId, Number(totalPrice), actionType);
+    onClose();
+  }
+
   return (
-    <RightPage show={showPanel} onClose={onClose} title="Publish">
-      <div className={Styles["order__publish"]}>
-        <div className={Styles["order__publish-header"]}>
-          <div className={Styles["tabs"]}>
-            <div
-              className={classNames(Styles["tab-item"], {
-                [Styles["active"]]: actionType === ActionType.Buy,
-              })}
-              onClick={() => setActionType(ActionType.Buy)}
-            >
-              Buy
+    <>
+      <RightPage show={showPanel} onClose={onClose} title="Publish">
+        <div className={Styles["order__publish"]}>
+          <div className={Styles["order__publish-header"]}>
+            <div className={Styles["tabs"]}>
+              <div
+                className={classNames(Styles["tab-item"], {
+                  [Styles["active"]]: actionType === ActionType.Buy,
+                })}
+                onClick={() => setActionType(ActionType.Buy)}
+              >
+                Buy
+              </div>
+              <div
+                className={classNames(Styles["tab-item"], {
+                  [Styles["active"]]: actionType === ActionType.Sell,
+                })}
+                onClick={() => setActionType(ActionType.Sell)}
+              >
+                Sell
+              </div>
             </div>
-            <div
-              className={classNames(Styles["tab-item"], {
-                [Styles["active"]]: actionType === ActionType.Sell,
-              })}
-              onClick={() => setActionType(ActionType.Sell)}
-            >
-              Sell
+
+            <div className={Styles["rules"]}>Rules</div>
+          </div>
+
+          <div className={Styles["order__publish-coin"]}></div>
+
+          <div className={Styles["order__publish-main"]}>
+            <div className={Styles["input__item"]}>
+              <div className={Styles["input__item-title"]}>Total</div>
+              <div className={Styles["input__item-input"]}>
+                <Input
+                  type="number"
+                  value={total}
+                  placeholder="Please enter"
+                  onChange={(e) => setTotal(e)}
+                />
+              </div>
+            </div>
+
+            <div className={Styles["input__item"]}>
+              <div className={Styles["input__item-title"]}>Total Price</div>
+              <div className={Styles["input__item-input"]}>
+                <Input
+                  type="number"
+                  value={totalPrice}
+                  placeholder="Please enter"
+                  onChange={(e) => setTotalPrice(e)}
+                />
+                <img className={Styles["currency-icon"]} src={USDTImg} />
+                <span className={Styles["currency-name"]}>USDT</span>
+              </div>
+            </div>
+
+            <div className={Styles["input__item"]}>
+              <div className={Styles["input__item-title"]}>Unit Price</div>
+              <div className={Styles["input__item-input"]}>
+                {unitPrice ? (
+                  <span className={Styles["unit-price"]}>{unitPrice} USDT</span>
+                ) : (
+                  <span className={Styles["placeholder"]}>Please Enter</span>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className={Styles["rules"]}>Rules</div>
+          <div className={Styles["publish-btn"]} onClick={onPublish}>
+            <div className={Styles["btn"]}>Publish</div>
+          </div>
         </div>
+      </RightPage>
 
-        <div className={Styles["order__publish-coin"]}></div>
-
-        <div className={Styles["order__publish-main"]}>
-          <div className={Styles["input__item"]}>
-            <div className={Styles["input__item-title"]}>Total</div>
-            <div className={Styles["input__item-input"]}>
-              <Input
-                type="number"
-                value={total}
-                placeholder="Please enter"
-                onChange={(e) => setTotal(e)}
-              />
-            </div>
+      <RightPage
+        show={!!orderId}
+        onClose={() => setOrderId("")}
+        title="Publish"
+      >
+        <div className={Styles["success-page"]}>
+          <div className={Styles["page-title"]}>
+            <img className={Styles["icon"]} src={TitleImg} alt="title" />
+            <div className={Styles["title"]}>Publish</div>
+            <div className={Styles["title"]}>Successfully!</div>
           </div>
 
-          <div className={Styles["input__item"]}>
-            <div className={Styles["input__item-title"]}>Total Price</div>
-            <div className={Styles["input__item-input"]}>
-              <Input
-                type="number"
-                value={totalPrice}
-                placeholder="Please enter"
-                onChange={(e) => setTotalPrice(e)}
-              />
-              <img className={Styles["currency-icon"]} src={USDTImg} />
-              <span className={Styles["currency-name"]}>USDT</span>
-            </div>
+          <div className={Styles["content-2"]}>
+            By paying a deposit now, your transaction success rate can increase
+            by 500%!
           </div>
 
-          <div className={Styles["input__item"]}>
-            <div className={Styles["input__item-title"]}>Unit Price</div>
-            <div className={Styles["input__item-input"]}>
-              {unitPrice ? (
-                <span className={Styles["unit-price"]}>{unitPrice} USDT</span>
-              ) : (
-                <span className={Styles["placeholder"]}>Please Enter</span>
-              )}
-            </div>
+          <div className={Styles["content-3"]}>
+            A decentralized contract will ensure the security of your funds.
+          </div>
+          <div className={Styles["content-3"]}>
+            The deposit will be stored in a smart contract, which cannot be
+            misappropriated by anyone.
+          </div>
+          <div className={Styles["content-3"]}>
+            Funds can be retrieved in real-time from the smart contract (in the
+            event of no transaction).
+          </div>
+
+          <div className={Styles["share-btn"]}>
+            <span className={Styles['btn']} onClick={onPayGuarantee}>Pay</span>
           </div>
         </div>
-
-        <div className={Styles["publish-btn"]} onClick={onPublish}>
-          <div className={Styles["btn"]}>Publish</div>
-        </div>
-      </div>
-    </RightPage>
+      </RightPage>
+    </>
   );
 };
 export default OrderEdit;

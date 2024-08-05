@@ -59,6 +59,7 @@ const LoginModal: React.FC = () => {
           inviteCode,
         );
 
+        onHideLogin(true);
         afterLogin(res.bearer_token);
       })();
     },
@@ -89,7 +90,7 @@ const LoginModal: React.FC = () => {
   };
 
   return (
-    <RightPage show={showModal} onClose={onHideLogin}>
+    <RightPage show={showModal} onClose={() => onHideLogin(false)}>
       <div className={Styles["login__panel"]}>
         <div className={Styles["login__panel-header"]}>Log in to Dinero</div>
 
