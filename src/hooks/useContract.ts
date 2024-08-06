@@ -5,7 +5,7 @@ import {
 import { erc20ABI, PublicClient } from "wagmi";
 import { useAccount, usePublicClient, useWalletClient, useContractWrite } from "wagmi";
 import { useEffect, useRef } from "react";
-import { getContract, GetWalletClientResult } from "wagmi/actions";
+import { GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
 import { Toast } from "antd-mobile";
 import { ActionType } from "@/types";
@@ -32,6 +32,13 @@ export default function useContract() {
 
   const chainList = usePublicDataStore(state => state.chainList);
 
+  const { writeAsync: writeApprove } = useContractWrite({
+    address: USDT_ADDRESS,
+    abi: erc20ABI,
+    functionName: "approve",
+    account: account.address,
+  });
+
   const { writeAsync: writeCreateOrder } = useContractWrite({
     abi: DineroAbi,
     address: CONTRACT_ADDRESS,
@@ -56,27 +63,6 @@ export default function useContract() {
     functionName: "finishOrderBySeller",
   });
 
-  // const { write, isSuccess, isLoading } = useContractWrite({
-  //   abi: DineroAbi,
-  //   address:CONTRACT_ADDRESS,
-  //   functionName: "createOrder",
-  //   args: ["5", Number(totalPrice) * Math.pow(10, 18), actionType],
-  // });
-
-  // const { write, isSuccess, isLoading } = useContractWrite({
-  //   abi: DineroAbi,
-  //   address:CONTRACT_ADDRESS,
-  //   functionName: "payOrder",
-  //   args: ["5", Number(totalPrice) * Math.pow(10, 18), actionType],
-  // });
-
-  // const { write, isSuccess, isLoading } = useContractWrite({
-  //   abi: DineroAbi,
-  //   address:CONTRACT_ADDRESS,
-  //   functionName: "cancelOrder",
-  //   args: ["5"],
-  // });
-
   useEffect(() => {
     if (publicClient) {
       usePublicClientRef.current = publicClient;
@@ -90,7 +76,6 @@ export default function useContract() {
   }, [walletClient]);
 
   const approve = async (
-    tokenAddress: `0x${string}`,
     unLockAddress: `0x${string}`,
     amount: bigint,
   ) => {
@@ -98,30 +83,15 @@ export default function useContract() {
       return;
     }
 
-    let hash;
-    try {
-      const token0 = getContract({
-        address: tokenAddress,
-        abi: erc20ABI,
-        publicClient: usePublicClientRef.current,
-        walletClient: useWalletClientRef.current,
-      });
+    let hash
 
-      hash = await token0.write.approve({
-        account: account.address,
+    try {
+      const res = await writeApprove({
         args: [unLockAddress, amount],
       });
 
-      // const { request } = await usePublicClientRef.current.simulateContract({
-      //   abi: erc20ABI,
-      //   address: tokenAddress,
-      //   functionName: "approve",
-      //   args: [unLockAddress, amount],
-      //   account: account.address,
-      // });
-      // hash = await useWalletClientRef.current?.writeContract(request);
+      hash = res.hash;
 
-      // wati tx
       await usePublicClientRef.current?.waitForTransactionReceipt({
         hash,
       });
@@ -158,7 +128,6 @@ export default function useContract() {
 
     try {
       await approve(
-        USDT_ADDRESS as `0x${string}`,
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
@@ -194,7 +163,6 @@ export default function useContract() {
 
     try {
       await approve(
-        USDT_ADDRESS as `0x${string}`,
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
