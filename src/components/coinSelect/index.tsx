@@ -1,28 +1,48 @@
 import React, { useState } from "react";
 import { Popup } from "antd-mobile";
-import { DownOutline } from "antd-mobile-icons";
 
-import Styles from "./index.module.less";
 import { ICoinItem } from "@/types";
 
+import ArrowIcon from "@/assets/imgs/arrow.png";
+
+import Styles from "./index.module.less";
+import usePublicDataStore from "@/store/usePublicDataStore";
 
 interface CoinSelectCompProps {
   curCoinInfo?: ICoinItem;
-  onSelectCoin: (coinId: string) => void;
+  onSelectCoin: (coinInfo: ICoinItem) => void;
 }
 
 const CoinSelect: React.FC<CoinSelectCompProps> = ({
   curCoinInfo,
+  onSelectCoin,
 }) => {
+  const { coinList } = usePublicDataStore((state) => ({
+    coinList: state.coinList,
+  }));
+
   const [showPopup, setShowPopup] = useState(false);
 
   const onHidePopup = () => {
     setShowPopup(false);
-  }
+  };
+
+  const onSelect = (coinInfo: ICoinItem) => {
+    setShowPopup(false);
+
+    if (coinInfo.id !== curCoinInfo?.id) {
+      onSelectCoin(coinInfo);
+    }
+  };
+
+  console.log('###', curCoinInfo);
 
   return (
     <div className={Styles["coin__select"]}>
-      <div className={Styles["coin__select-cur"]} onClick={() => setShowPopup(true)}>
+      <div
+        className={Styles["coin__select-cur"]}
+        onClick={() => setShowPopup(true)}
+      >
         <div className={Styles["coin-info"]}>
           {curCoinInfo && (
             <>
@@ -31,22 +51,36 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
             </>
           )}
         </div>
-        <DownOutline />
+        <img className={Styles["arrow"]} src={ArrowIcon} />
       </div>
 
       <Popup
         visible={showPopup}
         onMaskClick={onHidePopup}
         bodyStyle={{
-          borderTopLeftRadius: "15px",
-          borderTopRightRadius: "15px",
+          height: "60vh",
           background: "#15161B",
-          minHeight: "50vh",
+          borderRadius: "15px 15px 0px 0px",
         }}
       >
-        123
+        <div className={Styles["coin__list"]}>
+          <div className={Styles["coin__list-prefix"]}></div>
+
+          <div className={Styles["list-container"]}>
+            {coinList.map((coin) => (
+              <div
+                className={Styles["coin-item"]}
+                key={coin.id}
+                onClick={() => onSelect(coin)}
+              >
+                <img className={Styles["icon"]} src={coin.image} />
+                {coin.name}
+              </div>
+            ))}
+          </div>
+        </div>
       </Popup>
     </div>
   );
-}
+};
 export default CoinSelect;
