@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 import CoinItem from "./components/coinItem";
 import MarketItem from "./components/marketItem";
-import CoinSelect from "@/components/coinSelect";
+// import CoinSelect from "@/components/coinSelect";
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { getOrderList } from "@/api/order";
 
@@ -28,11 +28,11 @@ const Market: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
 
   // 过滤
-  const [type, setType] = useState<ActionType>(ActionType.Buy); 
+  const [type] = useState<ActionType>(ActionType.Buy); 
   const [curCoin, setCurCoin] = useState<ICoinItem | null>(null);
-  const [sortType, setSortType] = useState<SortType>(SortType.UnitPriceDown);
-  const [search, setSearch] = useState('');
-  const [guaranteeStatus, setGuaranteeStatus] = useState<GuaranteeStatus>(
+  const [sortType] = useState<SortType>(SortType.UnitPriceDown);
+  const [search] = useState('');
+  const [guaranteeStatus] = useState<GuaranteeStatus>(
     GuaranteeStatus.NotGuaranteed,
   );
 

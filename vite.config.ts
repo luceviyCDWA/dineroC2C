@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
-import pxtovw from "postcss-px-to-viewport";
+import pxtovw from "@minko-fe/postcss-pxtoviewport";
 
 const loder_pxtovw = pxtovw({
   //这里是设计稿宽度 自己修改
