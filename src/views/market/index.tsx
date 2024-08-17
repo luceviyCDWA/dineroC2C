@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 import CoinItem from "./components/coinItem";
 import MarketItem from "./components/marketItem";
-// import CoinSelect from "@/components/coinSelect";
+import CoinSelect from "@/components/coinSelect";
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { getOrderList } from "@/api/order";
 
@@ -28,11 +28,11 @@ const Market: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
 
   // 过滤
-  const [type] = useState<ActionType>(ActionType.Buy); 
+  const [type, setType] = useState<ActionType>(ActionType.Buy); 
   const [curCoin, setCurCoin] = useState<ICoinItem | null>(null);
-  const [sortType] = useState<SortType>(SortType.UnitPriceDown);
-  const [search] = useState('');
-  const [guaranteeStatus] = useState<GuaranteeStatus>(
+  const [sortType, setSortType] = useState<SortType>(SortType.UnitPriceDown);
+  const [search, setSearch] = useState('');
+  const [guaranteeStatus, setGuaranteeStatus] = useState<GuaranteeStatus>(
     GuaranteeStatus.NotGuaranteed,
   );
 
@@ -44,6 +44,10 @@ const Market: React.FC = () => {
       setCurCoin(coinList[0]);
     }
   }, [coinList]);
+
+  useEffect(() => {
+    onGetOrderList(true);
+  }, [type, curCoin, sortType, guaranteeStatus]);
 
   const onGetOrderList = async (isReset?: boolean) => {
     if (!curCoin) {
@@ -60,19 +64,29 @@ const Market: React.FC = () => {
     const curOffset = isReset ? START_OFFSET : offset;
     const nowList = isReset ? [] : [...orderList];
 
-    const { total, list = [] } = await getOrderList({
-      category_id: curCoin?.id,
-      type,
-      is_mortgage: guaranteeStatus,
-      keyword: search,
-      sort: sortType,
-      limit: PAGE_SIZE,
-      offset: curOffset,
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "Loading...",
     });
 
-    setOrderList([...nowList, ...list]);
-    setOffset(curOffset + PAGE_SIZE);
-    setHasMore(curOffset + PAGE_SIZE < total);
+    try {
+      const { total, list = [] } = await getOrderList({
+        category_id: curCoin?.id,
+        type,
+        is_mortgage: guaranteeStatus,
+        keyword: search,
+        sort: sortType,
+        limit: PAGE_SIZE,
+        offset: curOffset,
+      });
+
+      setOrderList([...nowList, ...(list || [])]);
+      setOffset(curOffset + PAGE_SIZE);
+      setHasMore(curOffset + PAGE_SIZE < total);
+    } finally {
+      Toast.clear();
+    }
   }
 
   const onResetData = () => {
@@ -84,11 +98,11 @@ const Market: React.FC = () => {
   }
 
   const onSelectSortType = (newSortType: SortType) => {
-    if (newSortType === sortType) {
+    if (Number(newSortType) === sortType) {
       return;
     }
 
-    setSortType(newSortType);
+    setSortType(Number(newSortType));
     setShowSortPopup(false);
   }
 
@@ -161,6 +175,7 @@ const Market: React.FC = () => {
                     type="number"
                     placeholder="amount"
                     onChange={setSearch}
+                    onEnterPress={onResetData}
                   />
 
                   <img className={Styles["key__input-icon"]} src={USDTIcon} />
@@ -223,10 +238,10 @@ const Market: React.FC = () => {
                   (type) => (
                     <div
                       className={classNames(Styles["list-item"], {
-                        [Styles["active"]]: type === sortType,
+                        [Styles["active"]]: Number(type) === sortType,
                       })}
-                      key={type}
-                      onClick={() => onSelectSortType(type)}
+                      key={Number(type)}
+                      onClick={() => onSelectSortType(Number(type))}
                     >
                       <div className={Styles["container"]}>
                         <span>{SORT_TITLE_HASH[type]}</span>

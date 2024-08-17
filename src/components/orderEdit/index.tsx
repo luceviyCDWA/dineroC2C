@@ -47,18 +47,16 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   } = useContract();
 
   useEffect(() => {
-    setCurCoinInfo(coinList.find(target => target.id === coinId));
-  }, [coinId, coinList]);
-
-  useEffect(() => {
     if (!showPanel) {
       setActionType(ActionType.Buy);
       setTotal("");
       setTotalPrice("");
       setOrderId("");
       setCurCoinInfo(undefined);
+    } else {
+      setCurCoinInfo(coinList.find((target) => target.id === coinId));
     }
-  }, [showPanel]);
+  }, [showPanel, coinId, coinList]);
 
   useEffect(() => {
     if (total && totalPrice) {
@@ -98,8 +96,6 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     await createOrderByContract(orderId, Number(totalPrice), actionType);
     onClose();
   }
-
-  console.log("##", curCoinInfo);
 
   return (
     <>

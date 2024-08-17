@@ -35,8 +35,6 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
     }
   };
 
-  console.log('###', curCoinInfo);
-
   return (
     <div className={Styles["coin__select"]}>
       <div
