@@ -51,9 +51,9 @@ const Market: React.FC = () => {
 
   const onGetOrderList = async (isReset?: boolean) => {
     if (!curCoin) {
-      Toast.show({
-        content: 'Please Select Category First',
-      });
+      // Toast.show({
+      //   content: 'Please Select Category First',
+      // });
       return;
     }
 
