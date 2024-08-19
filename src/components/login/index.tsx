@@ -94,20 +94,20 @@ const LoginModal: React.FC = () => {
       <div className={Styles["login__panel"]}>
         <div className={Styles["login__panel-header"]}>Log in to Dinero</div>
 
-        <div className={Styles["login__panel-invite"]}>
-          <div className={Styles["bg"]}></div>
-          <div className={Styles["content"]}>
-            <span className={Styles["label"]}>
-              <span className={Styles["text"]}>invite code (if exist)</span>
-            </span>
-            <Input value={inviteCode} onChange={setInviteCode} />
-          </div>
-        </div>
-
         <div className={Styles["login__panel-list"]}>
           <div className={Styles["login-item"]} onClick={onConnectWallet}>
             <img className={Styles["icon"]} src={WalletIcon} alt="wallet" />
             Wallet
+          </div>
+        </div>
+
+        <div className={Styles["login__panel-invite"]}>
+          <div className={Styles["bg"]}></div>
+          <div className={Styles["content"]}>
+            <span className={Styles["label"]}>
+              <span className={Styles["text"]}>invite code (optional)</span>
+            </span>
+            <Input value={inviteCode} onChange={setInviteCode} />
           </div>
         </div>
       </div>

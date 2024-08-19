@@ -83,7 +83,7 @@ const TaskComp: React.FC = () => {
       <div className={Styles["total__score"]}>
         <div className={Styles["total__score-detail"]}>
           <div className={Styles["total__score-detail-title"]}>
-            AI Points
+            D Point
             <img
               className={Styles["total__score-detail-tips"]}
               src={AITips}
