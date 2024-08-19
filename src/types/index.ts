@@ -113,4 +113,6 @@ export interface IOrderDetail {
   payment_name: string;
 
   status: OrderStatus;
+
+  created_at?: string;
 }

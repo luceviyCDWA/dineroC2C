@@ -52,7 +52,7 @@ const RightPage: React.FC<PropsWithChildren<RightPageCompProps>> = ({
         <div className={Styles["title"]}>{title}</div>
         <div className={Styles["btns"]}>{rightBtnNode}</div>
       </div>
-      {children}
+      <div className={Styles["right__panel-content"]}>{children}</div>
     </div>
   );
 };

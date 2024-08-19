@@ -1,3 +1,4 @@
+import { DEFAULT_PAGE_SIZE } from "@/config/env";
 import { IOrderDetail } from "@/types";
 import request from "@/utils/request";
 
@@ -51,15 +52,15 @@ export function getScoreDetailList() {
   >("/apis/v1/task/get_user_task_log_list");
 }
 
-export function getOrderList(data: {
-  limit: number;
-  offset: number;
-}) {
+export function getOrderList(page: number) {
   return request.post<
     unknown,
     {
       total: number;
       list: Array<IOrderDetail>;
     }
-  >("/apis/v1/dinero/get_my_order_list", data);
+  >("/apis/v1/dinero/get_my_order_list", {
+    offset: (page - 1) * DEFAULT_PAGE_SIZE + 1,
+    limit: DEFAULT_PAGE_SIZE,
+  });
 }
