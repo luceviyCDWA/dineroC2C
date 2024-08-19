@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 // common Rpc
@@ -83,7 +83,9 @@ const Layout: React.FC = () => {
           <div className="layout">
             <Header />
             <div className="content">
-              <Outlet></Outlet>
+              <Suspense fallback={<div></div>}>
+                <Outlet></Outlet>
+              </Suspense>
             </div>
             <Footer />
           </div>

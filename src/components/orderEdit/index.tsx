@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { Input } from "antd-mobile";
+import { Input, Toast } from "antd-mobile";
 
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { createOrder } from "@/api/order";
 import useContract from "@/hooks/useContract";
+import CoinSelect from "../coinSelect";
 
 import RightPage from "../rightPage";
 
-import { ActionType } from "@/types";
+import { ActionType, ICoinItem } from "@/types";
 
 import USDTImg from '@/assets/imgs/example/usdt.png';
 import TitleImg from '@/assets/imgs/mask.png';
@@ -26,9 +27,13 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   showPanel,
   onClose,
 }) => {
-  const chainList = usePublicDataStore(state => state.chainList);
+  const { chainList, coinList } = usePublicDataStore((state) => ({
+    chainList: state.chainList,
+    coinList: state.coinList,
+  }));
 
   // 订单参数
+  const [curCoinInfo, setCurCoinInfo] = useState<ICoinItem>();
   const [actionType, setActionType] = useState<ActionType>(ActionType.Buy);
   const [total, setTotal] = useState("");
   const [totalPrice, setTotalPrice] = useState("");
@@ -42,11 +47,16 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   } = useContract();
 
   useEffect(() => {
-    setActionType(ActionType.Buy);
-    setTotal('');
-    setTotalPrice('');
-    setOrderId('');
-  }, [showPanel]);
+    if (!showPanel) {
+      setActionType(ActionType.Buy);
+      setTotal("");
+      setTotalPrice("");
+      setOrderId("");
+      setCurCoinInfo(undefined);
+    } else {
+      setCurCoinInfo(coinList.find((target) => target.id === coinId));
+    }
+  }, [showPanel, coinId, coinList]);
 
   useEffect(() => {
     if (total && totalPrice) {
@@ -59,13 +69,17 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   const onPublish = async () => {
     const chainInfo = chainList[0];
 
+    if (!curCoinInfo) {
+      return Toast.show('Please select category first');
+    }
+
     const { order_id } = await createOrder({
       total_count: Number(total),
       total_price: Number(totalPrice),
       chain_id: chainInfo.chain_id,
       chain_name: chainInfo.name,
       contract_address: CONTRACT_ADDRESS,
-      category_id: coinId,
+      category_id: curCoinInfo?.id,
       type: actionType,
       payment_name: "USDT",
     });
@@ -110,7 +124,9 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
             <div className={Styles["rules"]}>Rules</div>
           </div>
 
-          <div className={Styles["order__publish-coin"]}></div>
+          <div className={Styles["order__publish-coin"]}>
+            <CoinSelect curCoinInfo={curCoinInfo} onSelectCoin={setCurCoinInfo} />
+          </div>
 
           <div className={Styles["order__publish-main"]}>
             <div className={Styles["input__item"]}>

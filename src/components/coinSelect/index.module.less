@@ -1,0 +1,85 @@
+.coin__select {
+  &-cur {
+    .flex(row, flex-start, center);
+    .btn-mix();
+
+    .coin-info {
+      width: 70px;
+      height: 20px;
+      margin-right: 5px;
+
+      .flex(row, space-between, center);
+
+      .coin-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .coin-name {
+        width: 45px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 16px;
+        color: #FFFFFF;
+      }
+    }
+
+    .arrow {
+      width: 10px;
+      height: 6px;
+    }
+  }
+}
+
+.coin__list {
+  height: 100%;
+  padding: 15px 10px;
+  box-sizing: border-box;
+
+  &-prefix {
+    height: 4px;
+    margin-bottom: 15px;
+    position: relative;
+
+    &::before {
+      content: ' ';
+      width: 40px;
+      height: 4px;
+      background: #262A38;
+      border-radius: 2px;
+
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .list-container {
+    height: calc(100% - 19px);
+    overflow-y: auto;
+    .flex(column);
+
+    .coin-item {
+      padding: 0 10px;
+      margin-bottom: 15px;
+
+      .flex(row, flex-start, center);
+      column-gap: 10px;
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 14px;
+      color: #FFFFFF;
+
+      .icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+}

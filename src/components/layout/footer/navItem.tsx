@@ -56,7 +56,7 @@ const NavItem: React.FC<NavItemCompProps> = ({
         ) : (
           <img className={Styles["icon"]} src={icon} alt="icon" />
         )}
-        {navInfo.type === NAV_TYPE.MESSAGE && (
+        {navInfo.type === NAV_TYPE.MESSAGE && unreadNum > 0 && (
           <span className={Styles["unread"]}>{unreadNum > 9 ? '9+' : unreadNum}</span>
         )}
       </div>

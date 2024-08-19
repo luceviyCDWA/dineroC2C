@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 
 import { getTaskInfo, getTaskList } from "@/api/user";
+import useLayoutStore from "@/store/useLayoutStore";
 
 import TaskItemComp from "./components/taskItem";
 import { TaskType, type TaskItem } from "./components/taskItem/types";
@@ -10,6 +11,7 @@ import AIScoreBtnIcon from "@/assets/imgs/me/score.png";
 import AITips from "@/assets/imgs/me/score_q.png";
 
 import Styles from './index.module.less';
+import HistoryList from "./components/history";
 
 const DAILY_NUM = 7;
 
@@ -23,15 +25,31 @@ const DAILY_NORMAL_LIST: Array<undefined> = [
 ];
 
 const TaskComp: React.FC = () => {
+  const { setPageTitle, setShowBack, setSubTitle } = useLayoutStore(state => ({
+    setSubTitle: state.setSubTitle,
+    setPageTitle: state.setPageTitle,
+    setShowBack: state.setShowBack,
+  }));
+
   const [score, setScore] = useState(0);
   const [inviteCode, setInviteCode] = useState('');
   const [hasSigned, setHasSigned] = useState(0);
   const [todayHasSigned, setTodayHasSigned] = useState(false);
   const [taskList, setTaskList] = useState<TaskItem[]>([]);
 
+  const [showHistory, setShowHistory] = useState(false);
+
   useEffect(() => {
+    setPageTitle('Me');
+    setShowBack(false);
+    setSubTitle(<div onClick={() => setShowHistory(true)}>History</div>);
+
     initTaskInfo();
     initTaskList();
+
+    return () => {
+      setSubTitle();
+    }
   }, []);
 
   async function initTaskInfo() {
@@ -139,6 +157,8 @@ const TaskComp: React.FC = () => {
           More rewards are coming soon...
         </div>
       </div>
+
+      <HistoryList showPanel={showHistory} onClose={() => setShowHistory(false)} />
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { IOrderDetail } from "@/types";
 import request from "@/utils/request";
 
 export function getTaskInfo() {
@@ -48,4 +49,17 @@ export function getScoreDetailList() {
       user_id: number;
     }>
   >("/apis/v1/task/get_user_task_log_list");
+}
+
+export function getOrderList(data: {
+  limit: number;
+  offset: number;
+}) {
+  return request.post<
+    unknown,
+    {
+      total: number;
+      list: Array<IOrderDetail>;
+    }
+  >("/apis/v1/dinero/get_my_order_list", data);
 }

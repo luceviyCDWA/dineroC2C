@@ -21,7 +21,7 @@ export interface Ipurchase {
 }
 export default function useContract() {
   const USDT_ADDRESS = "0xe24ff3d398ec931a22076608a16e85edbaacd4a4";
-  const CONTRACT_ADDRESS = "0x3be0cd01d9801546ebf77e8915f2c10e03c34724";
+  const CONTRACT_ADDRESS = "0x463bb171cd640d53ef915700de31c9a1deff6566";
   // current connect account add network
   const publicClient = usePublicClient();
   const account = useAccount();
