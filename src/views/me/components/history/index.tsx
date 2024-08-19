@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { InfiniteScroll, PullToRefresh } from "antd-mobile";
 
@@ -52,7 +52,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   }
 
   async function getNextPageOrderList(isReset?: boolean) {
-    if (!orderHasMore) {
+    if (!isReset && !orderHasMore) {
       return;
     }
 
@@ -72,9 +72,10 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     setShowDetail(true);
   }
 
-  const onDetailClose = useCallback(() => {
+  const onDetailClose = () => {
     setShowDetail(false);
-  }, []);
+    getNextPageOrderList(true);
+  };
 
   return (
     <>

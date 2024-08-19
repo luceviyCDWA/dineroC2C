@@ -72,11 +72,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
           )}
         </div>
         <div className={Styles["market-btn"]} onClick={onClickTrade}>
-          {
-            BtnNameByActionType[
-              type === ActionType.Buy ? ActionType.Sell : ActionType.Buy
-            ]
-          }
+          {BtnNameByActionType[type]}
         </div>
       </div>
 

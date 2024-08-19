@@ -1,7 +1,3 @@
-import {
-  BaseError,
-  ContractFunctionRevertedError,
-} from "viem";
 import { erc20ABI, PublicClient } from "wagmi";
 import { useAccount, usePublicClient, useWalletClient, useContractWrite } from "wagmi";
 import { useEffect, useRef } from "react";
@@ -97,22 +93,6 @@ export default function useContract() {
       });
     } catch (err) {
       console.log(err);
-      if (err instanceof BaseError) {
-        const revertError = err.walk(
-          (err) => err instanceof ContractFunctionRevertedError,
-        );
-        if (revertError instanceof ContractFunctionRevertedError) {
-          const errorName = revertError.data?.errorName ?? "";
-          // do something with `errorName`
-          console.log(errorName);
-          if (errorName) {
-            Toast.show({
-              icon: "error",
-              content: errorName,
-            });
-          }
-        }
-      }
     }
 
     return hash;
@@ -148,8 +128,11 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        content: (e as object).toString(),
+        icon: "error",
+        content: "Pay Failed",
       });
+
+      throw new Error('pay failed');
     }
   }
 
@@ -183,8 +166,11 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        content: (e as object).toString(),
+        icon: "error",
+        content: "Pay Failed",
       });
+
+      throw new Error("pay failed");
     }
   }
 
@@ -204,8 +190,11 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        content: (e as object).toString(),
+        icon: "error",
+        content: "Cancel Failed",
       });
+
+      throw new Error("Cancel failed");
     }
   }
 
@@ -239,8 +228,11 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        content: (e as object).toString(),
+        icon: "error",
+        content: "Confirm Failed",
       });
+
+      throw new Error("Confirm failed");
     }
   };
 

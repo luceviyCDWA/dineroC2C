@@ -11,6 +11,7 @@ import {
 } from "@/types";
 
 import Styles from './index.module.less';
+import useContract from "@/hooks/useContract";
 
 interface MessageDetailCompProps {
   showPanel: boolean;
@@ -24,6 +25,8 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
   onClose,
 }) => {
   const {
+    id,
+    order_onchain_id,
     category_image,
     category_name,
     type,
@@ -34,6 +37,27 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     status,
     is_mortgage,
   } = msgDetail;
+  const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract();
+
+  const onCreateOrder = async () => {
+    await createOrder(id, Number(total_price), type);
+    onClose();
+  }
+
+  const onPayOrder = async () => {
+    await payOrder(id, Number(total_price), type);
+    onClose();
+  }
+
+  const onCancelOrder = async () => {
+    await cancelOrder(id);
+    onClose();
+  }
+
+  const onConfirmOrder = async () => {
+    await confirmOrder(id, order_onchain_id, type);
+    onClose();
+  }
 
   return (
     <RightPage
@@ -103,14 +127,14 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         <div className={Styles["detail__item"]}>
           <div className={Styles["detail__item-title"]}>Guarantee deposit</div>
           <div className={Styles["detail__item-content"]}>
-            {is_mortgage ? 'Paid' : 'Pending'}
+            {is_mortgage ? "Paid" : "Pending"}
           </div>
         </div>
       </div>
 
       {status === OrderStatus.InitState && (
         // createOrder
-        <div className={Styles["detail__panel-btn"]}>
+        <div className={Styles["detail__panel-btn"]} onClick={onCreateOrder}>
           <div className={Styles["btn"]}>Go to pay</div>
         </div>
       )}
@@ -118,11 +142,11 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
       {status === OrderStatus.WaitForBuyer &&
         (type === ActionType.Buy ? (
           // payOrder
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onPayOrder}>
             <div className={Styles["btn"]}>Go to pay</div>
           </div>
         ) : (
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
         ))}
@@ -130,11 +154,11 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
       {status === OrderStatus.WaitForSeller &&
         (type === ActionType.Sell ? (
           // payOrder
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onPayOrder}>
             <div className={Styles["btn"]}>Go to pay</div>
           </div>
         ) : (
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
         ))}
@@ -142,35 +166,32 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
       {status === OrderStatus.BothPaid &&
         (type === ActionType.Buy ? (
           // payOrder
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onConfirmOrder}>
             <div className={Styles["btn"]}>Confirm</div>
           </div>
         ) : (
-          <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
             <div className={Styles["btn"]}>Cancel</div>
           </div>
         ))}
 
-      {status === OrderStatus.CancelWithBuyer &&
-        type === ActionType.Sell && (
-          <div className={Styles["detail__panel-btn"]}>
-            <div className={Styles["btn"]}>Cancel</div>
-          </div>
-        )}
+      {status === OrderStatus.CancelWithBuyer && type === ActionType.Sell && (
+        <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
+          <div className={Styles["btn"]}>Cancel</div>
+        </div>
+      )}
 
-      {status === OrderStatus.CancelWithSeller &&
-        type === ActionType.Buy && (
-          <div className={Styles["detail__panel-btn"]}>
-            <div className={Styles["btn"]}>Cancel</div>
-          </div>
-        )}
+      {status === OrderStatus.CancelWithSeller && type === ActionType.Buy && (
+        <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
+          <div className={Styles["btn"]}>Cancel</div>
+        </div>
+      )}
 
-      {status === OrderStatus.Withdrawal &&
-        type === ActionType.Sell && (
-          <div className={Styles["detail__panel-btn"]}>
-            <div className={Styles["btn"]}>Confirm</div>
-          </div>
-        )}
+      {status === OrderStatus.Withdrawal && type === ActionType.Sell && (
+        <div className={Styles["detail__panel-btn"]} onClick={onConfirmOrder}>
+          <div className={Styles["btn"]}>Confirm</div>
+        </div>
+      )}
     </RightPage>
   );
 };

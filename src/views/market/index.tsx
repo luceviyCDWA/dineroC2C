@@ -28,7 +28,7 @@ const Market: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
 
   // 过滤
-  const [type, setType] = useState<ActionType>(ActionType.Buy); 
+  const [type, setType] = useState<ActionType>(ActionType.Sell); 
   const [curCoin, setCurCoin] = useState<ICoinItem | null>(null);
   const [sortType, setSortType] = useState<SortType>(SortType.UnitPriceDown);
   const [search, setSearch] = useState('');
@@ -122,17 +122,17 @@ const Market: React.FC = () => {
               <div className={Styles["tabs"]}>
                 <div
                   className={classNames(Styles["tab-item"], {
-                    [Styles["active"]]: type === ActionType.Buy,
+                    [Styles["active"]]: type === ActionType.Sell,
                   })}
-                  onClick={() => setType(ActionType.Buy)}
+                  onClick={() => setType(ActionType.Sell)}
                 >
                   Buy
                 </div>
                 <div
                   className={classNames(Styles["tab-item"], {
-                    [Styles["active"]]: type === ActionType.Sell,
+                    [Styles["active"]]: type === ActionType.Buy,
                   })}
-                  onClick={() => setType(ActionType.Sell)}
+                  onClick={() => setType(ActionType.Buy)}
                 >
                   Sell
                 </div>
