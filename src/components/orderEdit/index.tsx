@@ -125,7 +125,10 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
           </div>
 
           <div className={Styles["order__publish-coin"]}>
-            <CoinSelect curCoinInfo={curCoinInfo} onSelectCoin={setCurCoinInfo} />
+            <CoinSelect
+              curCoinInfo={curCoinInfo}
+              onSelectCoin={setCurCoinInfo}
+            />
           </div>
 
           <div className={Styles["order__publish-main"]}>
@@ -161,7 +164,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
                 {unitPrice ? (
                   <span className={Styles["unit-price"]}>{unitPrice} USDT</span>
                 ) : (
-                  <span className={Styles["placeholder"]}>Please Enter</span>
+                  <span className={Styles["placeholder"]}>0.00USDT</span>
                 )}
               </div>
             </div>
