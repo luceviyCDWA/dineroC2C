@@ -8,9 +8,10 @@ import { LeftOutline } from "antd-mobile-icons";
 
 
 const Header: React.FC = () => {
-  const { pageTitle, showBack, subTitle } = useLayoutStore((state) => ({
+  const { pageTitle, showBack, subTitle, showHeader } = useLayoutStore((state) => ({
     pageTitle: state.pageTitle,
     showBack: state.showBack,
+    showHeader: state.showHeader,
     subTitle: state.subTitle,
   }));
   const navigate = useNavigate();
@@ -19,18 +20,22 @@ const Header: React.FC = () => {
     navigate(-1);
   }
 
-  return (
-    <div className={Styles["header"]}>
-      {showBack && (
-        <div className={Styles["back"]} onClick={onBack}>
-          <LeftOutline />
-        </div>
-      )}
+  if (showHeader) {
+    return (
+      <div className={Styles["header"]}>
+        {showBack && (
+          <div className={Styles["back"]} onClick={onBack}>
+            <LeftOutline />
+          </div>
+        )}
 
-      <div className={Styles["title"]}>{pageTitle}</div>
+        <div className={Styles["title"]}>{pageTitle}</div>
 
-      {subTitle && <div className={Styles["sub"]}>{subTitle}</div>}
-    </div>
-  );
+        {subTitle && <div className={Styles["sub"]}>{subTitle}</div>}
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
 export default Header;

@@ -1,90 +1,57 @@
 .task {
   height: 100%;
-  padding: 10px;
+  padding: 0 18px 18px;
   box-sizing: border-box;
 
-  .total__score {
-    height: 88px;
-    margin-bottom: 10px;
-    padding: 10px 10px 10px 15px;
-    box-sizing: border-box;
-    background: url('../../assets/imgs/me/score_bg.png') no-repeat center center;
-    background-size: 100% 100%;
+  .custom__header {
+    height: 70px;
+    position: relative;
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    .setting {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
 
-    &-detail {
-      height: 100%;
+      width: 20px;
+      height: 20px;
+    }
 
-      &-title {
-        height: 16px;
-        margin-bottom: 16px;
-        font-size: 14px;
-        color: #fff;
+    .score {
+      height: 70px;
+      padding: 0 55px;
 
-        display: flex;
-        align-items: center;
-      }
+      .flex(row, center, center);
 
-      &-tips {
-        width: 12px;
-        height: 12px;
-        margin-left: 5px;
-      }
+      font-size: 22px;
+      font-weight: bold;
+      color: #fff;
+      font-family: Manrope;
 
-      &-num {
-        line-height: 32px;
-        font-weight: 600;
-        font-size: 28px;
-        color: #FFFFFF;
+      &-icon {
+        width: 30px;
+        height: 30px;
+        margin-right: 8px;
       }
     }
 
-    &-exchange {
-      width: 84px;
-      height: 26px;
-      border-radius: 25px;
-      background-color: #fff;
+    .history {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
 
+      font-size: 15px;
       font-weight: 500;
-      font-size: 8px;
-      color: #3A0BBD;
-      text-transform: none;
-
-      line-height: 1.2;
-      cursor: pointer;
-
-      outline: none !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-      transition: background-color .15s, color .15s;
-      text-decoration: none !important;
-      --premium-gradient: linear-gradient(88.39deg, #6C93FF -2.56%, #976FFF 51.27%, #DF69D1 107.39%);
-
-      .btn-mix();
-
-      &-icon {
-        width: 13px;
-        height: 12px;
-        margin-right: 3px;
-      }
-
-      &-txt {
-        white-space: nowrap;
-      }
+      color: #fff;
+      font-family: Poppins;
+      text-decoration: underline;
     }
   }
 
   .daily__table {
     height: 134px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     padding-top: 10px;
     box-sizing: border-box;
     background: url('../../assets/imgs/me/daily_bg.png') no-repeat center center;
@@ -95,7 +62,7 @@
       padding-left: 15px;
       margin-bottom: 10px;
       font-weight: 500;
-      font-size: 16px;
+      font-size: 14px;
       color: #FFFFFF;
     }
 
@@ -138,6 +105,43 @@
     }
   }
 
+  .tab {
+    margin-bottom: 15px;
+    position: relative;
+    left: -3px;
+
+    .flex(row, flex-start, center);
+    column-gap: 10px;
+
+    &-item {
+      width: 70px;
+      height: 32px;
+      padding-bottom: 11px;
+      box-sizing: border-box;
+
+      position: relative;
+
+      font-size: 14px;
+      font-weight: 500;
+      font-family: Poppins;
+      line-height: 21px;
+      letter-spacing: 2px;
+      color: #fff;
+      text-align: center;
+
+      &.active::before {
+        content: ' ';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 55px;
+        height: 3px;
+        background: linear-gradient(90deg, #FA497C 0%, #690DF8 40%, #269AFA 66%, #14CEF8 86%, #64d7e7 100%);
+      }
+    }
+  }
+
   .task__list {
     display: flex;
     flex-direction: column;
@@ -167,6 +171,33 @@
       &::after {
         left: calc(100% + 10px)
       }
+    }
+  }
+
+  .logout {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 18px;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 18px); /* 兼容 iOS < 11.2 */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 18px); /* 兼容 iOS >= 11.2 */
+    border-radius: 24px 24px 0 0;
+    background: #18181b;
+
+    &-btn {
+      height: 51px;
+      background: #1F1E45;
+      border: 1px solid #6764E7;
+      border-radius: 12px;
+
+      .flex(row, center, center);
+      .btn-mix();
+
+      font-size: 18px;
+      font-weight: 500;
+      font-family: Poppins;
+      color: #fff;
     }
   }
 }

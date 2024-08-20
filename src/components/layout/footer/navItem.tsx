@@ -9,6 +9,8 @@ import Styles from './index.module.less';
 import { useNavigate } from "react-router-dom";
 import useLayoutStore from "@/store/useLayoutStore";
 import useMsgStore from "@/store/useMsgStore";
+import useUserStore from "@/store/useUserStore";
+import useLoginModalStore from "@/store/useLoginModalStore";
 
 interface NavItemCompProps {
   className?: string;
@@ -24,6 +26,8 @@ const NavItem: React.FC<NavItemCompProps> = ({
   const naviagate = useNavigate();
   const setPageTitle = useLayoutStore((state) => state.setPageTitle);
   const unreadNum = useMsgStore(state => state.unreadNum);
+  const isLogin = useUserStore((state) => state.isLogin);
+  const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
 
   const [isActive, setIsActive] = useState(false);
 
@@ -35,9 +39,15 @@ const NavItem: React.FC<NavItemCompProps> = ({
     }
   }, [history.location.pathname]);
 
-  const onJumpNewPage = () => {
+  const onJumpNewPage = async () => {
     if (isActive) {
       return;
+    }
+
+    if (path === "/message" || path === '/me'){
+      if (!isLogin) {
+        await onShowLogin();
+      }
     }
 
     naviagate(path);

@@ -1,6 +1,7 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import NProgress from "nprogress"; // progress bar
 import useUserStore from "@/store/useUserStore";
+import useLoginModalStore from "@/store/useLoginModalStore";
 
 axios.defaults.timeout = 30000;
 
@@ -27,8 +28,22 @@ axios.interceptors.request.use(async (config) => {
 });
 
 // HTTPresponse拦截
-axios.interceptors.response.use((res) => {
-  const { data } = res;
+axios.interceptors.response.use(async (res) => {
+  const { data, config } = res;
+  const originalRequest = config as AxiosRequestConfig & {
+    _retry?: boolean;
+  }; 
+
+  if (data?.result?.code === 401 && !originalRequest._retry) {
+    const { onShowLogin } = useLoginModalStore.getState();
+
+    originalRequest._retry = true;
+
+    await onShowLogin();
+
+    // 重新发送请求并返回结果
+    return axios(originalRequest);
+  }
 
   if (data?.result?.code && data?.result?.data) {
     return data.result.data;

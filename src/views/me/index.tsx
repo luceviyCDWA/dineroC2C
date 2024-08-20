@@ -3,15 +3,19 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getTaskInfo, getTaskList } from "@/api/user";
 import useLayoutStore from "@/store/useLayoutStore";
 
+import HistoryList from "./components/history";
+
 import TaskItemComp from "./components/taskItem";
 import { TaskType, type TaskItem } from "./components/taskItem/types";
 import DailyItem from "./components/dailyItem";
 
-import AIScoreBtnIcon from "@/assets/imgs/me/score.png";
-import AITips from "@/assets/imgs/me/score_q.png";
+import SettingIcon from '@/assets/imgs/me/setting.png';
+import ScoreIcon from '@/assets/imgs/me/score.png';
 
 import Styles from './index.module.less';
-import HistoryList from "./components/history";
+import RightPage from "@/components/rightPage";
+import useUserStore from "@/store/useUserStore";
+import { Toast } from "antd-mobile";
 
 const DAILY_NUM = 7;
 
@@ -25,11 +29,10 @@ const DAILY_NORMAL_LIST: Array<undefined> = [
 ];
 
 const TaskComp: React.FC = () => {
-  const { setPageTitle, setShowBack, setSubTitle } = useLayoutStore(state => ({
-    setSubTitle: state.setSubTitle,
-    setPageTitle: state.setPageTitle,
-    setShowBack: state.setShowBack,
+  const { setShowHeader } = useLayoutStore((state) => ({
+    setShowHeader: state.setShowHeader,
   }));
+  const clearAll = useUserStore(state => state.clearAll);
 
   const [score, setScore] = useState(0);
   const [inviteCode, setInviteCode] = useState('');
@@ -38,17 +41,16 @@ const TaskComp: React.FC = () => {
   const [taskList, setTaskList] = useState<TaskItem[]>([]);
 
   const [showHistory, setShowHistory] = useState(false);
+  const [showSetting, setShowSetting] = useState(false);
 
   useEffect(() => {
-    setPageTitle('Me');
-    setShowBack(false);
-    setSubTitle(<div onClick={() => setShowHistory(true)}>History</div>);
+    setShowHeader(false);
 
     initTaskInfo();
     initTaskList();
 
     return () => {
-      setSubTitle();
+      setShowHeader(true);
     }
   }, []);
 
@@ -96,29 +98,34 @@ const TaskComp: React.FC = () => {
     initTaskInfo();
   }, [hasSigned]);
 
+  const onLogout = () => {
+    clearAll();
+    setShowSetting(false);
+
+    Toast.show('Logged out');
+
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 500);
+  }
+
   return (
     <div className={Styles["task"]}>
-      <div className={Styles["total__score"]}>
-        <div className={Styles["total__score-detail"]}>
-          <div className={Styles["total__score-detail-title"]}>
-            D Point
-            <img
-              className={Styles["total__score-detail-tips"]}
-              src={AITips}
-              alt="tips"
-            />
-          </div>
-          <div className={Styles["total__score-detail-num"]}>{score}</div>
+      <div className={Styles["custom__header"]}>
+        <img
+          className={Styles["setting"]}
+          src={SettingIcon}
+          onClick={() => setShowSetting(true)}
+        />
+        <div className={Styles["score"]}>
+          <img className={Styles["score-icon"]} src={ScoreIcon} />
+          {score} points
         </div>
-        <div className={Styles["total__score-exchange"]}>
-          <img
-            className={Styles["total__score-exchange-icon"]}
-            src={AIScoreBtnIcon}
-            alt="score"
-          />
-          <span className={Styles["total__score-exchange-txt"]}>Exchange</span>
+        <div className={Styles["history"]} onClick={() => setShowHistory(true)}>
+          History
         </div>
       </div>
+
       <div className={Styles["daily__table"]}>
         <div className={Styles["daily__table-title"]}>
           Sign in continuously to get points
@@ -145,6 +152,11 @@ const TaskComp: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <div className={Styles["tab"]}>
+        <div className={`${Styles["tab-item"]} ${Styles["active"]}`}>Task</div>
+      </div>
+
       <div className={Styles["task__list"]}>
         {taskList.map((task) => (
           <TaskItemComp
@@ -158,7 +170,22 @@ const TaskComp: React.FC = () => {
         </div>
       </div>
 
-      <HistoryList showPanel={showHistory} onClose={() => setShowHistory(false)} />
+      <HistoryList
+        showPanel={showHistory}
+        onClose={() => setShowHistory(false)}
+      />
+
+      <RightPage
+        title="Setting"
+        show={showSetting}
+        onClose={() => setShowSetting(false)}
+      >
+        <div className={Styles["logout"]}>
+          <div className={Styles["logout-btn"]} onClick={onLogout}>
+            Log Out
+          </div>
+        </div>
+      </RightPage>
     </div>
   );
 };
