@@ -47,9 +47,6 @@ importers:
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
-      postcss-px-to-viewport:
-        specifier: ^1.1.1
-        version: 1.1.1
       qs:
         specifier: ^6.12.3
         version: 6.12.3
@@ -75,9 +72,6 @@ importers:
         specifier: ^4.5.4
         version: 4.5.4(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
     devDependencies:
-      '@minko-fe/postcss-pxtoviewport':
-        specifier: ^1.5.0
-        version: 1.5.0(postcss@8.4.41)
       '@types/crypto-js':
         specifier: ^4.2.2
         version: 4.2.2
@@ -123,12 +117,6 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.4.7
         version: 0.4.9(eslint@8.57.0)
-      postcss:
-        specifier: ^8.4.41
-        version: 8.4.41
-      postcss-px-to-viewport-8-plugin:
-        specifier: ^1.2.5
-        version: 1.2.5
       postcss-pxtorem:
         specifier: ^6.1.0
         version: 6.1.0(postcss@8.4.41)
@@ -513,14 +501,6 @@ packages:
   '@metamask/utils@9.1.0':
     resolution: {integrity: sha512-g2REf+xSt0OZfMoNNdC4+/Yy8eP3KUqvIArel54XRFKPoXbHI6+YjFfrLtfykWBjffOp7DTfIc3Kvk5TLfuiyg==}
     engines: {node: '>=16.0.0'}
-
-  '@minko-fe/lodash-pro@0.3.3':
-    resolution: {integrity: sha512-vK9JXI0THoB4myxhJAahqjP84PCmzdaXJgnb1+NfxLEAHClqPrOnUY2rh5RqU1+BAfsFaj3F4ErVw3h1kzzWeA==}
-
-  '@minko-fe/postcss-pxtoviewport@1.5.0':
-    resolution: {integrity: sha512-sAI9nf4QujIZAAX2l/Lmxk6PACTf2HvW4hkKNzHjmHcObdkUZsxdCgxwb8aUPCu6oucpoeINiz3o7mm2eK1DxA==}
-    peerDependencies:
-      postcss: '>=8.0.0'
 
   '@motionone/animation@10.18.0':
     resolution: {integrity: sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==}
@@ -923,9 +903,6 @@ packages:
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
-
-  '@types/lodash-es@4.17.12':
-    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
 
   '@types/lodash@4.17.7':
     resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
@@ -1454,10 +1431,6 @@ packages:
   decode-uri-component@0.2.2:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
     engines: {node: '>=0.10'}
-
-  decode-uri-component@0.4.1:
-    resolution: {integrity: sha512-+8VxcR21HhTy8nOt6jf20w0c9CADrw1O8d+VZ/YzzCt4bJ3uBjw+D1q2osAB8RnpwwaeYBxy0HyKQxD5JBMuuQ==}
-    engines: {node: '>=14.16'}
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
@@ -1991,9 +1964,6 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
-  lodash-es@4.17.21:
-    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
-
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
 
@@ -2172,10 +2142,6 @@ packages:
   outdent@0.8.0:
     resolution: {integrity: sha512-KiOAIsdpUTcAXuykya5fnVVT+/5uS0Q1mrkRHcF89tpieSmY33O/tmc54CqwA+bfhbtEfZUNLHaPUiB9X3jt1A==}
 
-  p-is-promise@4.0.0:
-    resolution: {integrity: sha512-4G3B+86qsIAX/+ip/yhHX9WUcyFKYkQYtE5bGkjpZyGK0Re53RbHky2UKt6RQVkDbUXb8EJRb4iga2SaI360nQ==}
-    engines: {node: '>=12'}
-
   p-limit@2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
     engines: {node: '>=6'}
@@ -2266,12 +2232,6 @@ packages:
   pony-cause@2.1.11:
     resolution: {integrity: sha512-M7LhCsdNbNgiLYiP4WjsfLUuFmCfnjdF6jKe2R9NKl4WFN+HZPGHJZ9lnLP7f9ZnKe3U9nuWD0szirmj+migUg==}
     engines: {node: '>=12.0.0'}
-
-  postcss-px-to-viewport-8-plugin@1.2.5:
-    resolution: {integrity: sha512-+yc69+q/euV7iKh5fGXY6C/lpepmVx2DGFHeYj5BpzIFyBBpdACDjZyrZ8AV0kCg+J0bplBv4ZA1QTzgaK0rGg==}
-
-  postcss-px-to-viewport@1.1.1:
-    resolution: {integrity: sha512-2x9oGnBms+e0cYtBJOZdlwrFg/mLR4P1g2IFu7jYKvnqnH/HLhoKyareW2Q/x4sg0BgklHlP1qeWo2oCyPm8FQ==}
 
   postcss-pxtorem@6.1.0:
     resolution: {integrity: sha512-ROODSNci9ADal3zUcPHOF/K83TiCgNSPXQFSbwyPHNV8ioHIE4SaC+FPOufd8jsr5jV2uIz29v1Uqy1c4ov42g==}
@@ -2552,10 +2512,6 @@ packages:
   split-on-first@1.1.0:
     resolution: {integrity: sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==}
     engines: {node: '>=6'}
-
-  split-on-first@3.0.0:
-    resolution: {integrity: sha512-qxQJTx2ryR0Dw0ITYyekNQWpz6f8dGd7vffGNflQQ3Iqj9NJ6qiZ7ELpZsJ/QBhIVAiDfXdag3+Gp8RvWa62AA==}
-    engines: {node: '>=12'}
 
   split2@4.2.0:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
@@ -3338,22 +3294,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@minko-fe/lodash-pro@0.3.3':
-    dependencies:
-      '@types/lodash-es': 4.17.12
-      deepmerge: 4.3.1
-      defu: 6.1.4
-      destr: 2.0.3
-      lodash-es: 4.17.21
-      p-is-promise: 4.0.0
-
-  '@minko-fe/postcss-pxtoviewport@1.5.0(postcss@8.4.41)':
-    dependencies:
-      '@minko-fe/lodash-pro': 0.3.3
-      decode-uri-component: 0.4.1
-      postcss: 8.4.41
-      split-on-first: 3.0.0
-
   '@motionone/animation@10.18.0':
     dependencies:
       '@motionone/easing': 10.18.0
@@ -3778,10 +3718,6 @@ snapshots:
       '@types/ms': 0.7.34
 
   '@types/estree@1.0.5': {}
-
-  '@types/lodash-es@4.17.12':
-    dependencies:
-      '@types/lodash': 4.17.7
 
   '@types/lodash@4.17.7': {}
 
@@ -4674,8 +4610,6 @@ snapshots:
 
   decode-uri-component@0.2.2: {}
 
-  decode-uri-component@0.4.1: {}
-
   deep-is@0.1.4: {}
 
   deep-object-diff@1.1.9: {}
@@ -5264,8 +5198,6 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash-es@4.17.21: {}
-
   lodash.isequal@4.5.0: {}
 
   lodash.merge@4.6.2: {}
@@ -5419,8 +5351,6 @@ snapshots:
 
   outdent@0.8.0: {}
 
-  p-is-promise@4.0.0: {}
-
   p-limit@2.3.0:
     dependencies:
       p-try: 2.2.0
@@ -5498,15 +5428,6 @@ snapshots:
   pngjs@5.0.0: {}
 
   pony-cause@2.1.11: {}
-
-  postcss-px-to-viewport-8-plugin@1.2.5:
-    dependencies:
-      object-assign: 4.1.1
-
-  postcss-px-to-viewport@1.1.1:
-    dependencies:
-      object-assign: 4.1.1
-      postcss: 8.4.41
 
   postcss-pxtorem@6.1.0(postcss@8.4.41):
     dependencies:
@@ -5781,8 +5702,6 @@ snapshots:
     optional: true
 
   split-on-first@1.1.0: {}
-
-  split-on-first@3.0.0: {}
 
   split2@4.2.0: {}
 
