@@ -15,3 +15,8 @@ body {
   background: #0E0D14;
 
 }
+
+.app {
+  width: 375px;
+  margin: 0 auto;
+}

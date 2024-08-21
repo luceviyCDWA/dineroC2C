@@ -18,7 +18,7 @@ function App() {
       <Helmet>
         <title>Dinero</title>
       </Helmet>
-      <div className={`App`}>
+      <div className={`app`}>
         <Router />
       </div>
     </>

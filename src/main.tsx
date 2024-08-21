@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
 import App from "./App.tsx";
+import "@/utils/rem.ts";
 import './index.css'
 
 dayjs.extend(utc);

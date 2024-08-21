@@ -128,7 +128,7 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        icon: "error",
+        icon: "fail",
         content: "Pay Failed",
       });
 
@@ -166,7 +166,7 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        icon: "error",
+        icon: "fail",
         content: "Pay Failed",
       });
 
@@ -190,7 +190,7 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        icon: "error",
+        icon: "fail",
         content: "Cancel Failed",
       });
 
@@ -228,7 +228,7 @@ export default function useContract() {
     } catch (e) {
       Toast.clear();
       Toast.show({
-        icon: "error",
+        icon: "fail",
         content: "Confirm Failed",
       });
 

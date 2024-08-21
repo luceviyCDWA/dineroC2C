@@ -40,13 +40,21 @@ const Message: React.FC = () => {
       content: "Loading...",
     });
 
-    const {url} = await getMessageDetail(selectId);
-    const orderInfo = await getOrderDetail(url);
+    try {
+      const { url } = await getMessageDetail(selectId);
+      const orderInfo = await getOrderDetail(url);
 
-    Toast.clear();
+      setShowDetail(true);
+      setCurMsgDetail(orderInfo);
 
-    setShowDetail(true);
-    setCurMsgDetail(orderInfo);
+      Toast.clear();
+    } catch (e) {
+      Toast.clear();
+      Toast.show({
+        icon: "fail",
+        content: "Fail to get message detail",
+      });
+    }
   }, []);
 
   const onDetailClose = useCallback(() => {

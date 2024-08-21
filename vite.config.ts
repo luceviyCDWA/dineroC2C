@@ -1,13 +1,7 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
-import pxtovw from "@minko-fe/postcss-pxtoviewport";
-
-const loder_pxtovw = pxtovw({
-  //这里是设计稿宽度 自己修改
-  viewportWidth: 375,
-  viewportUnit: "vw",
-});
+import pxToRem from "postcss-pxtorem";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -34,7 +28,13 @@ export default defineConfig({
       },
     },
     postcss: {
-      plugins: [loder_pxtovw],
+      plugins: [
+        pxToRem({
+          rootValue: 37.5,
+          unitPrecision: 3,
+          propList: ['*'],
+        }),
+      ],
     },
   },
 
