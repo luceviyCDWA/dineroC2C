@@ -55,7 +55,12 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
       <Popup
         visible={showPopup}
         onMaskClick={onHidePopup}
+        style={{
+          left: '50%',
+          width: '375px'
+        }}
         bodyStyle={{
+          width: "375px",
           height: "60vh",
           background: "#15161B",
           borderRadius: "15px 15px 0px 0px",

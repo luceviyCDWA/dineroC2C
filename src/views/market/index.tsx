@@ -219,7 +219,9 @@ const Market: React.FC = () => {
               setShowSortPopup(false);
             }}
             bodyStyle={{
+              width: "375px",
               height: "60vh",
+              left: '50%',
               background: "#15161B",
               borderRadius: "15px 15px 0px 0px",
             }}

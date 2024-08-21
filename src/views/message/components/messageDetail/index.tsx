@@ -59,11 +59,15 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     onClose();
   }
 
+  const onJumpAppeal = () => {
+    location.href = "https://t.me/DineroSupporter";
+  }
+
   return (
     <RightPage
       show={showPanel}
       title="Order Detail"
-      rightBtnNode={<div className={Styles["btns"]}>Appeal</div>}
+      rightBtnNode={<div className={Styles["btns"]} onClick={onJumpAppeal}>Appeal</div>}
       onClose={onClose}
     >
       <div className={Styles["detail__panel-main"]}>
