@@ -60,7 +60,7 @@ export function getOrderList(page: number) {
       list: Array<IOrderDetail>;
     }
   >("/apis/v1/dinero/get_my_order_list", {
-    offset: (page - 1) * DEFAULT_PAGE_SIZE + 1,
+    offset: page,
     limit: DEFAULT_PAGE_SIZE,
   });
 }

@@ -15,17 +15,19 @@ import CheckIcon from "@/assets/imgs/check.png";
 import USDTIcon from '@/assets/imgs/example/usdt.png';
 
 import Styles from './index.module.less';
+import { useLocation } from "react-router-dom";
 
 const START_OFFSET = 1;
 const PAGE_SIZE = 10;
 
 const Market: React.FC = () => {
   const coinList = usePublicDataStore((state) => state.coinList);
+  const { state } = useLocation();
 
   // 列表属性
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
   const [offset, setOffset] = useState(START_OFFSET);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
   // 过滤
   const [type, setType] = useState<ActionType>(ActionType.Sell); 
@@ -41,9 +43,18 @@ const Market: React.FC = () => {
 
   useEffect(() => {
     if (coinList?.length) {
-      setCurCoin(coinList[0]);
+      const targetCoinId = state?.curCoidId || '';
+      const targetCoinInfo = coinList.find(
+        (coinInfo) => coinInfo.id === targetCoinId,
+      );
+
+      if (targetCoinInfo) {
+        setCurCoin(targetCoinInfo);
+      } else {
+        setCurCoin(coinList[0]);
+      }
     }
-  }, [coinList]);
+  }, [state, coinList]);
 
   useEffect(() => {
     onGetOrderList(true);
@@ -77,10 +88,11 @@ const Market: React.FC = () => {
         limit: PAGE_SIZE,
         offset: curOffset,
       });
+      const curList = [...nowList, ...(list || [])];
 
-      setOrderList([...nowList, ...(list || [])]);
-      setOffset(curOffset + PAGE_SIZE);
-      setHasMore(curOffset + PAGE_SIZE < total);
+      setOrderList(curList);
+      setOffset(curOffset + 1);
+      setHasMore(curList.length < total);
     } finally {
       Toast.clear();
     }
