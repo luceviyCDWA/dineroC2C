@@ -30,6 +30,7 @@ import Footer from "./footer";
 
 import "./index.less";
 import LoginModal from "../login";
+import QuickOrder from "../quickOrder";
 
 
 const Layout: React.FC = () => {
@@ -90,7 +91,9 @@ const Layout: React.FC = () => {
             <Footer />
           </div>
 
+          {/* 全局组件 */}
           <LoginModal />
+          <QuickOrder />
         </RainbowKitProvider>
       </WagmiConfig>
     </>

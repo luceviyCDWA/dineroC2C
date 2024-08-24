@@ -10,6 +10,7 @@ import { GuaranteeStatus, BtnNameByActionType, type IOrderDetail, ActionType, Or
 import GuaranteeIcon from "@/assets/imgs/guarantee.png";
 
 import Styles from "./index.module.less";
+import useQuickOrderStore from "@/store/useQuickOrderStore";
 
 interface MarketItemCompProps {
   marketItemInfo: IOrderDetail;
@@ -35,20 +36,27 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   const { isConnected } = useAccount();
   const isLogin = useUserStore((state) => state.isLogin);
   const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
+  const getOrderInfoAndShow = useQuickOrderStore(
+    (state) => state.getOrderInfoAndShow,
+  );
   const { createOrder, payOrder } = useContract();
+
+  // 与当前相反
+  const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;
 
   const onClickTrade = async () => {
     if (!isConnected || !isLogin) {
       await onShowLogin();
     }
 
-    // 与当前相反
-    const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;
-
-    if (status === OrderStatus.InitState) {
-      await createOrder(id, Number(total_price), realType);
+    if (realType === ActionType.Buy) {
+      if (status === OrderStatus.InitState) {
+        await createOrder(id, Number(total_price), realType);
+      } else {
+        await payOrder(id, Number(total_price), realType);
+      }
     } else {
-      await payOrder(id, Number(total_price), realType);
+      await getOrderInfoAndShow(id, realType);
     }
 
     onCompleteOrder(id);
@@ -72,7 +80,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
           )}
         </div>
         <div className={Styles["market-btn"]} onClick={onClickTrade}>
-          {BtnNameByActionType[type]}
+          {BtnNameByActionType[realType]}
         </div>
       </div>
 
