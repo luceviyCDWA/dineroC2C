@@ -2,7 +2,7 @@
 
 html {
   overflow-y: overlay;
-  background: #0E0D14;
+  background: #3c3c3c;
 }
 * {
   margin: 0;
@@ -12,11 +12,11 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1;
-  background: #0E0D14;
-
+  background: #3c3c3c;
 }
 
 .app {
   width: 375px;
   margin: 0 auto;
+  background: #0E0D14;
 }

@@ -231,11 +231,12 @@ const Market: React.FC = () => {
               setShowSortPopup(false);
             }}
             bodyStyle={{
-              width: "375px",
+              width: "10rem",
               height: "60vh",
-              left: '50%',
+              left: "calc(50% - 5rem)",
               background: "#15161B",
               borderRadius: "15px 15px 0px 0px",
+              transform: "translateX(-50%)",
             }}
           >
             <div className={Styles["sort__list"]}>
