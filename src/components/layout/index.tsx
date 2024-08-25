@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
+import queryString from "query-string";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 // common Rpc
 import {
@@ -31,6 +32,7 @@ import Footer from "./footer";
 import "./index.less";
 import LoginModal from "../login";
 import QuickOrder from "../quickOrder";
+import useQuickOrderStore from "@/store/useQuickOrderStore";
 
 
 const Layout: React.FC = () => {
@@ -71,11 +73,21 @@ const Layout: React.FC = () => {
   const getUserInfoFromToken = useUserStore(
     (state) => state.getUserInfoFromToken,
   );
-  
+
+  const getOrderInfoAndShow = useQuickOrderStore(
+    (state) => state.getOrderInfoAndShow,
+  );
+
+  const location = useLocation();
+  const { quickOrderId } = queryString.parse(location.search);
 
   useEffect(() => {
     getUserInfoFromToken();
   }, []);
+
+  useEffect(() => {
+    quickOrderId && getOrderInfoAndShow(quickOrderId as string);
+  }, [quickOrderId]);
 
   return (
     <>

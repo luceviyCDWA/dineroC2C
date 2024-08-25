@@ -1,0 +1,239 @@
+.order__publish {
+  &-header {
+    padding: 10px;
+    position: relative;
+
+    .flex(row, center, center);
+
+    .tabs {
+      width: 164px;
+      height: 38px;
+      padding: 2px;
+      box-sizing: border-box;
+      background: rgba(63,57,89,0.3);
+      border-radius: 8px;
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 400;
+      font-size: 16px;
+      color: #FFFFFF;
+      line-height: 22px;
+
+      .flex(row, center, center);
+
+      .tab-item {
+        width: 82px;
+        height: 34px;
+        
+        .flex(row, center, center);
+        .btn-mix();
+
+        &.active {
+          background: linear-gradient( 35deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+          border-radius: 8px;
+        }
+      }
+    }
+
+    .rules {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 14px;
+      color: #298FFC;
+    }
+  }
+
+  &-coin {
+    padding: 0 10px;
+    margin: 10px 0 30px;
+  }
+
+  &-main {
+    padding: 0 10px;
+
+    .input__item {
+      margin-bottom: 14px;
+
+      &-title {
+        padding: 10px 0;
+
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 16px;
+        color: #8E8E8E;
+        line-height: 16px;
+      }
+
+      &-input {
+        height: 48px;
+        padding: 0 15px;
+        background: rgba(63,57,89,0.3);
+        border-radius: 12px;
+
+        .flex(row, flex-start, center);
+        column-gap: 5px;
+
+        .content {
+          height: 16px;
+          flex: 1;
+          font-family: PingFangSC, PingFang SC;
+          font-weight: 400;
+          font-size: 16px;
+          color: #FFFFFF;
+          line-height: 16px;
+
+          &::placeholder {
+            color: #B5B5B5;
+          }
+        }
+
+        .currency-icon {
+          width: 16px;
+          height: 16px;
+        }
+
+        .currency-name {
+          font-family: PingFangSC, PingFang SC;
+          font-weight: 400;
+          font-size: 16px;
+          color: #FFFFFF;
+        }
+
+        .placeholder {
+          color: #B5B5B5;
+        }
+      }
+    }
+  }
+
+
+  .publish-btn {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 0;
+    padding-bottom: 20px;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 20px); /* 兼容 iOS < 11.2 */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px); /* 兼容 iOS >= 11.2 */
+
+    .btn {
+      height: 48px;
+      background: linear-gradient( 15deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+      border-radius: 12px;
+
+      .flex(row, center, center);
+      .btn-mix();
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+  }
+}
+
+.success-page {
+  padding-top: 20px;
+
+  .page-title {
+    width: 100%;
+    height: 143px;
+    padding: 0 18px;
+    box-sizing: border-box;
+    position: relative;
+
+    .flex(column, center, flex-start);
+
+    .icon {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .title {
+      position: relative;
+      z-index: 10;
+
+      font-family: Poppins, Poppins;
+      font-weight: 600;
+      font-size: 38px;
+      line-height: 48px;
+
+      background: linear-gradient(71deg, rgba(91, 196, 255, 1) 0%, rgba(77, 94, 255, 1) 20%, rgba(99, 98, 255, 1) 49%, rgba(201, 112, 255, 1) 75%, rgba(255, 159, 165, 1) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+
+  .content-1, .content-2, .content-3 {
+    padding: 0 18px;
+  }
+
+  .content-2 {
+    margin-bottom: 20px;
+
+    font-family: Poppins, Poppins;
+    font-weight: 300;
+    font-size: 12px;
+    color: #D2D2D3;
+    line-height: 20px;
+
+    .content-em {
+      font-weight: 500;
+      font-size: 16px;
+      color: #fff;
+    }
+  }
+
+  .content-3 {
+    padding-left: 32px;
+
+    position: relative;
+
+    margin-bottom: 10px;
+    font-family: Poppins, Poppins;
+    font-weight: 500;
+    font-size: 18px;
+    color: #FFFFFF;
+    line-height: 30px;
+
+    &:before {
+      content: '·';
+      position: absolute;
+      left: 18px;
+      top: 0;
+    }
+  }
+
+  .share-btn {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 0;
+    padding-bottom: 20px;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 20px); /* 兼容 iOS < 11.2 */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px); /* 兼容 iOS >= 11.2 */
+
+    .btn {
+      height: 48px;
+      background: linear-gradient( 15deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+      border-radius: 12px;
+
+      .flex(row, center, center);
+      .btn-mix();
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+  }
+}

@@ -17,6 +17,7 @@ export default {
   statusWhiteList: [428],
   // 配置首页不可关闭
   isFirstPage: false,
+  hostUrl: 'https://c2c.dinero.zone',
   setting: {
     sidebar: "vertical",
     tag: true,

@@ -221,7 +221,11 @@
     padding-bottom: calc(constant(safe-area-inset-bottom) + 20px); /* 兼容 iOS < 11.2 */
     padding-bottom: calc(env(safe-area-inset-bottom) + 20px); /* 兼容 iOS >= 11.2 */
 
+    .flex(row);
+    column-gap: 10px;
+
     .btn {
+      flex: 1;
       height: 48px;
       background: linear-gradient( 15deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
       border-radius: 12px;
@@ -233,6 +237,19 @@
       font-weight: 500;
       font-size: 18px;
       color: #FFFFFF;
+
+      &.btn-txt {
+        padding: 1px;
+        box-sizing: border-box;
+
+        .content {
+          width: 100%;
+          height: 100%;
+          background: #0E0D14;
+          border-radius: 12px;
+          .flex(row, center, center);
+        }
+      }
     }
   }
 }

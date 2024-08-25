@@ -12,6 +12,9 @@ import {
 
 import Styles from './index.module.less';
 import useContract from "@/hooks/useContract";
+import { Toast } from "antd-mobile";
+import website from "@/config/website";
+import copy from "copy-to-clipboard";
 
 interface MessageDetailCompProps {
   showPanel: boolean;
@@ -63,11 +66,28 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     location.href = "https://t.me/DineroSupporter";
   }
 
+  const onShareOrder = () => {
+    if (!id) {
+      return;
+    }
+
+    copy(`${website.hostUrl}?quickOrderId=${id}`);
+
+    Toast.show({
+      icon: "success",
+      content: "share url was copied!",
+    });
+  };
+
   return (
     <RightPage
       show={showPanel}
       title="Order Detail"
-      rightBtnNode={<div className={Styles["btns"]} onClick={onJumpAppeal}>Appeal</div>}
+      rightBtnNode={
+        <div className={Styles["btns"]} onClick={onJumpAppeal}>
+          Appeal
+        </div>
+      }
       onClose={onClose}
     >
       <div className={Styles["detail__panel-main"]}>
@@ -138,32 +158,67 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
       {status === OrderStatus.InitState && (
         // createOrder
-        <div className={Styles["detail__panel-btn"]} onClick={onCreateOrder}>
-          <div className={Styles["btn"]}>Go to pay</div>
+        <div className={Styles["detail__panel-btn"]}>
+          <div className={Styles["btn"]} onClick={onCreateOrder}>
+            Go to pay
+          </div>
+          <div
+            className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+            onClick={onShareOrder}
+          >
+            <span className={Styles["content"]}>Share</span>
+          </div>
         </div>
       )}
 
       {status === OrderStatus.WaitForBuyer &&
         (type === ActionType.Buy ? (
           // payOrder
-          <div className={Styles["detail__panel-btn"]} onClick={onPayOrder}>
-            <div className={Styles["btn"]}>Go to pay</div>
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]} onClick={onPayOrder}>
+              Go to pay
+            </div>
+            <div
+              className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+              onClick={onShareOrder}
+            >
+              <span className={Styles["content"]}>Share</span>
+            </div>
           </div>
         ) : (
-          <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
-            <div className={Styles["btn"]}>Cancel</div>
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]} onClick={onCancelOrder}>
+              Cancel
+            </div>
+            <div
+              className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+              onClick={onShareOrder}
+            >
+              <span className={Styles["content"]}>Share</span>
+            </div>
           </div>
         ))}
 
       {status === OrderStatus.WaitForSeller &&
         (type === ActionType.Sell ? (
           // payOrder
-          <div className={Styles["detail__panel-btn"]} onClick={onPayOrder}>
-            <div className={Styles["btn"]}>Go to pay</div>
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]} onClick={onPayOrder}>
+              Go to pay
+            </div>
+            <div
+              className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+              onClick={onShareOrder}
+            >
+              <span className={Styles["content"]}>Share</span>
+            </div>
           </div>
         ) : (
           <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
             <div className={Styles["btn"]}>Cancel</div>
+            <div className={`${Styles["btn"]} ${Styles["btn-txt"]}`}>
+              <span className={Styles["content"]}>Share</span>
+            </div>
           </div>
         ))}
 

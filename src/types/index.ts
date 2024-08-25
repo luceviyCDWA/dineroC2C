@@ -104,6 +104,7 @@ export interface IOrderDetail {
   order_onchain_id: string;
   category_name: string;
   category_image: string;
+  category_id: string;
   is_mortgage: GuaranteeStatus;
   type: ActionType;
 

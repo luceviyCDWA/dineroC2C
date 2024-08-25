@@ -56,7 +56,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
         await payOrder(id, Number(total_price), realType);
       }
     } else {
-      await getOrderInfoAndShow(id, realType);
+      await getOrderInfoAndShow(id);
     }
 
     onCompleteOrder(id);

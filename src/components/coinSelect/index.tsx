@@ -10,11 +10,13 @@ import usePublicDataStore from "@/store/usePublicDataStore";
 
 interface CoinSelectCompProps {
   curCoinInfo?: ICoinItem;
+  disabled?: boolean;
   onSelectCoin: (coinInfo: ICoinItem) => void;
 }
 
 const CoinSelect: React.FC<CoinSelectCompProps> = ({
   curCoinInfo,
+  disabled,
   onSelectCoin,
 }) => {
   const { coinList } = usePublicDataStore((state) => ({
@@ -28,6 +30,10 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
   };
 
   const onSelect = (coinInfo: ICoinItem) => {
+    if (disabled) {
+      return;
+    }
+
     setShowPopup(false);
 
     if (coinInfo.id !== curCoinInfo?.id) {
@@ -39,7 +45,7 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
     <div className={Styles["coin__select"]}>
       <div
         className={Styles["coin__select-cur"]}
-        onClick={() => setShowPopup(true)}
+        onClick={() => !disabled && setShowPopup(true)}
       >
         <div className={Styles["coin-info"]}>
           {curCoinInfo && (
@@ -49,7 +55,7 @@ const CoinSelect: React.FC<CoinSelectCompProps> = ({
             </>
           )}
         </div>
-        <img className={Styles["arrow"]} src={ArrowIcon} />
+        {!disabled && <img className={Styles["arrow"]} src={ArrowIcon} />}
       </div>
 
       <Popup

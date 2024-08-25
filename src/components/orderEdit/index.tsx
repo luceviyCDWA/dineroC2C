@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { Input, Toast } from "antd-mobile";
+import copy from "copy-to-clipboard";
 
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { createOrder } from "@/api/order";
@@ -15,6 +16,7 @@ import USDTImg from '@/assets/imgs/example/usdt.png';
 import TitleImg from '@/assets/imgs/mask.png';
 
 import Styles from "./index.module.less";
+import website from "@/config/website";
 
 interface OrderEditCompProps {
   coinId: string;
@@ -95,6 +97,19 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   const onPayGuarantee = async () => {
     await createOrderByContract(orderId, Number(totalPrice), actionType);
     onClose();
+  }
+
+  const onShareOrder = () => {
+    if (!orderId) {
+      return;
+    }
+
+    copy(`${website.hostUrl}?quickOrderId=${orderId}`);
+
+    Toast.show({
+      icon: 'success',
+      content: 'share url was copied!'
+    });
   }
 
   return (
@@ -204,6 +219,13 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
           <div className={Styles["share-btn"]}>
             <span className={Styles["btn"]} onClick={onPayGuarantee}>
               Pay
+            </span>
+
+            <span
+              className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+              onClick={onShareOrder}
+            >
+              <span className={Styles["content"]}>Share</span>
             </span>
           </div>
         </div>
