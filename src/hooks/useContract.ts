@@ -264,9 +264,18 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         throw new Error("status is not valid");
       }
 
-      await writeCancelOrder({
+      const res = await writeCancelOrder({
         args: [orderOnChainId],
       });
+
+      await updateOrderTx({
+        id: orderId,
+        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        address: account.address as string,
+        chain_id: chainList[0].chain_id,
+        tx: res.hash,
+      });
+
       Toast.clear();
     } catch (e) {
       Toast.clear();
