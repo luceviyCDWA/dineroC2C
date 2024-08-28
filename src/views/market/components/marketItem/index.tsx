@@ -23,6 +23,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
 }) => {
   const {
     id,
+    order_onchain_id,
     category_image,
     name,
     is_mortgage,
@@ -39,7 +40,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   const getOrderInfoAndShow = useQuickOrderStore(
     (state) => state.getOrderInfoAndShow,
   );
-  const { createOrder, payOrder } = useContract(id);
+  const { createOrder, payOrder } = useContract(id, order_onchain_id);
 
   // 与当前相反
   const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;

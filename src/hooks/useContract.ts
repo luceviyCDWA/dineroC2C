@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
 import { Toast } from "antd-mobile";
-import { ActionType, IOrderDetail } from "@/types";
+import { ActionType } from "@/types";
 import { buyerConfirmOrder, getOrderDetail, getSignByOrderOnChainId, updateOrderTx } from "@/api/order";
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { cancelOrderValidate, confirmOrderValidate, createOrderValidate, payOrderValidate } from "@/utils/orderValidate";
@@ -20,7 +20,7 @@ export interface Ipurchase {
 export const USDT_ADDRESS = "0xe24ff3d398ec931a22076608a16e85edbaacd4a4";
 export const CONTRACT_ADDRESS = "0x320881d4f14876e9331c0fba04fb947d83e7f7f0";
 
-export default function useContract(orderId: string) {
+export default function useContract(orderId: string, orderOnChainId: string) {
   // current connect account add network
   const publicClient = usePublicClient();
   const account = useAccount();
@@ -66,7 +66,7 @@ export default function useContract(orderId: string) {
     abi: DineroAbi,
     address: CONTRACT_ADDRESS,
     functionName: "orderList",
-    args: [orderId]
+    args: [orderOnChainId],
   });
 
   useEffect(() => {
@@ -123,13 +123,19 @@ export default function useContract(orderId: string) {
     try {
       const orderInfoFromBE = await getOrderDetail(orderId);
       const { data } = await refetch();
-      const orderInfoFromContract = data as IOrderDetail;
+      const [, , , , status] = data as [
+        unknown,
+        unknown,
+        bigint,
+        bigint,
+        bigint,
+      ];
 
       if (
-        !createOrderValidate(orderInfoFromBE) ||
-        !createOrderValidate(orderInfoFromContract)
+        !createOrderValidate(orderInfoFromBE.status) ||
+        !createOrderValidate(Number(status))
       ) {
-        throw new Error('status is not valid');
+        return payOrder(totalPrice, actionType);
       }
 
       await approve(
@@ -138,7 +144,11 @@ export default function useContract(orderId: string) {
       );
 
       const res = await writeCreateOrder({
-        args: [orderId, Number(totalPrice) * Math.pow(10, 18), actionType],
+        args: [
+          orderOnChainId,
+          Number(totalPrice) * Math.pow(10, 18),
+          actionType,
+        ],
       });
 
       await updateOrderTx({
@@ -176,11 +186,17 @@ export default function useContract(orderId: string) {
     try {
       const orderInfoFromBE = await getOrderDetail(orderId);
       const { data } = await refetch();
-      const orderInfoFromContract = data as IOrderDetail;
+      const [, , , , status] = data as [
+        unknown,
+        unknown,
+        bigint,
+        bigint,
+        bigint,
+      ];
 
       if (
-        !payOrderValidate(orderInfoFromBE, actionType) ||
-        !payOrderValidate(orderInfoFromContract, actionType)
+        !payOrderValidate(orderInfoFromBE.status, actionType) ||
+        !payOrderValidate(Number(status), actionType)
       ) {
         throw new Error("status is not valid");
       }
@@ -191,7 +207,11 @@ export default function useContract(orderId: string) {
       );
 
       const res = await writePayOrder({
-        args: [orderId, Number(totalPrice) * Math.pow(10, 18), actionType],
+        args: [
+          orderOnChainId,
+          Number(totalPrice) * Math.pow(10, 18),
+          actionType,
+        ],
       });
 
       await updateOrderTx({
@@ -229,17 +249,23 @@ export default function useContract(orderId: string) {
     try {
       const orderInfoFromBE = await getOrderDetail(orderId);
       const { data } = await refetch();
-      const orderInfoFromContract = data as IOrderDetail;
+      const [, , , , status] = data as [
+        unknown,
+        unknown,
+        bigint,
+        bigint,
+        bigint,
+      ];
 
       if (
-        !cancelOrderValidate(orderInfoFromBE, actionType) ||
-        !cancelOrderValidate(orderInfoFromContract, actionType)
+        !cancelOrderValidate(orderInfoFromBE.status, actionType) ||
+        !cancelOrderValidate(Number(status), actionType)
       ) {
         throw new Error("status is not valid");
       }
 
       await writeCancelOrder({
-        args: [orderId],
+        args: [orderOnChainId],
       });
       Toast.clear();
     } catch (e) {
@@ -271,11 +297,17 @@ export default function useContract(orderId: string) {
     try {
       const orderInfoFromBE = await getOrderDetail(orderId);
       const { data } = await refetch();
-      const orderInfoFromContract = data as IOrderDetail;
+      const [, , , , status] = data as [
+        unknown,
+        unknown,
+        bigint,
+        bigint,
+        bigint,
+      ];
 
       if (
-        !confirmOrderValidate(orderInfoFromBE, actionType) ||
-        !confirmOrderValidate(orderInfoFromContract, actionType)
+        !confirmOrderValidate(orderInfoFromBE.status, actionType) ||
+        !confirmOrderValidate(Number(status), actionType)
       ) {
         throw new Error("status is not valid");
       }
@@ -286,7 +318,7 @@ export default function useContract(orderId: string) {
       );
 
       await writeConfirm({
-        args: [orderId, signature],
+        args: [orderOnChainId, signature],
       });
 
       if (actionType === ActionType.Buy) {

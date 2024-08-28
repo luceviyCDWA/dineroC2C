@@ -41,11 +41,10 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   const [totalPrice, setTotalPrice] = useState("");
   const [unitPrice, setUnitPrice] = useState('');
 
-  const [orderId, setOrderId] = useState('');
+  const [orderId, setOrderId] = useState("");
+  const [orderOnChainId, setOrderOnChainId] = useState("");
 
-  const {
-    createOrder: createOrderByContract,
-  } = useContract(orderId);
+  const { createOrder: createOrderByContract } = useContract(orderId, orderOnChainId);
 
   useEffect(() => {
     if (!showPanel) {
@@ -53,6 +52,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
       setTotal("");
       setTotalPrice("");
       setOrderId("");
+      setOrderOnChainId("");
       setCurCoinInfo(undefined);
     } else {
       setCurCoinInfo(coinList.find((target) => target.id === coinId));
@@ -74,7 +74,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
       return Toast.show('Please select category first');
     }
 
-    const { order_id } = await createOrder({
+    const { order_id, order_onchain_id } = await createOrder({
       total_count: Number(total),
       total_price: Number(totalPrice),
       chain_id: chainInfo.chain_id,
@@ -86,15 +86,22 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     });
 
     setOrderId(order_id);
+    setOrderOnChainId(order_onchain_id);
   };
 
   const onClosePayGuarantee = () => {
     setOrderId("");
+    setOrderOnChainId("");
     onClose();
   }
 
   const onPayGuarantee = async () => {
     await createOrderByContract(Number(totalPrice), actionType);
+    Toast.show({
+      icon: 'success',
+      content: 'Pay Successfully'
+    });
+    onClosePayGuarantee();
     onClose();
   }
 
@@ -190,7 +197,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
         </div>
       </RightPage>
 
-      <RightPage show={!!orderId} onClose={onClosePayGuarantee} title="Publish">
+      <RightPage show={!!orderId} onClose={onClosePayGuarantee} title="Success">
         <div className={Styles["success-page"]}>
           <div className={Styles["page-title"]}>
             <img className={Styles["icon"]} src={TitleImg} alt="title" />

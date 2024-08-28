@@ -37,7 +37,7 @@ const RightPage: React.FC<PropsWithChildren<RightPageCompProps>> = ({
   const onBack = () => {
     setInnerShow(false);
   };
-  
+
   return (
     <div
       className={classNames(Styles["right__panel"], className, {

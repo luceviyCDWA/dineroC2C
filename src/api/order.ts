@@ -53,7 +53,7 @@ export const createOrder = (data: {
   payment_name: string;
   contract_address: string;
 }) => {
-  return request.post<unknown, { order_id: string }>(
+  return request.post<unknown, { order_id: string; order_onchain_id: string }>(
     "/apis/v1/dinero/create_dinero_order",
     data,
   );

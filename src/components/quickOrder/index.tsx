@@ -39,7 +39,7 @@ const QuickOrder: React.FC = () => {
       "quickOrderResolver",
     ]),
   );
-  const { createOrder, payOrder } = useContract(orderInfo?.id || '');
+  const { createOrder, payOrder } = useContract(orderInfo?.id || '', orderInfo?.order_onchain_id || '');
 
   const [curCoinInfo, setCurCoinInfo] = useState<ICoinItem>();
 
