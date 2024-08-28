@@ -39,7 +39,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   const getOrderInfoAndShow = useQuickOrderStore(
     (state) => state.getOrderInfoAndShow,
   );
-  const { createOrder, payOrder } = useContract();
+  const { createOrder, payOrder } = useContract(id);
 
   // 与当前相反
   const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;
@@ -51,9 +51,9 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
 
     if (realType === ActionType.Buy) {
       if (status === OrderStatus.InitState) {
-        await createOrder(id, Number(total_price), realType);
+        await createOrder(Number(total_price), realType);
       } else {
-        await payOrder(id, Number(total_price), realType);
+        await payOrder(Number(total_price), realType);
       }
     } else {
       await getOrderInfoAndShow(id);

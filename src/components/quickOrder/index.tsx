@@ -26,7 +26,6 @@ const QuickOrder: React.FC = () => {
   const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
   const { isConnected } = useAccount();
   const isLogin = useUserStore((state) => state.isLogin);
-  const { createOrder, payOrder } = useContract();
   const {
     showQuickOrder,
     orderInfo,
@@ -40,6 +39,7 @@ const QuickOrder: React.FC = () => {
       "quickOrderResolver",
     ]),
   );
+  const { createOrder, payOrder } = useContract(orderInfo?.id || '');
 
   const [curCoinInfo, setCurCoinInfo] = useState<ICoinItem>();
 
@@ -67,13 +67,11 @@ const QuickOrder: React.FC = () => {
     try {
       if (orderInfo.status === OrderStatus.InitState) {
         await createOrder(
-          orderInfo.id,
           Number(orderInfo.total_price),
           orderInfo.type,
         );
       } else {
         await payOrder(
-          orderInfo.id,
           Number(orderInfo.total_price),
           orderInfo.type,
         );

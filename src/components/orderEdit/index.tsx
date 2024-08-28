@@ -5,7 +5,7 @@ import copy from "copy-to-clipboard";
 
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { createOrder } from "@/api/order";
-import useContract from "@/hooks/useContract";
+import useContract, { CONTRACT_ADDRESS } from "@/hooks/useContract";
 import CoinSelect from "../coinSelect";
 
 import RightPage from "../rightPage";
@@ -45,8 +45,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
 
   const {
     createOrder: createOrderByContract,
-    CONTRACT_ADDRESS,
-  } = useContract();
+  } = useContract(orderId);
 
   useEffect(() => {
     if (!showPanel) {
@@ -95,7 +94,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
   }
 
   const onPayGuarantee = async () => {
-    await createOrderByContract(orderId, Number(totalPrice), actionType);
+    await createOrderByContract(Number(totalPrice), actionType);
     onClose();
   }
 

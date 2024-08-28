@@ -40,25 +40,25 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     status,
     is_mortgage,
   } = msgDetail;
-  const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract();
+  const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract(id);
 
   const onCreateOrder = async () => {
-    await createOrder(id, Number(total_price), type);
+    await createOrder(Number(total_price), type);
     onClose();
   }
 
   const onPayOrder = async () => {
-    await payOrder(id, Number(total_price), type);
+    await payOrder(Number(total_price), type);
     onClose();
   }
 
   const onCancelOrder = async () => {
-    await cancelOrder(id);
+    await cancelOrder(type);
     onClose();
   }
 
   const onConfirmOrder = async () => {
-    await confirmOrder(id, order_onchain_id, type);
+    await confirmOrder(order_onchain_id, type);
     onClose();
   }
 

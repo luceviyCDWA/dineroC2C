@@ -1,12 +1,13 @@
-import { erc20ABI, PublicClient } from "wagmi";
+import { erc20ABI, PublicClient, useContractRead } from "wagmi";
 import { useAccount, usePublicClient, useWalletClient, useContractWrite } from "wagmi";
 import { useEffect, useRef } from "react";
 import { GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
 import { Toast } from "antd-mobile";
-import { ActionType } from "@/types";
-import { buyerConfirmOrder, getSignByOrderOnChainId, updateOrderTx } from "@/api/order";
+import { ActionType, IOrderDetail } from "@/types";
+import { buyerConfirmOrder, getOrderDetail, getSignByOrderOnChainId, updateOrderTx } from "@/api/order";
 import usePublicDataStore from "@/store/usePublicDataStore";
+import { cancelOrderValidate, confirmOrderValidate, createOrderValidate, payOrderValidate } from "@/utils/orderValidate";
 
 export interface Ipurchase {
   value: bigint[];
@@ -15,9 +16,11 @@ export interface Ipurchase {
   keyManagers: string[];
   data: string[] | ["0x"];
 }
-export default function useContract() {
-  const USDT_ADDRESS = "0xe24ff3d398ec931a22076608a16e85edbaacd4a4";
-  const CONTRACT_ADDRESS = "0x463bb171cd640d53ef915700de31c9a1deff6566";
+
+export const USDT_ADDRESS = "0xe24ff3d398ec931a22076608a16e85edbaacd4a4";
+export const CONTRACT_ADDRESS = "0x320881d4f14876e9331c0fba04fb947d83e7f7f0";
+
+export default function useContract(orderId: string) {
   // current connect account add network
   const publicClient = usePublicClient();
   const account = useAccount();
@@ -57,6 +60,13 @@ export default function useContract() {
     abi: DineroAbi,
     address: CONTRACT_ADDRESS,
     functionName: "finishOrderBySeller",
+  });
+
+  const { refetch } = useContractRead({
+    abi: DineroAbi,
+    address: CONTRACT_ADDRESS,
+    functionName: "orderList",
+    args: [orderId]
   });
 
   useEffect(() => {
@@ -99,7 +109,11 @@ export default function useContract() {
   };
 
   // 创建订单
-  const createOrder = async (orderId: string, totalPrice: number, actionType: ActionType) => {
+  const createOrder = async (totalPrice: number, actionType: ActionType) => {
+    if (!orderId) {
+      return;
+    }
+
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -107,6 +121,17 @@ export default function useContract() {
     });
 
     try {
+      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { data } = await refetch();
+      const orderInfoFromContract = data as IOrderDetail;
+
+      if (
+        !createOrderValidate(orderInfoFromBE) ||
+        !createOrderValidate(orderInfoFromContract)
+      ) {
+        throw new Error('status is not valid');
+      }
+
       await approve(
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
@@ -137,7 +162,11 @@ export default function useContract() {
   }
 
   // 支付订单
-  const payOrder = async (orderId: string, totalPrice: number, actionType: ActionType) => {
+  const payOrder = async (totalPrice: number, actionType: ActionType) => {
+    if (!orderId) {
+      return;
+    }
+
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -145,6 +174,17 @@ export default function useContract() {
     });
 
     try {
+      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { data } = await refetch();
+      const orderInfoFromContract = data as IOrderDetail;
+
+      if (
+        !payOrderValidate(orderInfoFromBE, actionType) ||
+        !payOrderValidate(orderInfoFromContract, actionType)
+      ) {
+        throw new Error("status is not valid");
+      }
+
       await approve(
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
@@ -175,7 +215,11 @@ export default function useContract() {
   }
 
   // 取消
-  const cancelOrder = async (orderId: string) => {
+  const cancelOrder = async (actionType: ActionType) => {
+    if (!orderId) {
+      return;
+    }
+
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -183,6 +227,17 @@ export default function useContract() {
     });
 
     try {
+      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { data } = await refetch();
+      const orderInfoFromContract = data as IOrderDetail;
+
+      if (
+        !cancelOrderValidate(orderInfoFromBE, actionType) ||
+        !cancelOrderValidate(orderInfoFromContract, actionType)
+      ) {
+        throw new Error("status is not valid");
+      }
+
       await writeCancelOrder({
         args: [orderId],
       });
@@ -196,14 +251,17 @@ export default function useContract() {
 
       throw new Error("Cancel failed");
     }
-  }
+  };
 
   // 确认
   const confirmOrder = async (
-    orderId: string,
     orderOnChainId: string,
     actionType: ActionType,
   ) => {
+    if (!orderId) {
+      return;
+    }
+
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -211,6 +269,17 @@ export default function useContract() {
     });
 
     try {
+      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { data } = await refetch();
+      const orderInfoFromContract = data as IOrderDetail;
+
+      if (
+        !confirmOrderValidate(orderInfoFromBE, actionType) ||
+        !confirmOrderValidate(orderInfoFromContract, actionType)
+      ) {
+        throw new Error("status is not valid");
+      }
+
       const { signature } = await getSignByOrderOnChainId(
         orderOnChainId,
         account.address as string,
