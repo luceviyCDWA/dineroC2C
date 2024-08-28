@@ -326,8 +326,16 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         account.address as string,
       );
 
-      await writeConfirm({
+      const res = await writeConfirm({
         args: [orderOnChainId, signature],
+      });
+
+      await updateOrderTx({
+        id: orderId,
+        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        address: account.address as string,
+        chain_id: chainList[0].chain_id,
+        tx: res.hash,
       });
 
       if (actionType === ActionType.Buy) {
