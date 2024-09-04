@@ -52,7 +52,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   };
 
   return (
-    <div className={Styles["market__item"]}>
+    <div className={Styles["market__item"]} onClick={onClickTrade}>
       <div className={Styles["market__item-info"]}>
         <img className={Styles["coin-icon"]} src={category_image} alt="coin" />
         <div className={Styles["info-main"]}>
@@ -68,7 +68,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
             </div>
           )}
         </div>
-        <div className={Styles["market-btn"]} onClick={onClickTrade}>
+        <div className={Styles["market-btn"]}>
           {BtnNameByActionType[realType]}
         </div>
       </div>
