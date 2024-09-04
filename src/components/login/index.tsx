@@ -92,7 +92,11 @@ const LoginModal: React.FC = () => {
   };
 
   return (
-    <RightPage show={showModal} onClose={() => onHideLogin(false)}>
+    <RightPage
+      className={Styles["login__container"]}
+      show={showModal}
+      onClose={() => onHideLogin(false)}
+    >
       <div className={Styles["login__panel"]}>
         <div className={Styles["login__panel-header"]}>Log in to Dinero</div>
 
