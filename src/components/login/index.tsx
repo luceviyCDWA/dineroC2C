@@ -47,23 +47,25 @@ const LoginModal: React.FC = () => {
     },
   });
 
-  const { signMessage } = useSignMessage({
-    // sign callback
-    onSuccess(data) {
-      (async () => {
-        const res = await login(
-          address as string,
-          data,
-          signMsgRef.current,
-          "evm",
-          inviteCode,
-        );
+  const { signMessage } = useSignMessage(
+    {
+      // sign callback
+      onSuccess(data) {
+        (async () => {
+          const res = await login(
+            address as string,
+            data,
+            signMsgRef.current,
+            "evm",
+            inviteCode,
+          );
 
-        onHideLogin(true);
-        afterLogin(res.bearer_token);
-      })();
+          onHideLogin(true);
+          afterLogin(res.bearer_token);
+        })();
+      },
     },
-  });
+  );
 
   const { openConnectModal } = useConnectModal();
 
@@ -114,4 +116,7 @@ const LoginModal: React.FC = () => {
     </RightPage>
   );
 }
-export default LoginModal;
+
+const LoginModalMemo = React.memo(LoginModal);
+
+export default LoginModalMemo;

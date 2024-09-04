@@ -23,7 +23,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   showPanel,
   onClose
 }) => {
-  const [tab, setTab] = useState<'score' | 'order'>('score');
+  const [tab, setTab] = useState<'score' | 'order'>('order');
   const [detailList, setDetailList] = useState<ScoreDetail[]>([]);
 
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);

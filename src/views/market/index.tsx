@@ -6,7 +6,10 @@ import CoinItem from "./components/coinItem";
 import MarketItem from "./components/marketItem";
 import CoinSelect from "@/components/coinSelect";
 import usePublicDataStore from "@/store/usePublicDataStore";
+import useMarketStore from "@/store/useMarketStore";
+import useSelector from "@/hooks/useSelector";
 import { getOrderList } from "@/api/order";
+
 
 import { ActionType, GuaranteeStatus, SORT_TITLE_HASH, SortType, type ICoinItem, type IOrderDetail } from "@/types";
 
@@ -15,14 +18,15 @@ import CheckIcon from "@/assets/imgs/check.png";
 import USDTIcon from '@/assets/imgs/example/usdt.png';
 
 import Styles from './index.module.less';
-import { useLocation } from "react-router-dom";
+
 
 const START_OFFSET = 1;
 const PAGE_SIZE = 10;
 
 const Market: React.FC = () => {
   const coinList = usePublicDataStore((state) => state.coinList);
-  const { state } = useLocation();
+
+  const { curCoinId } = useMarketStore(useSelector("curCoinId"));
 
   // 列表属性
   const [orderList, setOrderList] = useState<IOrderDetail[]>([]);
@@ -43,7 +47,7 @@ const Market: React.FC = () => {
 
   useEffect(() => {
     if (coinList?.length) {
-      const targetCoinId = state?.curCoidId || '';
+      const targetCoinId = curCoinId || "";
       const targetCoinInfo = coinList.find(
         (coinInfo) => coinInfo.id === targetCoinId,
       );
@@ -54,7 +58,7 @@ const Market: React.FC = () => {
         setCurCoin(coinList[0]);
       }
     }
-  }, [state, coinList]);
+  }, [curCoinId, coinList]);
 
   useEffect(() => {
     onGetOrderList(true);

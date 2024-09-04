@@ -58,7 +58,7 @@ const TaskItemComp: React.FC<TaskItemCompProps> = (props) => {
           )}
         </div>
         {TaskDescHash[type].map((str) => (
-          <div className={Styles["task__item-content"]}>{str}</div>
+          <div key={str} className={Styles["task__item-content"]}>{str}</div>
         ))}
       </div>
       <img

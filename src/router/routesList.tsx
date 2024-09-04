@@ -1,8 +1,6 @@
-import React from "react";
-import { lazy } from "react";
-import { RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouteObject } from "react-router-dom";
 
-const Layout = lazy(() => import("@/components/layout"));
+import Layout from "@/components/layout";
 
 const routesList: RouteObject[] = [
   {
@@ -12,29 +10,13 @@ const routesList: RouteObject[] = [
         <Layout />
       </>
     ),
-    children: [
-      {
-        index: true,
-        element: React.createElement(lazy(() => import("@/views/index"))),
-      },
-      {
-        path: "/market",
-        element: React.createElement(lazy(() => import("@/views/market"))),
-      },
-      {
-        path: "/publish",
-        element: React.createElement(lazy(() => import("@/views/publish"))),
-      },
-      {
-        path: "/message",
-        element: React.createElement(lazy(() => import("@/views/message"))),
-      },
-      {
-        path: "/me",
-        element: React.createElement(lazy(() => import("@/views/me"))),
-      },
-    ],
+  },
+  {
+    path: "*",
+    element: <Navigate replace to='/' />,
   },
 ];
 
-export default routesList;
+const router: ReturnType<typeof createBrowserRouter> = createBrowserRouter(routesList);
+
+export default router;

@@ -3,9 +3,8 @@ import { useAccount } from "wagmi";
 
 import useUserStore from "@/store/useUserStore";
 import useLoginModalStore from "@/store/useLoginModalStore";
-import useContract from "@/hooks/useContract";
 
-import { GuaranteeStatus, BtnNameByActionType, type IOrderDetail, ActionType, OrderStatus } from "@/types";
+import { GuaranteeStatus, BtnNameByActionType, type IOrderDetail, ActionType } from "@/types";
 
 import GuaranteeIcon from "@/assets/imgs/guarantee.png";
 
@@ -23,7 +22,6 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
 }) => {
   const {
     id,
-    order_onchain_id,
     category_image,
     name,
     is_mortgage,
@@ -31,7 +29,6 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
     unit_price,
     total_price,
     payment_name,
-    status,
   } = marketItemInfo;
 
   const { isConnected } = useAccount();
@@ -40,7 +37,6 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   const getOrderInfoAndShow = useQuickOrderStore(
     (state) => state.getOrderInfoAndShow,
   );
-  const { createOrder, payOrder } = useContract(id, order_onchain_id);
 
   // 与当前相反
   const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;
@@ -50,15 +46,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
       await onShowLogin();
     }
 
-    if (realType === ActionType.Buy) {
-      if (status === OrderStatus.InitState) {
-        await createOrder(Number(total_price), realType);
-      } else {
-        await payOrder(Number(total_price), realType);
-      }
-    } else {
-      await getOrderInfoAndShow(id);
-    }
+    await getOrderInfoAndShow(id);
 
     onCompleteOrder(id);
   };

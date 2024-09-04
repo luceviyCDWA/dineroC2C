@@ -11,48 +11,51 @@ import MeIcon from "@/assets/imgs/layout/me.png";
 import MeActiveIcon from "@/assets/imgs/layout/me_active.png";
 
 
-export const enum NAV_TYPE {
-  HOME,
-  MARKET,
-  MESSAGE,
-  ME,
+export const enum PageTabType {
+  HOME = "index",
+  MARKET = "market",
+  PUBLISH = "publish",
+  MESSAGE = "message",
+  ME = "me",
 }
 
+
 export interface INavItem {
-  type: NAV_TYPE,
+  type: PageTabType;
   title: string;
   icon: string;
   activeIcon: string;
-  path: string;
 }
 
-export const NAV_LIST: Record<NAV_TYPE, INavItem> = {
-  [NAV_TYPE.HOME]: {
-    type: NAV_TYPE.HOME,
+export const NAV_LIST: Record<PageTabType, INavItem> = {
+  [PageTabType.HOME]: {
+    type: PageTabType.HOME,
     title: "Home",
     icon: HomeIcon,
     activeIcon: HomeActiveIcon,
-    path: "/",
   },
-  [NAV_TYPE.MARKET]: {
-    type: NAV_TYPE.MARKET,
+  [PageTabType.MARKET]: {
+    type: PageTabType.MARKET,
     title: "Market",
     icon: MarketIcon,
     activeIcon: MarketActiveIcon,
-    path: "/market",
   },
-  [NAV_TYPE.MESSAGE]: {
-    type: NAV_TYPE.MESSAGE,
+  [PageTabType.PUBLISH]: {
+    type: PageTabType.PUBLISH,
+    title: "Publish",
+    icon: '',
+    activeIcon: '',
+  },
+  [PageTabType.MESSAGE]: {
+    type: PageTabType.MESSAGE,
     title: "Message",
     icon: MessageIcon,
     activeIcon: MessageActiveIcon,
-    path: "/message",
   },
-  [NAV_TYPE.ME]: {
-    type: NAV_TYPE.ME,
+  [PageTabType.ME]: {
+    type: PageTabType.ME,
     title: "Me",
     icon: MeIcon,
     activeIcon: MeActiveIcon,
-    path: "/me",
   },
 };

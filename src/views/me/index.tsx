@@ -16,6 +16,7 @@ import Styles from './index.module.less';
 import RightPage from "@/components/rightPage";
 import useUserStore from "@/store/useUserStore";
 import { Toast } from "antd-mobile";
+import useSelector from "@/hooks/useSelector";
 
 const DAILY_NUM = 7;
 
@@ -29,9 +30,7 @@ const DAILY_NORMAL_LIST: Array<undefined> = [
 ];
 
 const TaskComp: React.FC = () => {
-  const { setShowHeader } = useLayoutStore((state) => ({
-    setShowHeader: state.setShowHeader,
-  }));
+  const { setShowHeader, activeTab } = useLayoutStore(useSelector(["setShowHeader", "activeTab"]));
   const clearAll = useUserStore(state => state.clearAll);
 
   const [score, setScore] = useState(0);
@@ -44,15 +43,15 @@ const TaskComp: React.FC = () => {
   const [showSetting, setShowSetting] = useState(false);
 
   useEffect(() => {
-    setShowHeader(false);
+    if (activeTab === 'me') {
+      setShowHeader(false);
 
-    initTaskInfo();
-    initTaskList();
-
-    return () => {
+      initTaskInfo();
+      initTaskList();
+    } else {
       setShowHeader(true);
     }
-  }, []);
+  }, [activeTab]);
 
   async function initTaskInfo() {
     try {

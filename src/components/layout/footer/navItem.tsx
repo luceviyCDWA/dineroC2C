@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-import history from "@/utils/history";
+import { INavItem, PageTabType } from "./data";
 
-import { INavItem, NAV_TYPE } from "./data";
+import useSelector from "@/hooks/useSelector";
 
-import Styles from './index.module.less';
-import { useNavigate } from "react-router-dom";
 import useLayoutStore from "@/store/useLayoutStore";
 import useMsgStore from "@/store/useMsgStore";
 import useUserStore from "@/store/useUserStore";
 import useLoginModalStore from "@/store/useLoginModalStore";
+
+import Styles from "./index.module.less";
 
 interface NavItemCompProps {
   className?: string;
@@ -21,10 +21,11 @@ const NavItem: React.FC<NavItemCompProps> = ({
   className,
   navInfo
 }) => {
-  const { icon, activeIcon, title, path } = navInfo;
+  const { icon, activeIcon, title, type } = navInfo;
 
-  const naviagate = useNavigate();
-  const setPageTitle = useLayoutStore((state) => state.setPageTitle);
+  const { setPageTitle, activeTab, setActiveTab } = useLayoutStore(
+    useSelector(["setPageTitle", "setActiveTab", "activeTab"]),
+  );
   const unreadNum = useMsgStore(state => state.unreadNum);
   const isLogin = useUserStore((state) => state.isLogin);
   const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
@@ -32,25 +33,25 @@ const NavItem: React.FC<NavItemCompProps> = ({
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    setIsActive(history.location.pathname === path);
+    setIsActive(activeTab === type);
 
-    if (history.location.pathname === path) {
+    if (activeTab === type) {
       setPageTitle(title);
     }
-  }, [history.location.pathname]);
+  }, [activeTab]);
 
   const onJumpNewPage = async () => {
     if (isActive) {
       return;
     }
 
-    if (path === "/message" || path === '/me'){
+    if (type === PageTabType.MESSAGE || type === PageTabType.ME) {
       if (!isLogin) {
         await onShowLogin();
       }
     }
 
-    naviagate(path);
+    setActiveTab(type);
   }
 
   return (
@@ -66,8 +67,10 @@ const NavItem: React.FC<NavItemCompProps> = ({
         ) : (
           <img className={Styles["icon"]} src={icon} alt="icon" />
         )}
-        {navInfo.type === NAV_TYPE.MESSAGE && unreadNum > 0 && (
-          <span className={Styles["unread"]}>{unreadNum > 9 ? '9+' : unreadNum}</span>
+        {navInfo.type === PageTabType.MESSAGE && unreadNum > 0 && (
+          <span className={Styles["unread"]}>
+            {unreadNum > 9 ? "9+" : unreadNum}
+          </span>
         )}
       </div>
       <div className={Styles["title"]}>{title}</div>
