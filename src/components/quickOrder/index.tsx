@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 import { useAccount } from "wagmi";
+import copy from "copy-to-clipboard";
+import { Toast } from "antd-mobile";
 
 import RightPage from "../rightPage";
 import CoinSelect from "../coinSelect";
@@ -13,11 +15,13 @@ import useLoginModalStore from "@/store/useLoginModalStore";
 import useContract from "@/hooks/useContract";
 
 import USDTImg from "@/assets/imgs/example/usdt.png";
+import TelegramIcon from "@/assets/imgs/settings/telegram.webp";
+import DiscordIcon from "@/assets/imgs/settings/discord.png";
+import WhatsappIcon from "@/assets/imgs/settings/whatapp.webp";
 
 import { ActionType, BtnNameByActionType, ICoinItem, OrderStatus } from "@/types";
 
 import Styles from "./index.module.less";
-import { Toast } from "antd-mobile";
 
 const QuickOrder: React.FC = () => {
   const { coinList } = usePublicDataStore((state) => ({
@@ -29,12 +33,14 @@ const QuickOrder: React.FC = () => {
   const {
     showQuickOrder,
     orderInfo,
+    contractInfo,
     setShowQuickOrder,
     quickOrderResolver,
   } = useQuickOrderStore(
     useSelector([
       "showQuickOrder",
       "orderInfo",
+      "contractInfo",
       "setShowQuickOrder",
       "quickOrderResolver",
     ]),
@@ -87,6 +93,19 @@ const QuickOrder: React.FC = () => {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  function onCopy (content: string) {
+    if (!content) {
+      return;
+    }
+
+    copy(content);
+
+    Toast.show({
+      icon: "success",
+      content: "opied!",
+    });
   }
 
   return (
@@ -156,6 +175,51 @@ const QuickOrder: React.FC = () => {
                   )}
                 </div>
               </div>
+
+              {contractInfo?.telegram ? (
+                <div
+                  className={Styles["input__item"]}
+                  onClick={() => onCopy(contractInfo.telegram || "")}
+                >
+                  <div className={Styles["input__item-title"]}>Telegram</div>
+                  <div className={Styles["input__item-input"]}>
+                    <img className={Styles["input-icon"]} src={TelegramIcon} />
+                    <span className={Styles["content"]}>
+                      {contractInfo.telegram || ""}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+
+              {contractInfo?.discord ? (
+                <div
+                  className={Styles["input__item"]}
+                  onClick={() => onCopy(contractInfo.discord || "")}
+                >
+                  <div className={Styles["input__item-title"]}>Discord</div>
+                  <div className={Styles["input__item-input"]}>
+                    <img className={Styles["input-icon"]} src={DiscordIcon} />
+                    <span className={Styles["content"]}>
+                      {contractInfo.discord || ""}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+
+              {contractInfo?.whatsapp ? (
+                <div
+                  className={Styles["input__item"]}
+                  onClick={() => onCopy(contractInfo.whatsapp || "")}
+                >
+                  <div className={Styles["input__item-title"]}>WhatsApp</div>
+                  <div className={Styles["input__item-input"]}>
+                    <img className={Styles["input-icon"]} src={WhatsappIcon} />
+                    <span className={Styles["content"]}>
+                      {contractInfo.whatsapp || ""}
+                    </span>
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <div className={Styles["publish-btn"]} onClick={onPay}>

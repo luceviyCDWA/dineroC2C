@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { InfiniteScroll, PullToRefresh } from "antd-mobile";
+import { InfiniteScroll, PullToRefresh, Toast } from "antd-mobile";
+import dayjs from "dayjs";
+
+import { INIT_PAGE } from "@/config/env";
 
 import { getOrderList, getScoreDetailList } from "@/api/user";
+import MessageDetail from "@/views/message/components/messageDetail";
 import RightPage from "@/components/rightPage";
 
 import { ScoreDetail, TaskIconHash } from "./types";
 import { TaskTitleHash, TaskType } from "../taskItem/types";
+import { ActionType, IContractInfo, IOrderDetail } from "@/types";
 
 import Styles from "./index.module.less";
-import { ActionType, IOrderDetail } from "@/types";
-import { INIT_PAGE } from "@/config/env";
-import dayjs from "dayjs";
-import MessageDetail from "@/views/message/components/messageDetail";
+import { getOrderDetail } from "@/api/order";
 
 interface HistoryListCompProps {
   showPanel: boolean;
@@ -32,6 +34,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
 
   const [showDetail, setShowDetail] = useState(false);
   const [curMsgDetail, setCurMsgDetail] = useState<IOrderDetail | null>(null);
+  const [curContractInfo, setCurContractInfo] = useState<IContractInfo>();
 
   useEffect(() => {
     initDetailList();
@@ -67,9 +70,28 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     setOrderHasMore(total > curList.length);
   }
 
-  function onSelectOrder(orderDetail: IOrderDetail) {
-    setCurMsgDetail(orderDetail);
-    setShowDetail(true);
+  async function onSelectOrder(orderDetail: IOrderDetail) {
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "Loading...",
+    });
+
+    try {
+      const { order, user_contact} = await getOrderDetail(orderDetail.id);
+
+      setCurMsgDetail(order);
+      setCurContractInfo(user_contact);
+      setShowDetail(true);
+
+      Toast.clear();
+    } catch (e) {
+      Toast.clear();
+      Toast.show({
+        icon: "fail",
+        content: "Fail to get message detail",
+      });
+    }
   }
 
   const onDetailClose = () => {
@@ -215,6 +237,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
         <MessageDetail
           showPanel={showDetail}
           msgDetail={curMsgDetail}
+          contractInfo={curContractInfo}
           onClose={onDetailClose}
         />
       )}

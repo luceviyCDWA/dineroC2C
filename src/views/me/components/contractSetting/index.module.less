@@ -1,0 +1,69 @@
+.setting-panel {
+  padding: 10px;
+
+  .input__item {
+    margin-bottom: 14px;
+
+    &-title {
+      padding: 10px 0;
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 400;
+      font-size: 16px;
+      color: #8E8E8E;
+      line-height: 16px;
+    }
+
+    &-input {
+      height: 48px;
+      padding: 0 15px;
+      background: rgba(63,57,89,0.3);
+      border-radius: 12px;
+
+      .flex(row, flex-start, center);
+      column-gap: 15px;
+
+      input {
+        height: 16px;
+        font-family: PingFangSC, PingFang SC;
+        font-weight: 400;
+        font-size: 16px;
+        color: #FFFFFF;
+        line-height: 16px;
+
+        &::placeholder {
+          color: #B5B5B5;
+        }
+      }
+
+      .input-icon {
+        width: 25px;
+        height: 25px;
+      }
+    }
+  }
+
+  .save-btn {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 0;
+    padding-bottom: 20px;
+    padding-bottom: calc(constant(safe-area-inset-bottom) + 20px); /* 兼容 iOS < 11.2 */
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px); /* 兼容 iOS >= 11.2 */
+
+    .btn {
+      height: 48px;
+      background: linear-gradient( 15deg, #5BC4FF 0%, #4D5EFF 20%, #6362FF 49%, #C970FF 75%, #FF9FA5 100%);
+      border-radius: 12px;
+
+      .flex(row, center, center);
+      .btn-mix();
+
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 500;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+  }
+}

@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import { Toast } from "antd-mobile";
 
-import { ActionType, IOrderDetail, OrderStatus } from "@/types";
+import { ActionType, IContractInfo, IOrderDetail, OrderStatus } from "@/types";
 import { getOrderDetail } from "@/api/order";
 
 interface QuickOrderStore {
   showQuickOrder: boolean;
   orderInfo: IOrderDetail | null;
+  contractInfo: IContractInfo | null;
 
   quickOrderResolver: () => void;
   quickOrderRejecter: () => void;
@@ -20,6 +21,7 @@ interface QuickOrderStore {
 const useQuickOrderStore = create<QuickOrderStore>((set) => ({
   showQuickOrder: false,
   orderInfo: null,
+  contractInfo: null,
 
   quickOrderResolver: () => {},
   quickOrderRejecter: () => {},
@@ -41,7 +43,9 @@ const useQuickOrderStore = create<QuickOrderStore>((set) => ({
       });
 
       try {
-        const orderDetail = await getOrderDetail(orderId);
+        const { order: orderDetail, user_contact: contractInfo } = await getOrderDetail(
+          orderId,
+        );
 
         // 覆盖类型
         orderDetail.type =
@@ -57,6 +61,7 @@ const useQuickOrderStore = create<QuickOrderStore>((set) => ({
           set((state) => ({
             ...state,
             orderInfo: orderDetail,
+            contractInfo: contractInfo || null,
             // 显示弹窗
             showQuickOrder: true,
 

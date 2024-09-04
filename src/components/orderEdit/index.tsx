@@ -17,6 +17,8 @@ import TitleImg from '@/assets/imgs/mask.png';
 
 import Styles from "./index.module.less";
 import website from "@/config/website";
+import ContractSetting from "@/views/me/components/contractSetting";
+import { getContractInfo } from "@/api/setting";
 
 interface OrderEditCompProps {
   coinId: string;
@@ -33,6 +35,9 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     chainList: state.chainList,
     coinList: state.coinList,
   }));
+
+  // 联系方式弹窗
+  const [showContractSetting, setShowContractSetting] = useState(false);
 
   // 订单参数
   const [curCoinInfo, setCurCoinInfo] = useState<ICoinItem>();
@@ -67,11 +72,29 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     }
   }, [total, totalPrice]);
 
-  const onPublish = async () => {
+  const onPublish = async (skipCheckTips?: boolean) => {
     const chainInfo = chainList[0];
 
     if (!curCoinInfo) {
       return Toast.show('Please select category first');
+    }
+
+    const { telegram, discord, whatsapp } = await getContractInfo();
+
+    if (!telegram && !discord && !whatsapp) {
+      !skipCheckTips &&
+        Toast.show({
+          icon: "fail",
+          content: (
+            <div style={{ textAlign: "center", wordBreak: 'normal' }}>
+              Please Submit Your Contract Info First
+            </div>
+          ),
+          afterClose: () => {
+            setShowContractSetting(true);
+          },
+        });
+      return;
     }
 
     const { order_id, order_onchain_id } = await createOrder({
@@ -116,6 +139,14 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
       icon: 'success',
       content: 'share url was copied!'
     });
+  }
+
+  const onSaveContractSetting = (hasSubmit?: boolean) => {
+    setShowContractSetting(false);
+
+    if (hasSubmit) {
+      onPublish(true);
+    }
   }
 
   return (
@@ -191,7 +222,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
             </div>
           </div>
 
-          <div className={Styles["publish-btn"]} onClick={onPublish}>
+          <div className={Styles["publish-btn"]} onClick={() => onPublish()}>
             <div className={Styles["btn"]}>Publish</div>
           </div>
         </div>
@@ -236,6 +267,11 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
           </div>
         </div>
       </RightPage>
+
+      <ContractSetting
+        showPanel={showContractSetting}
+        onClose={onSaveContractSetting}
+      />
     </>
   );
 };

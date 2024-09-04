@@ -121,7 +121,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     });
 
     try {
-      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
         unknown,
@@ -184,7 +184,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     });
 
     try {
-      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
         unknown,
@@ -247,7 +247,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     });
 
     try {
-      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
         unknown,
@@ -304,7 +304,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     });
 
     try {
-      const orderInfoFromBE = await getOrderDetail(orderId);
+      const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
         unknown,

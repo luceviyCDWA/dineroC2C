@@ -5,6 +5,7 @@ import RightPage from "@/components/rightPage";
 
 import {
   ActionType,
+  IContractInfo,
   IOrderDetail,
   OrderStatus,
   OrderStatusTitleHash,
@@ -19,12 +20,14 @@ import copy from "copy-to-clipboard";
 interface MessageDetailCompProps {
   showPanel: boolean;
   msgDetail: IOrderDetail;
+  contractInfo?: IContractInfo;
   onClose: () => void;
 }
 
 const MessageDetail: React.FC<MessageDetailCompProps> = ({
   showPanel,
   msgDetail,
+  contractInfo,
   onClose,
 }) => {
   const {
@@ -78,6 +81,19 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
       content: "share url was copied!",
     });
   };
+
+  function onCopy(content: string) {
+    if (!content) {
+      return;
+    }
+
+    copy(content);
+
+    Toast.show({
+      icon: "success",
+      content: "opied!",
+    });
+  }
 
   return (
     <RightPage
@@ -154,6 +170,42 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
             {is_mortgage ? "Paid" : "Pending"}
           </div>
         </div>
+
+        {contractInfo?.telegram ? (
+          <div
+            className={Styles["detail__item"]}
+            onClick={() => onCopy(contractInfo.telegram || "")}
+          >
+            <div className={Styles["detail__item-title"]}>Telegram</div>
+            <div className={Styles["detail__item-content"]}>
+              {contractInfo.telegram || ""}
+            </div>
+          </div>
+        ) : null}
+
+        {contractInfo?.discord ? (
+          <div
+            className={Styles["detail__item"]}
+            onClick={() => onCopy(contractInfo.discord || "")}
+          >
+            <div className={Styles["detail__item-title"]}>Discord</div>
+            <div className={Styles["detail__item-content"]}>
+              {contractInfo.discord || ""}
+            </div>
+          </div>
+        ) : null}
+
+        {contractInfo?.whatsapp ? (
+          <div
+            className={Styles["detail__item"]}
+            onClick={() => onCopy(contractInfo.whatsapp || "")}
+          >
+            <div className={Styles["detail__item-title"]}>WhatsApp</div>
+            <div className={Styles["detail__item-content"]}>
+              {contractInfo.whatsapp || ""}
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {status === OrderStatus.InitState && (

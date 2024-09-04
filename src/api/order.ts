@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 
-import { ActionType, GuaranteeStatus, IChainItem, ICoinItem, IHotItem, IOrderDetail, SortType } from "@/types";
+import { ActionType, GuaranteeStatus, IChainItem, ICoinItem, IContractInfo, IHotItem, IOrderDetail, SortType } from "@/types";
 
 export const getHotCoinList = () => {
   return request.get<unknown, IHotItem[]>("/apis/v1/dinero/get_hot_list");
@@ -39,8 +39,15 @@ export const getOrderList = (data: {
 export const getOrderDetail = (orderId: string) => {
   return request.get<
     unknown,
-    IOrderDetail
-  >(`/apis/v1/dinero/get_order_detail/${orderId}`);
+    {
+      order: IOrderDetail;
+      user_contact?: IContractInfo;
+    }
+  >(`/apis/v1/dinero/get_order_detail`, {
+    params: {
+      id: orderId,
+    },
+  });
 }
 
 export const createOrder = (data: {

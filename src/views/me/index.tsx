@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Toast } from "antd-mobile";
 
 import { getTaskInfo, getTaskList } from "@/api/user";
 import useLayoutStore from "@/store/useLayoutStore";
+import useUserStore from "@/store/useUserStore";
+import useSelector from "@/hooks/useSelector";
 
 import HistoryList from "./components/history";
-
+import RightPage from "@/components/rightPage";
 import TaskItemComp from "./components/taskItem";
 import { TaskType, type TaskItem } from "./components/taskItem/types";
 import DailyItem from "./components/dailyItem";
 
 import SettingIcon from '@/assets/imgs/me/setting.png';
 import ScoreIcon from '@/assets/imgs/me/score.png';
+import NextIcon from "@/assets/imgs/me/next.png";
 
 import Styles from './index.module.less';
-import RightPage from "@/components/rightPage";
-import useUserStore from "@/store/useUserStore";
-import { Toast } from "antd-mobile";
-import useSelector from "@/hooks/useSelector";
+import ContractSetting from "./components/contractSetting";
 
 const DAILY_NUM = 7;
 
@@ -41,6 +42,7 @@ const TaskComp: React.FC = () => {
 
   const [showHistory, setShowHistory] = useState(false);
   const [showSetting, setShowSetting] = useState(false);
+  const [showContractSetting, setShowContractSetting] = useState(false);
 
   useEffect(() => {
     if (activeTab === 'me') {
@@ -96,6 +98,10 @@ const TaskComp: React.FC = () => {
     setTodayHasSigned(true);
     initTaskInfo();
   }, [hasSigned]);
+
+  const onShowContractSetting = () => {
+    setShowContractSetting(true);
+  }
 
   const onLogout = () => {
     clearAll();
@@ -179,12 +185,23 @@ const TaskComp: React.FC = () => {
         show={showSetting}
         onClose={() => setShowSetting(false)}
       >
+        <div className={Styles["setting-list"]}>
+          <div className={Styles["setting"]} onClick={onShowContractSetting}>
+            Contact Information
+            <img className={Styles["next-icon"]} src={NextIcon} alt="btn" />
+          </div>
+        </div>
         <div className={Styles["logout"]}>
           <div className={Styles["logout-btn"]} onClick={onLogout}>
             Log Out
           </div>
         </div>
       </RightPage>
+
+      <ContractSetting
+        showPanel={showContractSetting}
+        onClose={() => setShowContractSetting(false)}
+      />
     </div>
   );
 };

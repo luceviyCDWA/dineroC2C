@@ -9,7 +9,7 @@ import MessageItem from "./components/messageItem";
 import MessageDetail from "./components/messageDetail";
 
 import Styles from "./index.module.less";
-import { type IOrderDetail } from "@/types";
+import { IContractInfo, type IOrderDetail } from "@/types";
 
 const Message: React.FC = () => {
   const {
@@ -28,6 +28,7 @@ const Message: React.FC = () => {
 
   const [showDetail, setShowDetail] = useState(false);
   const [curMsgDetail, setCurMsgDetail] = useState<IOrderDetail | null>(null);
+  const [curContractInfo, setCurContractInfo] = useState<IContractInfo>();
 
   const onLoadMore = async () => {
     await getNextPageData();
@@ -42,10 +43,11 @@ const Message: React.FC = () => {
 
     try {
       const { url } = await getMessageDetail(selectId);
-      const orderInfo = await getOrderDetail(url);
+      const { order: orderInfo, user_contact } = await getOrderDetail(url);
 
       setShowDetail(true);
       setCurMsgDetail(orderInfo);
+      setCurContractInfo(user_contact);
 
       Toast.clear();
     } catch (e) {
@@ -91,6 +93,7 @@ const Message: React.FC = () => {
         <MessageDetail
           showPanel={showDetail}
           msgDetail={curMsgDetail}
+          contractInfo={curContractInfo}
           onClose={onDetailClose}
         />
       )}

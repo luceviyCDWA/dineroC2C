@@ -117,3 +117,9 @@ export interface IOrderDetail {
 
   created_at?: string;
 }
+
+export interface IContractInfo {
+  telegram?: string;
+  discord?: string;
+  whatsapp?: string;
+}
