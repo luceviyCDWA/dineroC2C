@@ -37,8 +37,22 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   const [curContractInfo, setCurContractInfo] = useState<IContractInfo>();
 
   useEffect(() => {
-    initDetailList();
-  }, []);
+    if (showPanel) {
+      if (tab === "score") {
+        initDetailList();
+      } else if (tab === "order") {
+        initOrderList();
+      }
+    }
+  }, [showPanel]);
+
+  useEffect(() => {
+    if (tab === 'score') {
+      initDetailList();
+    } else if (tab === 'order') {
+      initOrderList();
+    }
+  }, [tab]);
 
   async function initDetailList() {
     const res = await getScoreDetailList();
@@ -52,6 +66,13 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
         date: item.created_at.split("T")[0],
       })),
     );
+  }
+
+  async function initOrderList() {
+    setOrderList([]);
+    setOrderPage(INIT_PAGE - 1);
+    setOrderHasMore(true);
+    getNextPageOrderList(true);
   }
 
   async function getNextPageOrderList(isReset?: boolean) {
