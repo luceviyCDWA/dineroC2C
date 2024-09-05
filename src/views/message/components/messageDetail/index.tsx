@@ -16,6 +16,9 @@ import useContract from "@/hooks/useContract";
 import { Toast } from "antd-mobile";
 import website from "@/config/website";
 import copy from "copy-to-clipboard";
+import useLoginModalStore from "@/store/useLoginModalStore";
+import { useAccount } from "wagmi";
+import useUserStore from "@/store/useUserStore";
 
 interface MessageDetailCompProps {
   showPanel: boolean;
@@ -45,22 +48,36 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
   } = msgDetail;
   const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract(id, order_onchain_id);
 
+  const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
+  const { isConnected } = useAccount();
+  const isLogin = useUserStore((state) => state.isLogin);
+
+  const checkLogin = async () => {
+    if (!isConnected || !isLogin) {
+      await onShowLogin();
+    }
+  }
+
   const onCreateOrder = async () => {
+    await checkLogin();
     await createOrder(Number(total_price), type);
     onClose();
   }
 
   const onPayOrder = async () => {
+    await checkLogin();
     await payOrder(Number(total_price), type);
     onClose();
   }
 
   const onCancelOrder = async () => {
+    await checkLogin();
     await cancelOrder(type);
     onClose();
   }
 
   const onConfirmOrder = async () => {
+    await checkLogin();
     await confirmOrder(order_onchain_id, type);
     onClose();
   }
@@ -266,9 +283,14 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
             </div>
           </div>
         ) : (
-          <div className={Styles["detail__panel-btn"]} onClick={onCancelOrder}>
-            <div className={Styles["btn"]}>Cancel</div>
-            <div className={`${Styles["btn"]} ${Styles["btn-txt"]}`}>
+          <div className={Styles["detail__panel-btn"]}>
+            <div className={Styles["btn"]} onClick={onCancelOrder}>
+              Cancel
+            </div>
+            <div
+              className={`${Styles["btn"]} ${Styles["btn-txt"]}`}
+              onClick={onShareOrder}
+            >
               <span className={Styles["content"]}>Share</span>
             </div>
           </div>
