@@ -145,81 +145,89 @@ const QuickOrder: React.FC = () => {
             </div>
 
             <div className={Styles["order__publish-main"]}>
-              <div className={Styles["input__item"]}>
-                <div className={Styles["input__item-title"]}>Total</div>
-                <div className={Styles["input__item-input"]}>
-                  {orderInfo.total_count}
-                </div>
-              </div>
-
-              <div className={Styles["input__item"]}>
-                <div className={Styles["input__item-title"]}>Total Price</div>
-                <div className={Styles["input__item-input"]}>
-                  <span className={Styles["content"]}>
-                    {orderInfo.total_price}
-                  </span>
-                  <img className={Styles["currency-icon"]} src={USDTImg} />
-                  <span className={Styles["currency-name"]}>USDT</span>
-                </div>
-              </div>
-
-              <div className={Styles["input__item"]}>
-                <div className={Styles["input__item-title"]}>Unit Price</div>
-                <div className={Styles["input__item-input"]}>
-                  {orderInfo.unit_price ? (
-                    <span className={Styles["unit-price"]}>
-                      {orderInfo.unit_price} USDT
-                    </span>
-                  ) : (
-                    <span className={Styles["placeholder"]}>0.00USDT</span>
-                  )}
-                </div>
-              </div>
-
-              {contractInfo?.telegram ? (
-                <div
-                  className={Styles["input__item"]}
-                  onClick={() => onCopy(contractInfo.telegram || "")}
-                >
-                  <div className={Styles["input__item-title"]}>Telegram</div>
+              <div className={Styles['main-container']}>
+                <div className={Styles["input__item"]}>
+                  <div className={Styles["input__item-title"]}>Total</div>
                   <div className={Styles["input__item-input"]}>
-                    <img className={Styles["input-icon"]} src={TelegramIcon} />
-                    <span className={Styles["content"]}>
-                      {contractInfo.telegram || ""}
-                    </span>
+                    {orderInfo.total_count}
                   </div>
                 </div>
-              ) : null}
 
-              {contractInfo?.discord ? (
-                <div
-                  className={Styles["input__item"]}
-                  onClick={() => onCopy(contractInfo.discord || "")}
-                >
-                  <div className={Styles["input__item-title"]}>Discord</div>
+                <div className={Styles["input__item"]}>
+                  <div className={Styles["input__item-title"]}>Total Price</div>
                   <div className={Styles["input__item-input"]}>
-                    <img className={Styles["input-icon"]} src={DiscordIcon} />
                     <span className={Styles["content"]}>
-                      {contractInfo.discord || ""}
+                      {orderInfo.total_price}
                     </span>
+                    <img className={Styles["currency-icon"]} src={USDTImg} />
+                    <span className={Styles["currency-name"]}>USDT</span>
                   </div>
                 </div>
-              ) : null}
 
-              {contractInfo?.whatsapp ? (
-                <div
-                  className={Styles["input__item"]}
-                  onClick={() => onCopy(contractInfo.whatsapp || "")}
-                >
-                  <div className={Styles["input__item-title"]}>WhatsApp</div>
+                <div className={Styles["input__item"]}>
+                  <div className={Styles["input__item-title"]}>Unit Price</div>
                   <div className={Styles["input__item-input"]}>
-                    <img className={Styles["input-icon"]} src={WhatsappIcon} />
-                    <span className={Styles["content"]}>
-                      {contractInfo.whatsapp || ""}
-                    </span>
+                    {orderInfo.unit_price ? (
+                      <span className={Styles["unit-price"]}>
+                        {orderInfo.unit_price} USDT
+                      </span>
+                    ) : (
+                      <span className={Styles["placeholder"]}>0.00USDT</span>
+                    )}
                   </div>
                 </div>
-              ) : null}
+
+                {contractInfo?.telegram ? (
+                  <div
+                    className={Styles["input__item"]}
+                    onClick={() => onCopy(contractInfo.telegram || "")}
+                  >
+                    <div className={Styles["input__item-title"]}>Telegram</div>
+                    <div className={Styles["input__item-input"]}>
+                      <img
+                        className={Styles["input-icon"]}
+                        src={TelegramIcon}
+                      />
+                      <span className={Styles["content"]}>
+                        {contractInfo.telegram || ""}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+
+                {contractInfo?.discord ? (
+                  <div
+                    className={Styles["input__item"]}
+                    onClick={() => onCopy(contractInfo.discord || "")}
+                  >
+                    <div className={Styles["input__item-title"]}>Discord</div>
+                    <div className={Styles["input__item-input"]}>
+                      <img className={Styles["input-icon"]} src={DiscordIcon} />
+                      <span className={Styles["content"]}>
+                        {contractInfo.discord || ""}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+
+                {contractInfo?.whatsapp ? (
+                  <div
+                    className={Styles["input__item"]}
+                    onClick={() => onCopy(contractInfo.whatsapp || "")}
+                  >
+                    <div className={Styles["input__item-title"]}>WhatsApp</div>
+                    <div className={Styles["input__item-input"]}>
+                      <img
+                        className={Styles["input-icon"]}
+                        src={WhatsappIcon}
+                      />
+                      <span className={Styles["content"]}>
+                        {contractInfo.whatsapp || ""}
+                      </span>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
             </div>
 
             <div className={Styles["publish-btn"]} onClick={onPay}>

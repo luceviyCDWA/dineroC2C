@@ -155,74 +155,82 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
           <div className={Styles["coin__detail-rule"]}>Rules</div>
         </div>
 
-        <div className={Styles["detail__item"]}>
-          <div className={Styles["detail__item-title"]}>Total</div>
-          <div className={Styles["detail__item-content"]}>{total_count}</div>
-        </div>
-
-        <div className={Styles["detail__item"]}>
-          <div className={Styles["detail__item-title"]}>Total Price</div>
-          <div className={Styles["detail__item-content"]}>
-            {total_price} {payment_name}
-          </div>
-        </div>
-
-        <div className={Styles["detail__item"]}>
-          <div className={Styles["detail__item-title"]}>Unit price</div>
-          <div className={Styles["detail__item-content"]}>
-            {unit_price} {payment_name}
-          </div>
-        </div>
-
-        <div className={Styles["detail__item"]}>
-          <div className={Styles["detail__item-title"]}>Status</div>
-          <div className={Styles["detail__item-content"]}>
-            {OrderStatusTitleHash[status]}
-          </div>
-        </div>
-
-        <div className={Styles["detail__item"]}>
-          <div className={Styles["detail__item-title"]}>Guarantee deposit</div>
-          <div className={Styles["detail__item-content"]}>
-            {is_mortgage ? "Paid" : "Pending"}
-          </div>
-        </div>
-
-        {contractInfo?.telegram ? (
-          <div
-            className={Styles["detail__item"]}
-            onClick={() => onCopy(contractInfo.telegram || "")}
-          >
-            <div className={Styles["detail__item-title"]}>Telegram</div>
-            <div className={Styles["detail__item-content"]}>
-              {contractInfo.telegram || ""}
+        <div className={Styles["message-main"]}>
+          <div className={Styles["main-container"]}>
+            <div className={Styles["detail__item"]}>
+              <div className={Styles["detail__item-title"]}>Total</div>
+              <div className={Styles["detail__item-content"]}>
+                {total_count}
+              </div>
             </div>
-          </div>
-        ) : null}
 
-        {contractInfo?.discord ? (
-          <div
-            className={Styles["detail__item"]}
-            onClick={() => onCopy(contractInfo.discord || "")}
-          >
-            <div className={Styles["detail__item-title"]}>Discord</div>
-            <div className={Styles["detail__item-content"]}>
-              {contractInfo.discord || ""}
+            <div className={Styles["detail__item"]}>
+              <div className={Styles["detail__item-title"]}>Total Price</div>
+              <div className={Styles["detail__item-content"]}>
+                {total_price} {payment_name}
+              </div>
             </div>
-          </div>
-        ) : null}
 
-        {contractInfo?.whatsapp ? (
-          <div
-            className={Styles["detail__item"]}
-            onClick={() => onCopy(contractInfo.whatsapp || "")}
-          >
-            <div className={Styles["detail__item-title"]}>WhatsApp</div>
-            <div className={Styles["detail__item-content"]}>
-              {contractInfo.whatsapp || ""}
+            <div className={Styles["detail__item"]}>
+              <div className={Styles["detail__item-title"]}>Unit price</div>
+              <div className={Styles["detail__item-content"]}>
+                {unit_price} {payment_name}
+              </div>
             </div>
+
+            <div className={Styles["detail__item"]}>
+              <div className={Styles["detail__item-title"]}>Status</div>
+              <div className={Styles["detail__item-content"]}>
+                {OrderStatusTitleHash[status]}
+              </div>
+            </div>
+
+            <div className={Styles["detail__item"]}>
+              <div className={Styles["detail__item-title"]}>
+                Guarantee deposit
+              </div>
+              <div className={Styles["detail__item-content"]}>
+                {is_mortgage ? "Paid" : "Pending"}
+              </div>
+            </div>
+
+            {contractInfo?.telegram ? (
+              <div
+                className={Styles["detail__item"]}
+                onClick={() => onCopy(contractInfo.telegram || "")}
+              >
+                <div className={Styles["detail__item-title"]}>Telegram</div>
+                <div className={Styles["detail__item-content"]}>
+                  {contractInfo.telegram || ""}
+                </div>
+              </div>
+            ) : null}
+
+            {contractInfo?.discord ? (
+              <div
+                className={Styles["detail__item"]}
+                onClick={() => onCopy(contractInfo.discord || "")}
+              >
+                <div className={Styles["detail__item-title"]}>Discord</div>
+                <div className={Styles["detail__item-content"]}>
+                  {contractInfo.discord || ""}
+                </div>
+              </div>
+            ) : null}
+
+            {contractInfo?.whatsapp ? (
+              <div
+                className={Styles["detail__item"]}
+                onClick={() => onCopy(contractInfo.whatsapp || "")}
+              >
+                <div className={Styles["detail__item-title"]}>WhatsApp</div>
+                <div className={Styles["detail__item-content"]}>
+                  {contractInfo.whatsapp || ""}
+                </div>
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </div>
 
       {status === OrderStatus.InitState && (
