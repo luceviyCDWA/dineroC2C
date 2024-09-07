@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
 import { Toast } from "antd-mobile";
-import { ActionType } from "@/types";
+import { ActionType, OrderCheckingStatus } from "@/types";
 import { buyerConfirmOrder, getOrderDetail, getSignByOrderOnChainId, updateOrderTx } from "@/api/order";
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { cancelOrderValidate, confirmOrderValidate, createOrderValidate, payOrderValidate } from "@/utils/orderValidate";
@@ -132,8 +132,10 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        (actionType === ActionType.Buy && orderInfoFromBE.is_buying) ||
-        (actionType === ActionType.Sell && orderInfoFromBE.is_selling)
+        (actionType === ActionType.Buy &&
+          orderInfoFromBE.is_buying === OrderCheckingStatus.IsProcessing) ||
+        (actionType === ActionType.Sell &&
+          orderInfoFromBE.is_selling === OrderCheckingStatus.IsProcessing)
       ) {
         throw new Error("order is buying/selling");
       }
@@ -203,8 +205,10 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        (actionType === ActionType.Buy && orderInfoFromBE.is_buying) ||
-        (actionType === ActionType.Sell && orderInfoFromBE.is_selling)
+        (actionType === ActionType.Buy &&
+          orderInfoFromBE.is_buying === OrderCheckingStatus.IsProcessing) ||
+        (actionType === ActionType.Sell &&
+          orderInfoFromBE.is_selling === OrderCheckingStatus.IsProcessing)
       ) {
         throw new Error("order is buying/selling");
       }

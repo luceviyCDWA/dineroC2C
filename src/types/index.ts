@@ -8,6 +8,11 @@ export const BtnNameByActionType: Record<ActionType, string> = {
   [ActionType.Sell]: "Sell",
 };
 
+export const enum OrderCheckingStatus {
+  IsProcessing = 1,
+  NotProcessing = 2,
+}
+
 //waiting for buyer 2. waiting for seller 3.both are payed 4.cancel with buyer 5.cancel with seller 6.appeal with buyer 7. appeal with seller 8.cancel 9.buyer confirm 100.finish
 export const enum OrderStatus {
   InitState = 0,
@@ -113,8 +118,8 @@ export interface IOrderDetail {
   total_count: number;
   payment_name: string;
 
-  is_buying?: boolean;
-  is_selling?: boolean;
+  is_buying?: OrderCheckingStatus;
+  is_selling?: OrderCheckingStatus;
 
   status: OrderStatus;
 
