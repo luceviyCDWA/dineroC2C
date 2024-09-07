@@ -132,9 +132,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        !createOrderValidate(orderInfoFromBE.status) ||
-        !createOrderValidate(Number(status))
+        (actionType === ActionType.Buy && orderInfoFromBE.is_buying) ||
+        (actionType === ActionType.Sell && orderInfoFromBE.is_selling)
       ) {
+        throw new Error("order is buying/selling");
+      }
+
+      if (!createOrderValidate(Number(status))) {
         return payOrder(totalPrice, actionType);
       }
 
@@ -161,10 +165,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Pay Failed",
+        content: message || "Pay Failed",
       });
 
       throw new Error('pay failed');
@@ -195,9 +203,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        !payOrderValidate(orderInfoFromBE.status, actionType) ||
-        !payOrderValidate(Number(status), actionType)
+        (actionType === ActionType.Buy && orderInfoFromBE.is_buying) ||
+        (actionType === ActionType.Sell && orderInfoFromBE.is_selling)
       ) {
+        throw new Error("order is buying/selling");
+      }
+
+      if (!payOrderValidate(Number(status), actionType)) {
         throw new Error("status is not valid");
       }
 
@@ -224,10 +236,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Pay Failed",
+        content: message || "Pay Failed",
       });
 
       throw new Error("pay failed");
@@ -278,10 +294,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Cancel Failed",
+        content: message || "Cancel Failed",
       });
 
       throw new Error("Cancel failed");
@@ -344,10 +364,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Confirm Failed",
+        content: message || "Confirm Failed",
       });
 
       throw new Error("Confirm failed");

@@ -113,6 +113,9 @@ export interface IOrderDetail {
   total_count: number;
   payment_name: string;
 
+  is_buying?: boolean;
+  is_selling?: boolean;
+
   status: OrderStatus;
 
   created_at?: string;
