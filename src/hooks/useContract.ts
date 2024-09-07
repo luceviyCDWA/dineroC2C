@@ -62,6 +62,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     functionName: "finishOrderBySeller",
   });
 
+  const { refetch: refetchAllowance } = useContractRead({
+    address: USDT_ADDRESS,
+    abi: erc20ABI,
+    functionName: 'allowance',
+    args: [account.address!, CONTRACT_ADDRESS],
+  });
+
+
   const { refetch } = useContractRead({
     abi: DineroAbi,
     address: CONTRACT_ADDRESS,
@@ -89,11 +97,32 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "Waiting for approve",
+    });
+
+    const { data: approvedVal } = await refetchAllowance();
+    let approvedNeeded = amount;
+
+    if (approvedVal) {
+      if (approvedVal >= approvedNeeded) {
+        approvedNeeded = BigInt(0);
+      } else {
+        approvedNeeded = approvedNeeded - approvedVal;
+      }
+    }
+
+    if (approvedNeeded <= BigInt(0)) {
+      return;
+    }
+
     let hash
 
     try {
       const res = await writeApprove({
-        args: [unLockAddress, amount],
+        args: [unLockAddress, approvedNeeded],
       });
 
       hash = res.hash;
@@ -114,13 +143,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -148,6 +177,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       const res = await writeCreateOrder({
         args: [
@@ -187,13 +222,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -221,6 +256,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       const res = await writePayOrder({
         args: [
@@ -260,13 +301,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -283,6 +324,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ) {
         throw new Error("status is not valid");
       }
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       const res = await writeCancelOrder({
         args: [orderOnChainId],
@@ -321,13 +368,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -344,6 +391,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ) {
         throw new Error("status is not valid");
       }
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       if (actionType === ActionType.Buy) {
         await buyerConfirmOrder(orderId);
