@@ -159,7 +159,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -232,7 +232,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -290,7 +290,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -359,7 +359,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
         await updateOrderTx({
           id: orderId,
-          type: ActionType.Buy,
+          type: ActionType.Sell,
           address: account.address as string,
           chain_id: chainList[0].chain_id,
           tx: res.hash,
