@@ -83,19 +83,25 @@ export const updateOrderTx = (data: {
   return request.post("/apis/v1/dinero/update_order_with_tx", data);
 };
 
-export const getSignByOrderOnChainId = (orderOnChainId: string, address: string) => {
-  return request.get<
+export const getSignByOrderOnChainId = (
+  orderOnChainId: string,
+  address: string,
+  contractAddress: string,
+  chainId: string,
+) => {
+  return request.post<
     unknown,
     {
       signature: string;
     }
   >("/apis/v1/dinero/get_privileges_sign", {
-    params: {
-      order_onchain_id: orderOnChainId,
-      address,
-    },
+    order_onchain_id: orderOnChainId,
+    address,
+    contract_address: contractAddress,
+    chain_id: chainId,
+    sign_type: 1,
   });
-}
+};
 
 export const buyerConfirmOrder = (orderId: string) => {
   return request.get(`/apis/v1/dinero/update_buyer_confirm/${orderId}`);

@@ -378,7 +378,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       if (
         !confirmOrderValidate(orderInfoFromBE.status, actionType) ||
-        !confirmOrderValidate(Number(status), actionType)
+        !confirmOrderValidate(Number(status), actionType, true)
       ) {
         throw new Error("status is not valid");
       }
@@ -395,6 +395,8 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         const { signature } = await getSignByOrderOnChainId(
           orderOnChainId,
           account.address as string,
+          CONTRACT_ADDRESS,
+          chainList[0].chain_id + ''
         );
 
         const res = await writeConfirm({

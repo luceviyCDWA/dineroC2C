@@ -36,9 +36,13 @@ export function cancelOrderValidate(status: OrderStatus, actionType: ActionType)
 export function confirmOrderValidate(
   status: OrderStatus,
   actionType: ActionType,
+  isContract?: boolean,
 ) {
   return (
     (status === OrderStatus.BothPaid && actionType === ActionType.Buy) ||
-    (status === OrderStatus.Withdrawal && actionType === ActionType.Sell)
+    (actionType === ActionType.Sell &&
+      (isContract
+        ? status === OrderStatus.BothPaid
+        : status === OrderStatus.Withdrawal))
   );
 }
