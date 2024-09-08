@@ -158,7 +158,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
         <div className={Styles["message-main"]}>
           <div className={Styles["main-container"]}>
             <div className={Styles["detail__item"]}>
-              <div className={Styles["detail__item-title"]}>Total</div>
+              <div className={Styles["detail__item-title"]}>Total Count</div>
               <div className={Styles["detail__item-content"]}>
                 {total_count}
               </div>
