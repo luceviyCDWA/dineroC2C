@@ -104,25 +104,16 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     });
 
     const { data: approvedVal } = await refetchAllowance();
-    let approvedNeeded = amount;
 
-    if (approvedVal) {
-      if (approvedVal >= approvedNeeded) {
-        approvedNeeded = BigInt(0);
-      } else {
-        approvedNeeded = approvedNeeded - approvedVal;
-      }
-    }
-
-    if (approvedNeeded <= BigInt(0)) {
-      return;
+    if (approvedVal && approvedVal >= amount) {
+      return
     }
 
     let hash
 
     try {
       const res = await writeApprove({
-        args: [unLockAddress, approvedNeeded],
+        args: [unLockAddress, amount],
       });
 
       hash = res.hash;
