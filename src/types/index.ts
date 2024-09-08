@@ -70,6 +70,7 @@ export const SORT_TITLE_HASH: Record<SortType, string> = {
 
 // 个人信息
 export interface IUserInfo {
+  id: string;
   token: string;
 }
 
@@ -117,6 +118,9 @@ export interface IOrderDetail {
   total_price: string;
   total_count: number;
   payment_name: string;
+
+  seller?: string;
+  buyer?: string;
 
   is_buying?: OrderCheckingStatus;
   is_selling?: OrderCheckingStatus;

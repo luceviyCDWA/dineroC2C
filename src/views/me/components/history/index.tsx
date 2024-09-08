@@ -15,6 +15,7 @@ import { ActionType, IContractInfo, IOrderDetail } from "@/types";
 
 import Styles from "./index.module.less";
 import { getOrderDetail } from "@/api/order";
+import useUserStore from "@/store/useUserStore";
 
 interface HistoryListCompProps {
   showPanel: boolean;
@@ -25,6 +26,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   showPanel,
   onClose
 }) => {
+  const { id } = useUserStore(state => state.userInfo!);
   const [tab, setTab] = useState<'score' | 'order'>('order');
   const [detailList, setDetailList] = useState<ScoreDetail[]>([]);
 
@@ -73,7 +75,13 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     const prevList = isReset ? [] : [...orderList];
 
     const { total, list } = await getOrderList(page);
-    const curList = [...prevList, ...list];
+    const curList = [
+      ...prevList,
+      ...list.map((item) => ({
+        ...item,
+        type: item.seller === id ? ActionType.Sell : ActionType.Buy,
+      })),
+    ];
 
     setOrderList(curList);
     setOrderPage(page);
