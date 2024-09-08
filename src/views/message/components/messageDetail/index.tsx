@@ -19,6 +19,7 @@ import copy from "copy-to-clipboard";
 import useLoginModalStore from "@/store/useLoginModalStore";
 import { useAccount } from "wagmi";
 import useUserStore from "@/store/useUserStore";
+import useSelector from "@/hooks/useSelector";
 
 interface MessageDetailCompProps {
   showPanel: boolean;
@@ -38,19 +39,21 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     order_onchain_id,
     category_image,
     category_name,
-    type,
     total_count,
     total_price,
     unit_price,
     payment_name,
     status,
+    seller,
     is_mortgage,
   } = msgDetail;
   const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract(id, order_onchain_id);
 
   const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
   const { isConnected } = useAccount();
-  const isLogin = useUserStore((state) => state.isLogin);
+  const { isLogin, userInfo } = useUserStore(useSelector(["isLogin", "userInfo"]));
+  const userId = userInfo?.id;
+  const type = userId === seller ? ActionType.Sell : ActionType.Buy;
 
   const checkLogin = async () => {
     if (!isConnected || !isLogin) {
