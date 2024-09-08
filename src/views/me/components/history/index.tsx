@@ -37,16 +37,6 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   const [curContractInfo, setCurContractInfo] = useState<IContractInfo>();
 
   useEffect(() => {
-    if (showPanel) {
-      if (tab === "score") {
-        initDetailList();
-      } else if (tab === "order") {
-        initOrderList();
-      }
-    }
-  }, [showPanel]);
-
-  useEffect(() => {
     if (tab === 'score') {
       initDetailList();
     } else if (tab === 'order') {
@@ -72,7 +62,6 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     setOrderList([]);
     setOrderPage(INIT_PAGE - 1);
     setOrderHasMore(true);
-    getNextPageOrderList(true);
   }
 
   async function getNextPageOrderList(isReset?: boolean) {
@@ -244,9 +233,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
                   loadMore={() => new Promise((resolve) => resolve())}
                   hasMore={false}
                 >
-                  {(orderHasMore) => (
-                    <div>{orderHasMore ? "Loading..." : "This is the end"}</div>
-                  )}
+                  <div>This is the end</div>
                 </InfiniteScroll>
               </PullToRefresh>
             </div>
