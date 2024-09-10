@@ -22,6 +22,7 @@ import WhatsappIcon from "@/assets/imgs/settings/whatapp.webp";
 import { ActionType, BtnNameByActionType, ICoinItem, OrderStatus } from "@/types";
 
 import Styles from "./index.module.less";
+import _ from "lodash";
 
 const QuickOrder: React.FC = () => {
   const { coinList } = usePublicDataStore((state) => ({
@@ -61,7 +62,7 @@ const QuickOrder: React.FC = () => {
     setShowQuickOrder(false);
   }
 
-  async function onPay () {
+  const onPay = _.debounce(async () => {
     if (!orderInfo) {
       return;
     }
@@ -72,20 +73,14 @@ const QuickOrder: React.FC = () => {
 
     try {
       if (orderInfo.status === OrderStatus.InitState) {
-        await createOrder(
-          Number(orderInfo.total_price),
-          orderInfo.type,
-        );
+        await createOrder(Number(orderInfo.total_price), orderInfo.type);
       } else {
-        await payOrder(
-          Number(orderInfo.total_price),
-          orderInfo.type,
-        );
+        await payOrder(Number(orderInfo.total_price), orderInfo.type);
       }
 
       Toast.show({
         icon: "success",
-        content: 'Sell Successfully',
+        content: "Sell Successfully",
       });
 
       quickOrderResolver();
@@ -93,7 +88,7 @@ const QuickOrder: React.FC = () => {
     } catch (e) {
       console.log(e);
     }
-  }
+  }, 200);
 
   function onCopy (content: string) {
     if (!content) {

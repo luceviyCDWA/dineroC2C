@@ -9,6 +9,7 @@ import WhatsappIcon from "@/assets/imgs/settings/whatapp.webp";
 
 import Styles from './index.module.less';
 import { getContractInfo, saveContractInfo } from "@/api/setting";
+import _ from "lodash";
 
 interface ContractSettingCompProps {
   showPanel: boolean;
@@ -47,7 +48,7 @@ const ContractSetting: React.FC<ContractSettingCompProps> = ({
     }
   }
 
-  async function onSave() {
+  const onSave = _.debounce(async () => {
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -58,25 +59,25 @@ const ContractSetting: React.FC<ContractSettingCompProps> = ({
       await saveContractInfo({
         telegram,
         discord,
-        whatsapp
+        whatsapp,
       });
 
       Toast.clear();
 
       Toast.show({
-        icon: 'success',
-        content: 'Saved Successfully!'
+        icon: "success",
+        content: "Saved Successfully!",
       });
 
-      setTelegram('');
+      setTelegram("");
       setDiscord("");
       setWhatsapp("");
 
       onClose(true);
-    } catch(e) {
+    } catch (e) {
       Toast.clear();
     }
-  }
+  }, 200);
 
   return (
     <RightPage show={showPanel} title="Contract Information" onClose={onClose}>

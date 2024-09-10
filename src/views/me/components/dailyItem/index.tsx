@@ -11,6 +11,7 @@ import TaskGift from "@/assets/imgs/me/gift.png";
 import TaskGiftDisabled from "@/assets/imgs/me/gift_disabled.png";
 
 import Styles from './index.module.less';
+import _ from 'lodash';
 
 interface DailyItemProps {
   hasSigned: number;
@@ -25,7 +26,7 @@ const SCORE_LIST = [1, 1, 1, 1, 1, 1, 5];
 const DailyItem: React.FC<DailyItemProps> = (props) => {
   const { hasSigned, today, todayHasSigned, onComplete } = props;
 
-  const onClick = async () => {
+  const onClick = _.debounce(async () => {
     if (hasSigned !== today || todayHasSigned) {
       return;
     }
@@ -40,7 +41,7 @@ const DailyItem: React.FC<DailyItemProps> = (props) => {
         content: "Task Completed !",
       });
     }
-  };
+  }, 200);
 
   const realDate = todayHasSigned ? hasSigned - 1 : hasSigned;
 

@@ -19,6 +19,7 @@ import Styles from "./index.module.less";
 import website from "@/config/website";
 import ContractSetting from "@/views/me/components/contractSetting";
 import { getContractInfo } from "@/api/setting";
+import _ from "lodash";
 
 interface OrderEditCompProps {
   coinId: string;
@@ -72,11 +73,11 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     }
   }, [total, totalPrice]);
 
-  const onPublish = async (skipCheckTips?: boolean) => {
+  const onPublish = _.debounce(async (skipCheckTips?: boolean) => {
     const chainInfo = chainList[0];
 
     if (!curCoinInfo) {
-      return Toast.show('Please select category first');
+      return Toast.show("Please select category first");
     }
 
     const { telegram, discord, whatsapp } = await getContractInfo();
@@ -86,7 +87,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
         Toast.show({
           icon: "fail",
           content: (
-            <div style={{ textAlign: "center", wordBreak: 'normal' }}>
+            <div style={{ textAlign: "center", wordBreak: "normal" }}>
               Please Submit Your Contract Info First
             </div>
           ),
@@ -110,7 +111,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
 
     setOrderId(order_id);
     setOrderOnChainId(order_onchain_id);
-  };
+  }, 200);
 
   const onClosePayGuarantee = () => {
     setOrderId("");
@@ -118,15 +119,15 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
     onClose();
   }
 
-  const onPayGuarantee = async () => {
+  const onPayGuarantee = _.debounce(async () => {
     await createOrderByContract(Number(totalPrice), actionType);
     Toast.show({
-      icon: 'success',
-      content: 'Pay Successfully'
+      icon: "success",
+      content: "Pay Successfully",
     });
     onClosePayGuarantee();
     onClose();
-  }
+  }, 200);
 
   const onShareOrder = () => {
     if (!orderId) {
