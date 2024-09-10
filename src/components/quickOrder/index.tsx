@@ -142,7 +142,7 @@ const QuickOrder: React.FC = () => {
             <div className={Styles["order__publish-main"]}>
               <div className={Styles['main-container']}>
                 <div className={Styles["input__item"]}>
-                  <div className={Styles["input__item-title"]}>Total</div>
+                  <div className={Styles["input__item-title"]}>Total Count</div>
                   <div className={Styles["input__item-input"]}>
                     {orderInfo.total_count}
                   </div>

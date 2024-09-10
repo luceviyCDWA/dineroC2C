@@ -176,10 +176,12 @@ const TaskComp: React.FC = () => {
         </div>
       </div>
 
-      <HistoryList
-        showPanel={showHistory}
-        onClose={() => setShowHistory(false)}
-      />
+      {showHistory && (
+        <HistoryList
+          showPanel={showHistory}
+          onClose={() => setShowHistory(false)}
+        />
+      )}
 
       <RightPage
         title="Setting"

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { GetWalletClientResult } from "wagmi/actions";
 import { DineroAbi } from "@/utils/abi";
 import { Toast } from "antd-mobile";
-import { ActionType } from "@/types";
+import { ActionType, OrderCheckingStatus } from "@/types";
 import { buyerConfirmOrder, getOrderDetail, getSignByOrderOnChainId, updateOrderTx } from "@/api/order";
 import usePublicDataStore from "@/store/usePublicDataStore";
 import { cancelOrderValidate, confirmOrderValidate, createOrderValidate, payOrderValidate } from "@/utils/orderValidate";
@@ -62,6 +62,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
     functionName: "finishOrderBySeller",
   });
 
+  const { refetch: refetchAllowance } = useContractRead({
+    address: USDT_ADDRESS,
+    abi: erc20ABI,
+    functionName: 'allowance',
+    args: [account.address!, CONTRACT_ADDRESS],
+  });
+
+
   const { refetch } = useContractRead({
     abi: DineroAbi,
     address: CONTRACT_ADDRESS,
@@ -89,6 +97,18 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "Waiting for approve",
+    });
+
+    const { data: approvedVal } = await refetchAllowance();
+
+    if (approvedVal && approvedVal >= amount) {
+      return
+    }
+
     let hash
 
     try {
@@ -114,13 +134,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -132,9 +152,15 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        !createOrderValidate(orderInfoFromBE.status) ||
-        !createOrderValidate(Number(status))
+        (actionType === ActionType.Buy &&
+          orderInfoFromBE.is_buying === OrderCheckingStatus.IsProcessing) ||
+        (actionType === ActionType.Sell &&
+          orderInfoFromBE.is_selling === OrderCheckingStatus.IsProcessing)
       ) {
+        throw new Error("order is buying/selling");
+      }
+
+      if (!createOrderValidate(Number(status))) {
         return payOrder(totalPrice, actionType);
       }
 
@@ -142,6 +168,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       const res = await writeCreateOrder({
         args: [
@@ -153,7 +185,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -161,10 +193,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Pay Failed",
+        content: message || "Pay Failed",
       });
 
       throw new Error('pay failed');
@@ -177,13 +213,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -195,9 +231,15 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       ];
 
       if (
-        !payOrderValidate(orderInfoFromBE.status, actionType) ||
-        !payOrderValidate(Number(status), actionType)
+        (actionType === ActionType.Buy &&
+          orderInfoFromBE.is_buying === OrderCheckingStatus.IsProcessing) ||
+        (actionType === ActionType.Sell &&
+          orderInfoFromBE.is_selling === OrderCheckingStatus.IsProcessing)
       ) {
+        throw new Error("order is buying/selling");
+      }
+
+      if (!payOrderValidate(Number(status), actionType)) {
         throw new Error("status is not valid");
       }
 
@@ -205,6 +247,12 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         CONTRACT_ADDRESS as `0x${string}`,
         BigInt(Number(totalPrice) * Math.pow(10, 18)),
       );
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       const res = await writePayOrder({
         args: [
@@ -216,7 +264,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -224,10 +272,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Pay Failed",
+        content: message || "Pay Failed",
       });
 
       throw new Error("pay failed");
@@ -240,13 +292,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -264,13 +316,19 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         throw new Error("status is not valid");
       }
 
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
+
       const res = await writeCancelOrder({
         args: [orderOnChainId],
       });
 
       await updateOrderTx({
         id: orderId,
-        type: actionType === ActionType.Buy ? ActionType.Sell : ActionType.Buy,
+        type: actionType,
         address: account.address as string,
         chain_id: chainList[0].chain_id,
         tx: res.hash,
@@ -278,10 +336,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Cancel Failed",
+        content: message || "Cancel Failed",
       });
 
       throw new Error("Cancel failed");
@@ -297,13 +359,13 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       return;
     }
 
-    Toast.show({
-      duration: 0,
-      icon: "loading",
-      content: "Loading...",
-    });
-
     try {
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Checking order",
+      });
+
       const { order: orderInfoFromBE } = await getOrderDetail(orderId);
       const { data } = await refetch();
       const [, , , , status] = data as [
@@ -316,10 +378,16 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
       if (
         !confirmOrderValidate(orderInfoFromBE.status, actionType) ||
-        !confirmOrderValidate(Number(status), actionType)
+        !confirmOrderValidate(Number(status), actionType, true)
       ) {
         throw new Error("status is not valid");
       }
+
+      Toast.show({
+        duration: 0,
+        icon: "loading",
+        content: "Waiting for contract",
+      });
 
       if (actionType === ActionType.Buy) {
         await buyerConfirmOrder(orderId);
@@ -327,6 +395,8 @@ export default function useContract(orderId: string, orderOnChainId: string) {
         const { signature } = await getSignByOrderOnChainId(
           orderOnChainId,
           account.address as string,
+          CONTRACT_ADDRESS,
+          chainList[0].chain_id + ''
         );
 
         const res = await writeConfirm({
@@ -335,7 +405,7 @@ export default function useContract(orderId: string, orderOnChainId: string) {
 
         await updateOrderTx({
           id: orderId,
-          type: ActionType.Buy,
+          type: ActionType.Sell,
           address: account.address as string,
           chain_id: chainList[0].chain_id,
           tx: res.hash,
@@ -344,10 +414,14 @@ export default function useContract(orderId: string, orderOnChainId: string) {
       
       Toast.clear();
     } catch (e) {
+      const message = (e as Error).message;
+
+      message && console.error(message);
+
       Toast.clear();
       Toast.show({
         icon: "fail",
-        content: "Confirm Failed",
+        content: message || "Confirm Failed",
       });
 
       throw new Error("Confirm failed");

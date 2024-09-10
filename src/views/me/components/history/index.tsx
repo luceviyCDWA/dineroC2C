@@ -16,6 +16,7 @@ import { ActionType, IContractInfo, IOrderDetail } from "@/types";
 import Styles from "./index.module.less";
 import { getOrderDetail } from "@/api/order";
 import _ from "lodash";
+import useUserStore from "@/store/useUserStore";
 
 interface HistoryListCompProps {
   showPanel: boolean;
@@ -26,6 +27,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   showPanel,
   onClose
 }) => {
+  const { id } = useUserStore(state => state.userInfo!);
   const [tab, setTab] = useState<'score' | 'order'>('order');
   const [detailList, setDetailList] = useState<ScoreDetail[]>([]);
 
@@ -36,16 +38,6 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
   const [showDetail, setShowDetail] = useState(false);
   const [curMsgDetail, setCurMsgDetail] = useState<IOrderDetail | null>(null);
   const [curContractInfo, setCurContractInfo] = useState<IContractInfo>();
-
-  useEffect(() => {
-    if (showPanel) {
-      if (tab === "score") {
-        initDetailList();
-      } else if (tab === "order") {
-        initOrderList();
-      }
-    }
-  }, [showPanel]);
 
   useEffect(() => {
     if (tab === 'score') {
@@ -73,7 +65,6 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     setOrderList([]);
     setOrderPage(INIT_PAGE - 1);
     setOrderHasMore(true);
-    getNextPageOrderList(true);
   }
 
   async function getNextPageOrderList(isReset?: boolean) {
@@ -85,7 +76,13 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     const prevList = isReset ? [] : [...orderList];
 
     const { total, list } = await getOrderList(page);
-    const curList = [...prevList, ...list];
+    const curList = [
+      ...prevList,
+      ...list.map((item) => ({
+        ...item,
+        type: item.seller === id ? ActionType.Sell : ActionType.Buy,
+      })),
+    ];
 
     setOrderList(curList);
     setOrderPage(page);
@@ -247,9 +244,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
                   loadMore={() => new Promise((resolve) => resolve())}
                   hasMore={false}
                 >
-                  {(orderHasMore) => (
-                    <div>{orderHasMore ? "Loading..." : "This is the end"}</div>
-                  )}
+                  <div>This is the end</div>
                 </InfiniteScroll>
               </PullToRefresh>
             </div>

@@ -2,6 +2,10 @@ import { DEFAULT_PAGE_SIZE } from "@/config/env";
 import { IOrderDetail } from "@/types";
 import request from "@/utils/request";
 
+export function getUserInfo() {
+  return request.get<unknown, { id: string }>("/apis/v1/user/get_user_info");
+}
+
 export function getTaskInfo() {
   return request.get<
     unknown,

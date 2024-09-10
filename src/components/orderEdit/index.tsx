@@ -186,7 +186,7 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
 
           <div className={Styles["order__publish-main"]}>
             <div className={Styles["input__item"]}>
-              <div className={Styles["input__item-title"]}>Total</div>
+              <div className={Styles["input__item-title"]}>Total Count</div>
               <div className={Styles["input__item-input"]}>
                 <Input
                   type="number"
