@@ -333,7 +333,7 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
 
       {status === OrderStatus.Withdrawal && type === ActionType.Sell && (
         <div className={Styles["detail__panel-btn"]} onClick={onConfirmOrder}>
-          <div className={Styles["btn"]}>Confirm</div>
+          <div className={Styles["btn"]}>Withdrawal</div>
         </div>
       )}
     </RightPage>
