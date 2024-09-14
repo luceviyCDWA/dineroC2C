@@ -10,6 +10,7 @@ import GuaranteeIcon from "@/assets/imgs/guarantee.png";
 
 import Styles from "./index.module.less";
 import useQuickOrderStore from "@/store/useQuickOrderStore";
+import _ from "lodash";
 
 interface MarketItemCompProps {
   marketItemInfo: IOrderDetail;
@@ -41,7 +42,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
   // 与当前相反
   const realType = type === ActionType.Buy ? ActionType.Sell : ActionType.Buy;
 
-  const onClickTrade = async () => {
+  const onClickTrade = _.debounce(async () => {
     if (!isConnected || !isLogin) {
       await onShowLogin();
     }
@@ -49,7 +50,7 @@ const MarketItem: React.FC<MarketItemCompProps> = ({
     await getOrderInfoAndShow(id);
 
     onCompleteOrder(id);
-  };
+  }, 200);
 
   return (
     <div className={Styles["market__item"]} onClick={onClickTrade}>

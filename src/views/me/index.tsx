@@ -18,6 +18,7 @@ import NextIcon from "@/assets/imgs/me/next.png";
 
 import Styles from './index.module.less';
 import ContractSetting from "./components/contractSetting";
+import _ from "lodash";
 
 const DAILY_NUM = 7;
 
@@ -103,16 +104,16 @@ const TaskComp: React.FC = () => {
     setShowContractSetting(true);
   }
 
-  const onLogout = () => {
+  const onLogout = _.debounce(() => {
     clearAll();
     setShowSetting(false);
 
-    Toast.show('Logged out');
+    Toast.show("Logged out");
 
     setTimeout(() => {
-      window.location.replace('/');
+      window.location.replace("/");
     }, 500);
-  }
+  }, 200);
 
   return (
     <div className={Styles["task"]}>

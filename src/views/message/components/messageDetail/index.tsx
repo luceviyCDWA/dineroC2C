@@ -19,6 +19,7 @@ import copy from "copy-to-clipboard";
 import useLoginModalStore from "@/store/useLoginModalStore";
 import { useAccount } from "wagmi";
 import useUserStore from "@/store/useUserStore";
+import _ from "lodash";
 import useSelector from "@/hooks/useSelector";
 
 interface MessageDetailCompProps {
@@ -61,29 +62,29 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
     }
   }
 
-  const onCreateOrder = async () => {
+  const onCreateOrder = _.debounce(async () => {
     await checkLogin();
     await createOrder(Number(total_price), type);
     onClose();
-  }
+  }, 200);
 
-  const onPayOrder = async () => {
+  const onPayOrder = _.debounce(async () => {
     await checkLogin();
     await payOrder(Number(total_price), type);
     onClose();
-  }
+  }, 200);
 
-  const onCancelOrder = async () => {
+  const onCancelOrder = _.debounce(async () => {
     await checkLogin();
     await cancelOrder(type);
     onClose();
-  }
+  }, 200);
 
-  const onConfirmOrder = async () => {
+  const onConfirmOrder = _.debounce(async () => {
     await checkLogin();
     await confirmOrder(order_onchain_id, type);
     onClose();
-  }
+  }, 200);
 
   const onJumpAppeal = () => {
     location.href = "https://t.me/DineroSupporter";

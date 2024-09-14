@@ -15,6 +15,7 @@ import { ActionType, IContractInfo, IOrderDetail } from "@/types";
 
 import Styles from "./index.module.less";
 import { getOrderDetail } from "@/api/order";
+import _ from "lodash";
 import useUserStore from "@/store/useUserStore";
 
 interface HistoryListCompProps {
@@ -88,7 +89,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     setOrderHasMore(total > curList.length);
   }
 
-  async function onSelectOrder(orderDetail: IOrderDetail) {
+  const onSelectOrder = _.debounce(async (orderDetail: IOrderDetail) => {
     Toast.show({
       duration: 0,
       icon: "loading",
@@ -96,7 +97,7 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
     });
 
     try {
-      const { order, user_contact} = await getOrderDetail(orderDetail.id);
+      const { order, user_contact } = await getOrderDetail(orderDetail.id);
 
       setCurMsgDetail(order);
       setCurContractInfo(user_contact);
@@ -110,7 +111,9 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
         content: "Fail to get message detail",
       });
     }
-  }
+  }, 200);
+
+  
 
   const onDetailClose = () => {
     setShowDetail(false);
