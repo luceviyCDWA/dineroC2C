@@ -35,6 +35,10 @@ const TaskItemComp: React.FC<TaskItemCompProps> = (props) => {
     }
   };
 
+  if (!TaskIconHash[type]) {
+    return null;
+  }
+
   return (
     <div className={Styles["task__item"]} onClick={onTaskClick}>
       {type !== TaskType.DAILY && (
