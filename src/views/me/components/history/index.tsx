@@ -169,21 +169,23 @@ const HistoryList: React.FC<HistoryListCompProps> = ({
                         className={Styles["detail__item-icon"]}
                       />
                       <div className={Styles["detail__item-main"]}>
-                        <div className={Styles["detail__item-title"]}>
-                          {orderInfo.type === ActionType.Buy ? "Buy" : "Sell"}
+                        <div className={Styles["detail__item-line"]}>
+                          <div className={Styles["detail__item-title"]}>
+                            {orderInfo.type === ActionType.Buy ? "Buy" : "Sell"}
+                          </div>
+                          <div className={Styles["detail__item-add"]}>
+                            {orderInfo.total_count} {orderInfo.category_name}
+                          </div>
                         </div>
-                        <div className={Styles["detail__item-date"]}>
-                          {dayjs(orderInfo.created_at).format(
-                            "YYYY-MM-DD HH:mm:ss",
-                          )}
-                        </div>
-                      </div>
-                      <div className={Styles["detail__item-score"]}>
-                        <div className={Styles["detail__item-add"]}>
-                          {orderInfo.total_count} {orderInfo.category_name}
-                        </div>
-                        <div className={Styles["detail__item-total"]}>
-                          {orderInfo.total_price} {orderInfo.payment_name}
+                        <div className={Styles["detail__item-line"]}>
+                          <div className={Styles["detail__item-date"]}>
+                            {dayjs(orderInfo.created_at).format(
+                              "YYYY-MM-DD HH:mm:ss",
+                            )}
+                          </div>
+                          <div className={Styles["detail__item-total"]}>
+                            {orderInfo.total_price} {orderInfo.payment_name}
+                          </div>
                         </div>
                       </div>
                     </div>

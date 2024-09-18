@@ -63,10 +63,19 @@
         }
 
         &-main {
-          flex: 1;
+          width: calc(100% - 46px - 10px);
+        }
+
+        &-line {
+          .flex(row, space-between, center);
+          column-gap: 10px;
         }
 
         &-title, &-date {
+          flex-shrink: 0;
+        }
+
+        &-total, &-add {
           max-width: 100%;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -87,6 +96,7 @@
         }
 
         &-add {
+          white-space: nowrap;
           line-height: 24px;
           font-weight: 600;
           font-size: 16px;
@@ -96,6 +106,7 @@
         }
 
         &-total {
+          white-space: nowrap;
           line-height: 16px;
           color: #8E8E8E;
           font-size: 14px;
