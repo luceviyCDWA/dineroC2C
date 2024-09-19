@@ -19,6 +19,7 @@ import NextIcon from "@/assets/imgs/me/next.png";
 import Styles from './index.module.less';
 import ContractSetting from "./components/contractSetting";
 import _ from "lodash";
+import TwitterTask from "./components/taskItem/twitterTask";
 
 const DAILY_NUM = 7;
 
@@ -83,6 +84,8 @@ const TaskComp: React.FC = () => {
             title: task.task_info?.name,
             content: task.task_info?.description?.split(","),
             tips: task.task_info?.tip_text,
+            score: task?.finish_count || 0,
+            url: task?.task_info.detail_url || '',
           });
         }
       });
@@ -164,13 +167,21 @@ const TaskComp: React.FC = () => {
       </div>
 
       <div className={Styles["task__list"]}>
-        {taskList.map((task) => (
-          <TaskItemComp
-            key={task.type}
-            taskInfo={task}
-            inviteCode={inviteCode}
-          />
-        ))}
+        {taskList.map((task) => {
+          if (!task.type) {
+            return null
+          } else if (task.type === TaskType.TWITTER) {
+            return <TwitterTask key={task.type} taskInfo={task} />;
+          } else {
+            return (
+              <TaskItemComp
+                key={task.type}
+                taskInfo={task}
+                inviteCode={inviteCode}
+              />
+            )
+          }
+        })}
         <div className={Styles["more-task"]}>
           More rewards are coming soon...
         </div>

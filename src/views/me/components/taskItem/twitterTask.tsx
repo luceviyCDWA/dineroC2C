@@ -1,0 +1,64 @@
+import React, { useEffect, useState } from "react";
+
+import TaskTwitterIcon from '@/assets/imgs/me/task_twitter.png';
+
+import { FollowStatus, TaskItem } from "./types";
+
+import Styles from './index.module.less';
+import classNames from "classnames";
+import { getTwitterTaskStatus, recordTwitterFollow } from "@/api/user";
+
+interface TwitterTaskCompProps {
+  taskInfo: TaskItem;
+}
+
+const TwitterTask: React.FC<TwitterTaskCompProps> = ({
+  taskInfo
+}) => {
+  const { title, content, url } = taskInfo;
+  const [hasComplete, setHasComplete] = useState(false);
+
+  useEffect(() => {
+    checkCompleteStatus();
+  }, []);
+
+  async function checkCompleteStatus() {
+    const { status } = await getTwitterTaskStatus();
+
+    setHasComplete(status === FollowStatus.Followed);
+  }
+
+  function onJumpToTwitter() {
+    if (hasComplete || !url) {
+      return;
+    }
+
+    window.open(url);
+
+    // 记录关注
+    recordTwitterFollow();
+    
+    // todo: 打开弹窗
+  }
+  return (
+    <div className={Styles["task__twitter"]}>
+      <img className={Styles["task__twitter-img"]} src={TaskTwitterIcon} />
+      <div className={Styles["task__twitter-main"]}>
+        <div className={Styles["title"]}>{title}</div>
+        <div className={Styles["content"]}>{content[0] || ""}</div>
+        <div
+          className={classNames(Styles["btn"], {
+            [Styles["done"]]: hasComplete,
+          })}
+          onClick={onJumpToTwitter}
+        >
+          Follow
+        </div>
+      </div>
+      <div className={Styles["task__twitter-score"]}>
+        <div className={Styles['score']}>20 Points</div>
+      </div>
+    </div>
+  );
+}
+export default TwitterTask;

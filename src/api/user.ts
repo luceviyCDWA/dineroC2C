@@ -1,6 +1,7 @@
 import { DEFAULT_PAGE_SIZE } from "@/config/env";
 import { IOrderDetail } from "@/types";
 import request from "@/utils/request";
+import { FollowStatus, TaskType } from "@/views/me/components/taskItem/types";
 
 export function getUserInfo() {
   return request.get<unknown, { id: string }>("/apis/v1/user/get_user_info");
@@ -33,6 +34,21 @@ export function getTaskList() {
       };
     }>
   >("/apis/v1/task/get_user_task_list");
+}
+
+export function getTwitterTaskStatus() {
+  return request.get<
+    unknown,
+    {
+      status: FollowStatus;
+    }
+  >(`/apis/v1/task/get_twitter_follow_status/${TaskType.TWITTER}`);
+}
+
+export function recordTwitterFollow() {
+  return request.post("/apis/v1/task/set_twitter_follow", {
+    task_id: TaskType.TWITTER,
+  });
 }
 
 export function completeTask(taskId: number) {

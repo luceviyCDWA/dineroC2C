@@ -7,6 +7,7 @@ export const enum TaskType {
   INVITE = 2,
   FOLLOW = 3,
   BIND = 4,
+  TWITTER = 5,
 }
 
 export const TaskIconHash = {
@@ -14,6 +15,7 @@ export const TaskIconHash = {
   [TaskType.BIND]: TaskIcon1,
   [TaskType.INVITE]: TaskIcon2,
   [TaskType.FOLLOW]: TaskIcon3,
+  [TaskType.TWITTER]: '',
 } as const;
 
 export const TaskTitleHash = {
@@ -21,6 +23,7 @@ export const TaskTitleHash = {
   [TaskType.INVITE]: "Invite friend tasks",
   [TaskType.FOLLOW]: "Joining Dinero group earns 5 points.",
   [TaskType.BIND]: "Bind Telegram Account",
+  [TaskType.TWITTER]: "",
 } as const;
 
 export const TaskDescHash = {
@@ -32,13 +35,21 @@ export const TaskDescHash = {
   ],
   [TaskType.FOLLOW]: [],
   [TaskType.BIND]: [],
+  [TaskType.TWITTER]: []
 } as const;
 
 export interface TaskItem {
   type: TaskType;
   title: string;
+  url?: string;
   content: string[];
+  score?: number;
   tips?: string;
+}
+
+export const enum FollowStatus {
+  Followed = 1,
+  NotFollowd = 2,
 }
 
 export const JOIN_TASK_GROUP_URL = "https://t.me/DineroLabs";
