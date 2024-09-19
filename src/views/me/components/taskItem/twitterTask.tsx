@@ -17,6 +17,7 @@ const TwitterTask: React.FC<TwitterTaskCompProps> = ({
   taskInfo
 }) => {
   const { title, content, url } = taskInfo;
+  const [hasInit, setHasInit] = useState(false);
   const [hasComplete, setHasComplete] = useState(false);
   const [showTips, setShowTips] = useState(false);
 
@@ -25,9 +26,13 @@ const TwitterTask: React.FC<TwitterTaskCompProps> = ({
   }, []);
 
   async function checkCompleteStatus() {
-    const { status } = await getTwitterTaskStatus();
+    try {
+      const { status } = await getTwitterTaskStatus();
 
-    setHasComplete(status === FollowStatus.Followed);
+      setHasComplete(status === FollowStatus.Followed);
+    } finally {
+      setHasInit(true);
+    }
   }
 
   function onJumpToTwitter() {
@@ -48,14 +53,16 @@ const TwitterTask: React.FC<TwitterTaskCompProps> = ({
         <div className={Styles["task__twitter-main"]}>
           <div className={Styles["title"]}>{title}</div>
           <div className={Styles["content"]}>{content[0] || ""}</div>
-          <div
-            className={classNames(Styles["btn"], {
-              [Styles["done"]]: hasComplete,
-            })}
-            onClick={onJumpToTwitter}
-          >
-            Follow
-          </div>
+          {hasInit && (
+            <div
+              className={classNames(Styles["btn"], {
+                [Styles["done"]]: hasComplete,
+              })}
+              onClick={onJumpToTwitter}
+            >
+              Follow
+            </div>
+          )}
         </div>
         <div className={Styles["task__twitter-score"]}>
           <div className={Styles["score"]}>20 Points</div>
