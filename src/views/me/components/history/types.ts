@@ -18,4 +18,5 @@ export const TaskIconHash = {
   [TaskType.INVITE]: TaskIcon2,
   [TaskType.FOLLOW]: TaskIcon3,
   [TaskType.BIND]: TaskIcon1,
+  [TaskType.TWITTER]: ''
 } as const;
