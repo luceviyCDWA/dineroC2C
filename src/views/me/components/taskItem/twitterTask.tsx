@@ -60,7 +60,7 @@ const TwitterTask: React.FC<TwitterTaskCompProps> = ({
               })}
               onClick={onJumpToTwitter}
             >
-              Follow
+              {hasComplete ? "Followed" : "Follow"}
             </div>
           )}
         </div>
