@@ -80,37 +80,49 @@ const OrderEdit: React.FC<OrderEditCompProps> = ({
       return Toast.show("Please select category first");
     }
 
-    const { telegram, discord, whatsapp } = await getContractInfo();
-
-    if (!telegram && !discord && !whatsapp) {
-      !skipCheckTips &&
-        Toast.show({
-          icon: "fail",
-          content: (
-            <div style={{ textAlign: "center", wordBreak: "normal" }}>
-              Please Submit Your Contract Info First
-            </div>
-          ),
-          afterClose: () => {
-            setShowContractSetting(true);
-          },
-        });
-      return;
-    }
-
-    const { order_id, order_onchain_id } = await createOrder({
-      total_count: Number(total),
-      total_price: Number(totalPrice),
-      chain_id: chainInfo.chain_id,
-      chain_name: chainInfo.name,
-      contract_address: CONTRACT_ADDRESS,
-      category_id: curCoinInfo?.id,
-      type: actionType,
-      payment_name: "USDT",
+    Toast.show({
+      duration: 0,
+      icon: "loading",
+      content: "loading",
     });
 
-    setOrderId(order_id);
-    setOrderOnChainId(order_onchain_id);
+    try {
+      const { telegram, discord, whatsapp } = await getContractInfo();
+
+      if (!telegram && !discord && !whatsapp) {
+        !skipCheckTips &&
+          Toast.show({
+            icon: "fail",
+            content: (
+              <div style={{ textAlign: "center", wordBreak: "normal" }}>
+                Please Submit Your Contract Info First
+              </div>
+            ),
+            afterClose: () => {
+              setShowContractSetting(true);
+            },
+          });
+        return;
+      }
+
+      const { order_id, order_onchain_id } = await createOrder({
+        total_count: Number(total),
+        total_price: Number(totalPrice),
+        chain_id: chainInfo.chain_id,
+        chain_name: chainInfo.name,
+        contract_address: CONTRACT_ADDRESS,
+        category_id: curCoinInfo?.id,
+        type: actionType,
+        payment_name: "USDT",
+      });
+
+      setOrderId(order_id);
+      setOrderOnChainId(order_onchain_id);
+    } finally {
+      setTimeout(() => {
+        Toast.clear();
+      }, 200);
+    }
   }, 200);
 
   const onClosePayGuarantee = () => {
