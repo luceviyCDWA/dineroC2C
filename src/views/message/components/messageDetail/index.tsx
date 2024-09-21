@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import classNames from "classnames";
 
 import RightPage from "@/components/rightPage";
@@ -56,11 +56,11 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
   const userId = userInfo?.id;
   const type = userId === seller ? ActionType.Sell : ActionType.Buy;
 
-  const checkLogin = async () => {
+  const checkLogin = useCallback(async () => {
     if (!isConnected || !isLogin) {
       await onShowLogin();
     }
-  }
+  }, [isConnected, isLogin]);
 
   const onCreateOrder = _.debounce(async () => {
     await checkLogin();
