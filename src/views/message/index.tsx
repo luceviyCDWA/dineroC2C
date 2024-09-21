@@ -61,6 +61,7 @@ const Message: React.FC = () => {
 
   const onDetailClose = useCallback(() => {
     setShowDetail(false);
+    resetData();
   }, []);
 
   return (
