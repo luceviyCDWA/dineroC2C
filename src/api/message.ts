@@ -13,7 +13,7 @@ export const getMesageList = (page: number) => {
     url: "/apis/v1/dinero/get_message_list",
     method: "post",
     data: {
-      offset: page,
+      offset: (page - 1) * DEFAULT_PAGE_SIZE + 1,
       limit: DEFAULT_PAGE_SIZE,
     },
   });
