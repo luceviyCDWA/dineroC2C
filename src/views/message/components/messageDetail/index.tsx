@@ -51,16 +51,16 @@ const MessageDetail: React.FC<MessageDetailCompProps> = ({
   const { createOrder, payOrder, cancelOrder, confirmOrder } = useContract(id, order_onchain_id);
 
   const onShowLogin = useLoginModalStore((state) => state.onShowLogin);
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { isLogin, userInfo } = useUserStore(useSelector(["isLogin", "userInfo"]));
   const userId = userInfo?.id;
   const type = userId === seller ? ActionType.Sell : ActionType.Buy;
 
   const checkLogin = useCallback(async () => {
-    if (!isConnected || !isLogin) {
+    if (!isConnected || !isLogin || !address) {
       await onShowLogin();
     }
-  }, [isConnected, isLogin]);
+  }, [isConnected, isLogin, address]);
 
   const onCreateOrder = _.debounce(async () => {
     await checkLogin();
